@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import Message from '../Main/Message';
 
 const Login = () => {
     const [login, loginAs] = useState('Login As');
     const [btnState, setBtnState] = useState('');
-    const [showAlert, setAlert] = useState(false);
+    const [alert, setAlert] = useState(false);
+    const [err, setError] = useState('');
     const navigate = useNavigate();
     const ctx = useContext(AppContext);
     // REDIRECTING IF USER IS ALREADY LOGGED IN
@@ -39,11 +40,10 @@ const Login = () => {
                 .then((response) => {
                     data = response.data;
                     code = 1;
-                    console.log(data);
                 })
                 .catch((error) => {
-                    console.log(error);
-                    return;
+                    setError(error.response.data.message.toString());
+                    setAlert(true);
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
@@ -54,7 +54,6 @@ const Login = () => {
                 })
                 .catch((error) => {
                     console.log(error);
-                    setAlert(true);
                 });
         } else if (role.current.value === 'Student') {
             await axios
@@ -71,11 +70,15 @@ const Login = () => {
             console.log('error');
             return;
         }
+        console.log(alert);
 
         const loggedIn = saveToken(`${data.token}${code}`);
 
         setBtnState('');
-        if (code === 0) return;
+        if (code === 0) {
+            setAlert(true);
+            return;
+        }
         if (loggedIn === true) {
             ctx.login();
             navigate('/');
@@ -143,6 +146,7 @@ const Login = () => {
                                         placeholder='Password'
                                         required
                                         ref={password}
+                                        minLength={8}
                                     ></input>
                                 </div>
                                 <br />
@@ -154,28 +158,31 @@ const Login = () => {
                                 </div>
                             </>
                         )}
+                        {alert === true && (
+                            <>
+                                <br />
+                                <Message
+                                    type='error'
+                                    text={err}
+                                    hideAlert={() => {
+                                        setAlert(false);
+                                    }}
+                                    showBtn={true}
+                                />
+                            </>
+                        )}
 
                         <div className='text-sm m-2 text-center font-bold'>
                             Don't have an account?&nbsp;
-                            <a className='link link-info decoration-transparent' href='/signup'>
+                            <Link className='link link-info decoration-transparent' to='/signup'>
                                 Signup!
-                            </a>
+                            </Link>
                             <br />
-                            <a className='link link-error decoration-transparent font-medium' href='/forgot-password'>
+                            <Link className='link link-error decoration-transparent font-medium' to='/forgot-password'>
                                 Forgot Password
-                            </a>
+                            </Link>
                         </div>
                     </form>
-                    {showAlert && (
-                        <Message
-                            type='warning'
-                            text="You haven't added any semesters for this batch"
-                            hideAlert={() => {
-                                setAlert(false);
-                            }}
-                            showBtn={true}
-                        />
-                    )}
                 </div>
             </div>
         </>

@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
+import Message from '../Main/Message';
 
 const SignUp = () => {
     const [signup, signupAs] = useState('Signup As');
     const [btnState, setBtnState] = useState('');
+    const [alert, setAlert] = useState(false);
+    const [err, setError] = useState('');
+
     const navigate = useNavigate();
     const name = useRef();
     const email = useRef();
@@ -45,7 +49,9 @@ const SignUp = () => {
                     code = 1;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
+                    setError(error.response.data.message);
+                    setAlert(true);
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
@@ -60,7 +66,9 @@ const SignUp = () => {
                     code = 2;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setError(error.response.data.message);
+
+                    setAlert(true);
                 });
         } else if (role.current.value === 'Student') {
             await axios
@@ -77,7 +85,9 @@ const SignUp = () => {
                     code = 3;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setError(error.response.data.message);
+
+                    setAlert(true);
                 });
         } else {
             console.log('error');
@@ -144,6 +154,7 @@ const SignUp = () => {
                                         placeholder='Full Name'
                                         required
                                         ref={name}
+                                        minLength={3}
                                     ></input>
                                 </div>
                                 <br />
@@ -166,6 +177,8 @@ const SignUp = () => {
                                                 placeholder='Batch Code'
                                                 required
                                                 ref={batch}
+                                                minLength={4}
+                                                maxLength={4}
                                             ></input>
                                         </div>
                                         <br />
@@ -202,6 +215,7 @@ const SignUp = () => {
                                         placeholder='Password'
                                         required
                                         ref={password}
+                                        minLength={8}
                                     ></input>
                                 </div>
                                 <br />
@@ -212,6 +226,7 @@ const SignUp = () => {
                                         placeholder='Confirm Password'
                                         required
                                         ref={confirmPassword}
+                                        minLength={8}
                                     ></input>
                                 </div>
 
@@ -223,11 +238,24 @@ const SignUp = () => {
                                 </div>
                             </>
                         )}
+                        {alert === true && (
+                            <>
+                                <br />
+                                <Message
+                                    type='error'
+                                    text={err}
+                                    hideAlert={() => {
+                                        setAlert(false);
+                                    }}
+                                    showBtn={true}
+                                />
+                            </>
+                        )}
                         <div className='text-sm m-2 text-center font-bold'>
                             Already have an account?&nbsp;
-                            <a className='link link-info ' href='/login'>
+                            <Link className='link link-info ' to='/login'>
                                 Login!
-                            </a>
+                            </Link>
                         </div>
                     </form>
                 </div>
