@@ -44,9 +44,7 @@ const BatchList = (props) => {
                     </Link>
                 </div>
             </div>
-            {showAlert && (
-                <Message type='error' text="You haven't added any batches yet" hideAlert={hideAlert} showBtn={true} />
-            )}
+
             <div className='overflow-x-auto'>
                 <table className='table table-compact w-full sm:table-normal'>
                     <thead>
@@ -63,7 +61,7 @@ const BatchList = (props) => {
                                     <tr key={index}>
                                         <th>{index + 1}</th>
                                         <td>
-                                            <Link to={`/admin/batch/${batch._id}`} key={batch._id}>
+                                            <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
                                                 {batch.name}
                                             </Link>
                                         </td>
@@ -75,6 +73,14 @@ const BatchList = (props) => {
                             })}
                     </tbody>
                 </table>
+                {showAlert && (
+                    <Message
+                        type='error'
+                        text="You haven't added any batches yet"
+                        hideAlert={hideAlert}
+                        showBtn={true}
+                    />
+                )}
             </div>
         </div>
     );

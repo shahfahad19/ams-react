@@ -4,16 +4,24 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import AddBatch from './Components/Admin/Controllers/AddBatch';
 import AddSemester from './Components/Admin/Controllers/AddSemester';
+import AddSubject from './Components/Admin/Controllers/AddSubject';
 import EditBatch from './Components/Admin/Controllers/EditBatch';
+import EditSemester from './Components/Admin/Controllers/EditSemester';
+import EditSubject from './Components/Admin/Controllers/EditSubject';
 import { default as AdminDashboard } from './Components/Admin/Dashboard/Dashboard';
 import BatchList from './Components/Admin/Lists/BatchList';
 import SemesterList from './Components/Admin/Lists/SemesterList';
+import StudentList from './Components/Admin/Lists/StudentList';
+import SubjectList from './Components/Admin/Lists/SubjectList';
+import AttendanceList from './Components/Admin/Lists/AttendanceList';
+import InviteLink from './Components/Admin/Views/InviteLink';
 import ViewBatch from './Components/Admin/Views/ViewBatch';
 import ViewSemester from './Components/Admin/Views/ViewSemester';
 import ViewSubject from './Components/Admin/Views/ViewSubject';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import Login from './Components/Auth/Login';
 import SignUp from './Components/Auth/SignUp';
+import Redirect from './Components/Utils/Redirect';
 import Welcome from './Components/Welcome';
 import './index.css';
 import Error from './Router/Error';
@@ -51,6 +59,32 @@ const router = createBrowserRouter([
                     {
                         path: 'batch/:batchId',
                         element: <ViewBatch />,
+                        children: [
+                            {
+                                path: 'semesters',
+                                element: <SemesterList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditBatch />,
+                            },
+                            {
+                                path: 'invite',
+                                element: <InviteLink />,
+                            },
+                            {
+                                path: 'add-semester',
+                                element: <AddSemester />,
+                            },
+                            {
+                                path: '',
+                                element: <Redirect to='semesters' />,
+                            },
+                            {
+                                path: 'students',
+                                element: <StudentList />,
+                            },
+                        ],
                     },
                     {
                         path: 'add-batch',
@@ -59,10 +93,42 @@ const router = createBrowserRouter([
                     {
                         path: 'semester/:semesterId',
                         element: <ViewSemester />,
+                        children: [
+                            {
+                                path: '',
+                                element: <SubjectList />,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <SubjectList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditSemester />,
+                            },
+                            {
+                                path: 'add-subject',
+                                element: <AddSubject />,
+                            },
+                        ],
                     },
                     {
                         path: 'subject/:subjectId',
                         element: <ViewSubject />,
+                        children: [
+                            {
+                                path: '',
+                                element: <AttendanceList />,
+                            },
+                            {
+                                path: 'attendance',
+                                element: <AttendanceList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditSubject />,
+                            },
+                        ],
                     },
                 ],
             },

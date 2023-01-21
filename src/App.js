@@ -8,7 +8,7 @@ import Header from './Components/Main/Header';
 function App() {
     return (
         <AppContextProvider>
-            <div className='App'>
+            <div className='App h-screen'>
                 <Header />
                 <Outlet></Outlet>
             </div>

@@ -33,16 +33,7 @@ const BatchList = () => {
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Semester List' />
-            {showAlert && (
-                <Message
-                    type='warning'
-                    text="You haven't added any semesters for this batch"
-                    hideAlert={() => {
-                        setAlert(false);
-                    }}
-                    showBtn={true}
-                />
-            )}
+
             <div className='overflow-x-auto'>
                 <table className='table table-compact w-full md:table-normal'>
                     <thead>
@@ -60,7 +51,7 @@ const BatchList = () => {
                                     <tr key={index}>
                                         <th>{index + 1}</th>
                                         <td>
-                                            <Link to={`/admin/semester/${semester._id}`}>{semester.name}</Link>
+                                            <Link to={`/admin/semester/${semester._id}/subjects`}>{semester.name}</Link>
                                         </td>
                                         <td>
                                             <Link to={`/admin/semester/${semester._id}?i=subjects`}>
@@ -76,6 +67,16 @@ const BatchList = () => {
                             })}
                     </tbody>
                 </table>
+                {showAlert && (
+                    <Message
+                        type='warning'
+                        text="You haven't added any semesters for this batch"
+                        hideAlert={() => {
+                            setAlert(false);
+                        }}
+                        showBtn={true}
+                    />
+                )}
             </div>
         </div>
     );

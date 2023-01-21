@@ -1,25 +1,20 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const EditBatch = (props) => {
+    const [batchData, setBatchData] = useOutletContext();
     const [btnState, setBtnState] = useState();
     const params = useParams();
-    const [batch, setBatch] = useState(props.batch);
     const batchName = useRef();
     const archived = useRef();
     const [alert, setAlert] = useState({
         show: false,
     });
     const ctx = useContext(AppContext);
-
-    useEffect(() => {
-        setBatch(props.batch);
-    }, [props]);
-
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
@@ -37,8 +32,7 @@ const EditBatch = (props) => {
                 },
             })
             .then((response) => {
-                setBatch(response.data.data.batch);
-                props.batchEdited(response.data.data.batch);
+                setBatchData(response.data.data.batch);
                 setAlert({
                     show: true,
                     type: 'success',
@@ -63,8 +57,7 @@ const EditBatch = (props) => {
                 },
             })
             .then((response) => {
-                setBatch({ ...batch, batchCode: response.data.data.batch.batchCode });
-                props.batchEdited({ ...batch, batchCode: response.data.data.batch.batchCode });
+                setBatchData({ ...batchData, batchCode: response.data.data.batch.batchCode });
             })
             .catch((error) => {
                 console.log(error);
@@ -75,7 +68,7 @@ const EditBatch = (props) => {
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Edit Batch' />
-            {batch.name && (
+            {batchData.name && (
                 <div className='flex justify-center'>
                     <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
                         <form className='font-medium w-full' onSubmit={submitForm}>
@@ -86,7 +79,7 @@ const EditBatch = (props) => {
                                     type='text'
                                     ref={batchName}
                                     required
-                                    defaultValue={batch.name}
+                                    defaultValue={batchData.name}
                                 ></input>
                             </div>
                             <br />
@@ -94,7 +87,7 @@ const EditBatch = (props) => {
                                 <label className='label'>Batch Code</label>
 
                                 <div className='flex justify-between items-center border border-solid rounded-lg border-base-300'>
-                                    <p className='text-primary pl-4'>{batch.batchCode || '...'}</p>
+                                    <p className='text-primary pl-4'>{batchData.batchCode || '...'}</p>
                                     <p onClick={generateCode} className='btn btn-primary btn-sm md:btn-md'>
                                         Regenerate
                                     </p>
@@ -110,7 +103,7 @@ const EditBatch = (props) => {
                                 <div className='form-control'>
                                     <select
                                         className='select select-bordered select-sm md:select-md'
-                                        defaultValue={batch.archived ? 'True' : 'False'}
+                                        defaultValue={batchData.archived ? 'True' : 'False'}
                                         ref={archived}
                                         required
                                     >

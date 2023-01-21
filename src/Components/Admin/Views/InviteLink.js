@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const InviteLink = (props) => {
-    const [batchCode, setBatchCode] = useState(props.batch.batchCode);
-    useEffect(() => {
-        setBatchCode(props.batch.batchCode);
-    }, [props]);
+    const [batch, setBatch] = useOutletContext();
+    const batchCode = batch.batchCode || undefined;
 
     function formChanged() {}
 
@@ -25,7 +24,7 @@ const InviteLink = (props) => {
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Invite Link' />
-            {props.batch.batchCode && (
+            {batchCode !== undefined && (
                 <div className='flex flex-col md:flex-row md:space-x-10 mt-4 space-y-4 md:space-y-10 items-center justify-center'>
                     <div className='qr hidden md:block'>
                         <img
@@ -45,13 +44,13 @@ const InviteLink = (props) => {
                             students
                         </div>
                         <div className='flex items-center space-x-2'>
-                            <div className=' h-0.5 bg-base-300 w-full rounded'></div>
+                            <div className='h-0.5 bg-base-300 w-full rounded'></div>
 
                             <p>OR</p>
-                            <div className=' h-0.5 bg-base-300 w-full rounded'></div>
+                            <div className='h-0.5 bg-base-300 w-full rounded'></div>
                         </div>
 
-                        <div className>Share the link below</div>
+                        <div>Share the link below</div>
                         <div className='input-group flex flex-col sm:flex-row items-center mt-5'>
                             <div className='w-full'>
                                 <input

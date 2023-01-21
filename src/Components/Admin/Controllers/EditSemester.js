@@ -1,24 +1,20 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useContext, useRef, useState } from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
-const EditSemester = (props) => {
+const EditSemester = () => {
     const [btnState, setBtnState] = useState();
+    const [semester, setSemester] = useOutletContext();
     const params = useParams();
-    const [semester, setSemester] = useState(props.semester);
     const semesterName = useRef();
     const archived = useRef();
     const [alert, setAlert] = useState({
         show: false,
     });
     const ctx = useContext(AppContext);
-
-    useEffect(() => {
-        setSemester(props.semester);
-    }, [props]);
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -38,7 +34,6 @@ const EditSemester = (props) => {
             })
             .then((response) => {
                 setSemester(response.data.data.semester);
-                props.semesterEdited(response.data.data.semester);
                 setAlert({
                     show: true,
                     type: 'success',

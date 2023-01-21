@@ -1,24 +1,20 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const EditSubject = (props) => {
+    const [subject, setSubject] = useOutletContext();
     const [btnState, setBtnState] = useState();
     const params = useParams();
-    const [subject, setSubject] = useState(props.subject);
     const subjectName = useRef();
     const archived = useRef();
     const [alert, setAlert] = useState({
         show: false,
     });
     const ctx = useContext(AppContext);
-
-    useEffect(() => {
-        setSubject(props.subject);
-    }, [props]);
 
     const submitForm = async (event) => {
         event.preventDefault();

@@ -7,7 +7,6 @@ import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const SubjectList = () => {
     const [subjects, setSubjects] = useState([]);
-
     const [showAlert, setAlert] = useState(false);
     const ctx = useContext(AppContext);
 
@@ -32,16 +31,7 @@ const SubjectList = () => {
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Subject List' />
-            {showAlert && (
-                <Message
-                    type='warning'
-                    text="You haven't added any subjects for this batch"
-                    hideAlert={() => {
-                        setAlert(false);
-                    }}
-                    showBtn={true}
-                />
-            )}
+
             <div className='overflow-x-auto'>
                 <table className='table table-compact w-full md:table-normal'>
                     <thead>
@@ -74,6 +64,16 @@ const SubjectList = () => {
                             })}
                     </tbody>
                 </table>
+                {showAlert && (
+                    <Message
+                        type='warning'
+                        text="You haven't added any subjects for this batch"
+                        hideAlert={() => {
+                            setAlert(false);
+                        }}
+                        showBtn={true}
+                    />
+                )}
             </div>
         </div>
     );

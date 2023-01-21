@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
+import Message from '../Main/Message';
 
 const Login = () => {
     const [login, loginAs] = useState('Login As');
     const [btnState, setBtnState] = useState('');
+    const [showAlert, setAlert] = useState(false);
     const navigate = useNavigate();
     const ctx = useContext(AppContext);
     // REDIRECTING IF USER IS ALREADY LOGGED IN
@@ -52,7 +54,7 @@ const Login = () => {
                 })
                 .catch((error) => {
                     console.log(error);
-                    return;
+                    setAlert(true);
                 });
         } else if (role.current.value === 'Student') {
             await axios
@@ -62,16 +64,18 @@ const Login = () => {
                     code = 3;
                 })
                 .catch((error) => {
-                    console.log(error);
-                    return;
+                    console.log(error.data);
+                    setAlert(true);
                 });
         } else {
             console.log('error');
             return;
         }
+
         const loggedIn = saveToken(`${data.token}${code}`);
 
         setBtnState('');
+        if (code === 0) return;
         if (loggedIn === true) {
             ctx.login();
             navigate('/');
@@ -162,6 +166,16 @@ const Login = () => {
                             </a>
                         </div>
                     </form>
+                    {showAlert && (
+                        <Message
+                            type='warning'
+                            text="You haven't added any semesters for this batch"
+                            hideAlert={() => {
+                                setAlert(false);
+                            }}
+                            showBtn={true}
+                        />
+                    )}
                 </div>
             </div>
         </>

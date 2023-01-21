@@ -7,8 +7,9 @@ const Dashboard = () => {
     return (
         <>
             {ctx.isLoggedIn === 'wait' && (
-                <div className='flex justify-center'>
-                    <progress className='progress w-48'></progress>
+                <div className='flex absolute flex-col justify-center h-auto bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 items-center'>
+                    <p className='text-lg font-bold text-primary text-center p-3'>Please wait</p>
+                    <progress className='progress progress-primary w-56'></progress>
                 </div>
             )}
 

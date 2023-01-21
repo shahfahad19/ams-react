@@ -29,7 +29,7 @@ const SignUp = () => {
         //const baseURL = 'https://amsapi.vercel.app';
         const baseURL = 'http://localhost:5000';
         let data = {};
-        let code = {};
+        let code = 0;
 
         if (role.current.value === 'Admin') {
             await axios
@@ -67,10 +67,10 @@ const SignUp = () => {
                 .post(`${baseURL}/student/signup`, {
                     name: name.current.value,
                     email: email.current.value,
-                    rollno: rollno.current.value,
+                    rollNo: rollno.current.value,
                     batchCode: batch.current.value,
                     password: password.current.value,
-                    confirmPassword: confirmPassword.current.value,
+                    passwordConfirm: confirmPassword.current.value,
                 })
                 .then((response) => {
                     data = response.data;
@@ -83,12 +83,13 @@ const SignUp = () => {
             console.log('error');
         }
         setBtnState('');
+        if (code === 0) return;
         const signedup = saveToken(`${data.token}${code}`);
 
         setBtnState('');
         if (signedup) {
             ctx.login();
-            navigate('/');
+            //navigate('/');
         }
     };
 
