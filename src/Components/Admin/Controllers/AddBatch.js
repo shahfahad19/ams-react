@@ -20,7 +20,7 @@ const AddBatch = () => {
         setBtnState('loading');
         setAlert({ show: false });
         //const baseURL = 'https://amsapi.vercel.app/admin/batches';
-        const baseURL = 'http://localhost:5000/admin/batches';
+        const baseURL = 'https://amsapi.vercel.app/admin/batches';
         let token = ctx.token;
         await axios
             .post(

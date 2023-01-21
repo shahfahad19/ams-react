@@ -12,7 +12,7 @@ const AttendanceList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/subject/' + params.subjectId + '/attendance';
+        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId + '/attendance';
 
         axios
             .get(`${baseURL}`, {

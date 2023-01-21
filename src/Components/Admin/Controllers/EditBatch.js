@@ -47,7 +47,7 @@ const EditBatch = (props) => {
     };
 
     const generateCode = async () => {
-        const baseURL = 'http://localhost:5000/admin/batch/' + params.batchId + '/updatecode';
+        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId + '/updatecode';
 
         await axios
             .get(`${baseURL}`, {

@@ -10,7 +10,7 @@ const BatchList = (props) => {
     const ctx = useContext(AppContext);
 
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/batches?sort=archived,name';
+        const baseURL = 'https://amsapi.vercel.app/admin/batches?sort=archived,name';
 
         axios
             .get(`${baseURL}`, {

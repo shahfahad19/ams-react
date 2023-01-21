@@ -14,7 +14,7 @@ const ViewSemester = (props) => {
     });
 
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/semester/' + params.semesterId;
+        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId;
 
         axios
             .get(`${baseURL}`, {

@@ -23,7 +23,7 @@ const EditSubject = (props) => {
             name: subjectName.current.value,
             archived: archived.current.value === 'True',
         };
-        const baseURL = 'http://localhost:5000/admin/subject/' + params.subjectId;
+        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId;
 
         await axios
             .patch(`${baseURL}`, subjectData, {

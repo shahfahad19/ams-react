@@ -23,7 +23,7 @@ const EditSemester = () => {
             name: semesterName.current.value,
             archived: archived.current.value === 'True',
         };
-        const baseURL = 'http://localhost:5000/admin/semester/' + params.semesterId;
+        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId;
 
         await axios
             .patch(`${baseURL}`, semesterData, {

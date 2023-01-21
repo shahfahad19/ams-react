@@ -22,7 +22,7 @@ const AddSubject = () => {
         event.preventDefault();
         setBtnState('loading');
         //const baseURL = 'https://amsapi.vercel.app/admin/semester/'+params.semesterId+'/subjects';
-        const baseURL = 'http://localhost:5000/admin/semester/' + params.semesterId + '/subjects';
+        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId + '/subjects';
         await axios
             .post(
                 `${baseURL}`,

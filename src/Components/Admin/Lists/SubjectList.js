@@ -12,7 +12,7 @@ const SubjectList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/semester/' + params.semesterId + '/subjects';
+        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId + '/subjects';
         axios
             .get(`${baseURL}`, {
                 credentials: 'include',

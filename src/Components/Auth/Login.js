@@ -23,7 +23,7 @@ const Login = () => {
         event.preventDefault();
         setBtnState('loading');
         const baseURL = 'https://amsapi.vercel.app';
-        //const baseURL = 'http://localhost:5000';
+        //const baseURL = 'https://amsapi.vercel.app';
         const loginData = {
             email: email.current.value,
             password: password.current.value,

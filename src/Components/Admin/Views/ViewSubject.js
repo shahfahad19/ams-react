@@ -13,7 +13,7 @@ const ViewSubject = () => {
     const [subject, setSubject] = useState([]);
 
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/subject/' + params.subjectId;
+        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId;
 
         axios
             .get(`${baseURL}`, {

@@ -12,7 +12,7 @@ const StudentList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'http://localhost:5000/admin/batch/' + params.batchId + '/students';
+        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId + '/students';
         console.log(params.batchId);
         axios
             .get(`${baseURL}`, {
