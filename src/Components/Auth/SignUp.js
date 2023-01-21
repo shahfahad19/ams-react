@@ -32,14 +32,13 @@ const SignUp = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        const baseURL = process.env.REACT_APP_API;
 
         let data = {};
         let code = 0;
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/signup?token=${captcha.current.getValue()}`, {
+                .post(`${ctx.baseURL}/admin/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     department: department.current.value,
@@ -57,7 +56,7 @@ const SignUp = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/signup?token=${captcha.current.getValue()}`, {
+                .post(`${ctx.baseURL}/teacher/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     password: password.current.value,
@@ -74,7 +73,7 @@ const SignUp = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/signup?token=${captcha.current.getValue()}`, {
+                .post(`${ctx.baseURL}/student/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     rollNo: rollno.current.value,
@@ -95,7 +94,12 @@ const SignUp = () => {
             console.log('error');
         }
         setBtnState('');
-        if (code === 0) return;
+        if (code === 0) {
+            setAlert(true);
+
+            window.grecaptcha.reset();
+            return;
+        }
         const signedup = saveToken(`${data.token}${code}`);
 
         setBtnState('');
@@ -233,7 +237,7 @@ const SignUp = () => {
                                 </div>
                                 <br />
                                 <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={process.env.REACT_APP_CAPTCHA_KEY} required ref={captcha} />
+                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
                                 </div>
                                 <br />
                                 <div className='form-control'>

@@ -25,7 +25,6 @@ const Login = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        const baseURL = process.env.REACT_APP_API;
         const loginData = {
             email: email.current.value,
             password: password.current.value,
@@ -35,7 +34,7 @@ const Login = () => {
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/login?token=${captcha.current.getValue()}`, loginData, {
+                .post(`${ctx.baseURL}/admin/login?token=${captcha.current.getValue()}`, loginData, {
                     credentials: 'include',
                 })
                 .then((response) => {
@@ -48,7 +47,7 @@ const Login = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/login?token=${captcha.current.getValue()}`, loginData)
+                .post(`${ctx.baseURL}/teacher/login?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     data = response.data;
                     code = 2;
@@ -58,7 +57,7 @@ const Login = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/login?token=${captcha.current.getValue()}`, loginData)
+                .post(`${ctx.baseURL}/student/login?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     data = response.data;
                     code = 3;
@@ -70,13 +69,13 @@ const Login = () => {
         } else {
             console.log('error');
         }
-        console.log(alert);
 
         const loggedIn = saveToken(`${data.token}${code}`);
 
         setBtnState('');
         if (code === 0) {
             setAlert(true);
+            window.grecaptcha.reset();
             return;
         }
         if (loggedIn === true) {
@@ -151,7 +150,7 @@ const Login = () => {
                                 </div>
                                 <br />
                                 <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={process.env.REACT_APP_CAPTCHA_KEY} required ref={captcha} />
+                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
                                 </div>
                                 <br />
 

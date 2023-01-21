@@ -1,10 +1,13 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import AppContext from '../Context/AppContext';
 
 const ForgotPassword = () => {
     const [account, setAccount] = useState('Change Account');
     const [btnState, setBtnState] = useState('');
+
+    const ctx = useContext(AppContext);
 
     const email = useRef();
     const password = useRef();
@@ -14,7 +17,6 @@ const ForgotPassword = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        const baseURL = process.env.REACT_APP_API;
 
         const loginData = {
             email: email.current.value,
@@ -23,7 +25,7 @@ const ForgotPassword = () => {
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/forgotPassword?token=${captcha.current.getValue()}`, loginData)
+                .post(`${ctx.baseURL}/admin/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -32,7 +34,7 @@ const ForgotPassword = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/forgotPassword?token=${captcha.current.getValue()}`, loginData)
+                .post(`${ctx.baseURL}/teacher/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -41,7 +43,7 @@ const ForgotPassword = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/forgotPassword?token=${captcha.current.getValue()}`, loginData)
+                .post(`${ctx.baseURL}/student/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -95,7 +97,7 @@ const ForgotPassword = () => {
                                 </div>
                                 <br />
                                 <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={process.env.REACT_APP_CAPTCHA_KEY} required ref={captcha} />
+                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
                                 </div>
                                 <br />
 

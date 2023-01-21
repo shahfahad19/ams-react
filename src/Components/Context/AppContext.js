@@ -8,6 +8,7 @@ const AppContext = React.createContext({
     loggedInAs: '',
     userData: {},
     baseURL: process.env.REACT_APP_API,
+    captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
     logout: () => {},
     login: () => {},
 });
@@ -117,6 +118,8 @@ export const AppContextProvider = (props) => {
                 userData: userData,
                 login: loginHandler,
                 logout: logoutHandler,
+                baseURL: process.env.REACT_APP_API,
+                captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
             }}
         >
             {props.children}
