@@ -1,0 +1,83 @@
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import AppContext from '../../Context/AppContext';
+import Message from '../../Main/Message';
+
+const BatchList = (props) => {
+    const [batches, setBatches] = useState([]);
+    const [showAlert, setAlert] = useState(false);
+    const ctx = useContext(AppContext);
+
+    useEffect(() => {
+        const baseURL = 'http://localhost:5000/admin/batches?sort=archived,name';
+
+        axios
+            .get(`${baseURL}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setBatches(response.data.data.batches);
+                if (response.data.data.batches.length === 0) {
+                    setAlert(true);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    const hideAlert = () => {
+        setAlert(false);
+    };
+
+    return (
+        <div className='batches'>
+            <div className='flex justify-between items-center p-2 bg-primary'>
+                <h1 className='font-medium text-center text-primary-content text-xl'>Batch List</h1>
+                <div>
+                    <Link className='btn btn-outline text-primary-content btn-xs sm:btn-sm' to='add-batch'>
+                        Add New Batch
+                    </Link>
+                </div>
+            </div>
+            {showAlert && (
+                <Message type='error' text="You haven't added any batches yet" hideAlert={hideAlert} showBtn={true} />
+            )}
+            <div className='overflow-x-auto'>
+                <table className='table table-compact w-full sm:table-normal'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Archived</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {batches.length > 0 &&
+                            batches.map((batch, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <th>{index + 1}</th>
+                                        <td>
+                                            <Link to={`/admin/batch/${batch._id}`} key={batch._id}>
+                                                {batch.name}
+                                            </Link>
+                                        </td>
+                                        <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived
+                                            .toString()
+                                            .slice(1)}`}</td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+export default BatchList;
