@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import Message from '../Main/Message';
@@ -19,12 +20,13 @@ const Login = () => {
     const email = useRef();
     const password = useRef();
     const role = useRef();
+    const captcha = useRef();
 
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        const baseURL = 'https://amsapi.vercel.app';
         //const baseURL = 'https://amsapi.vercel.app';
+        const baseURL = 'http://localhost:5000';
         const loginData = {
             email: email.current.value,
             password: password.current.value,
@@ -34,7 +36,7 @@ const Login = () => {
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/login`, loginData, {
+                .post(`${baseURL}/admin/login?token=${captcha.current.getValue()}`, loginData, {
                     credentials: 'include',
                 })
                 .then((response) => {
@@ -47,7 +49,7 @@ const Login = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/login`, loginData)
+                .post(`${baseURL}/teacher/login?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     data = response.data;
                     code = 2;
@@ -57,7 +59,7 @@ const Login = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/login`, loginData)
+                .post(`${baseURL}/student/login?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     data = response.data;
                     code = 3;
@@ -68,7 +70,6 @@ const Login = () => {
                 });
         } else {
             console.log('error');
-            return;
         }
         console.log(alert);
 
@@ -148,6 +149,14 @@ const Login = () => {
                                         ref={password}
                                         minLength={8}
                                     ></input>
+                                </div>
+                                <br />
+                                <div className='flex justify-center'>
+                                    <ReCAPTCHA
+                                        sitekey='6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip'
+                                        required
+                                        ref={captcha}
+                                    />
                                 </div>
                                 <br />
 

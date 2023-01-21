@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const ForgotPassword = () => {
     const [account, setAccount] = useState('Change Account');
@@ -8,6 +9,7 @@ const ForgotPassword = () => {
     const email = useRef();
     const password = useRef();
     const role = useRef();
+    const captcha = useRef();
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -21,7 +23,7 @@ const ForgotPassword = () => {
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/login`, loginData)
+                .post(`${baseURL}/admin/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -30,7 +32,7 @@ const ForgotPassword = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/login`, loginData)
+                .post(`${baseURL}/teacher/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -39,7 +41,7 @@ const ForgotPassword = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/login`, loginData)
+                .post(`${baseURL}/student/forgotPassword?token=${captcha.current.getValue()}`, loginData)
                 .then((response) => {
                     console.log(response);
                 })
@@ -50,7 +52,6 @@ const ForgotPassword = () => {
             console.log('error');
         }
         setBtnState('');
-        console.log('COMPLETED');
     };
 
     const changeAccount = () => {
@@ -91,6 +92,14 @@ const ForgotPassword = () => {
                                         required
                                         ref={email}
                                     ></input>
+                                </div>
+                                <br />
+                                <div className='flex justify-center'>
+                                    <ReCAPTCHA
+                                        sitekey='6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip'
+                                        required
+                                        ref={captcha}
+                                    />
                                 </div>
                                 <br />
 

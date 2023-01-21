@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import Message from '../Main/Message';
@@ -19,6 +20,7 @@ const SignUp = () => {
     const password = useRef();
     const confirmPassword = useRef();
     const role = useRef();
+    const captcha = useRef();
 
     const ctx = useContext(AppContext);
 
@@ -37,7 +39,7 @@ const SignUp = () => {
 
         if (role.current.value === 'Admin') {
             await axios
-                .post(`${baseURL}/admin/signup`, {
+                .post(`${baseURL}/admin/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     department: department.current.value,
@@ -55,7 +57,7 @@ const SignUp = () => {
                 });
         } else if (role.current.value === 'Teacher') {
             await axios
-                .post(`${baseURL}/teacher/signup`, {
+                .post(`${baseURL}/teacher/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     password: password.current.value,
@@ -72,7 +74,7 @@ const SignUp = () => {
                 });
         } else if (role.current.value === 'Student') {
             await axios
-                .post(`${baseURL}/student/signup`, {
+                .post(`${baseURL}/student/signup?token=${captcha.current.getValue()}`, {
                     name: name.current.value,
                     email: email.current.value,
                     rollNo: rollno.current.value,
@@ -229,7 +231,14 @@ const SignUp = () => {
                                         minLength={8}
                                     ></input>
                                 </div>
-
+                                <br />
+                                <div className='flex justify-center'>
+                                    <ReCAPTCHA
+                                        sitekey='6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip'
+                                        required
+                                        ref={captcha}
+                                    />
+                                </div>
                                 <br />
                                 <div className='form-control'>
                                     <button className={` btn btn-primary w-full font-bold ${btnState}`} type='submit'>
