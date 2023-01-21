@@ -99,7 +99,7 @@ const SignUp = () => {
         setBtnState('');
         if (signedup) {
             ctx.login();
-            //navigate('/');
+            navigate('/');
         }
     };
 
