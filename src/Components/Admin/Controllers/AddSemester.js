@@ -21,11 +21,10 @@ const AddSemester = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        //const baseURL = 'https://amsapi.vercel.app/admin/batch/'+params.batchId+'/semesters';
-        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId + '/semesters';
+
         await axios
             .post(
-                `${baseURL}`,
+                `${ctx.baseURL}admin/batch/${params.batchId}/semesters`,
                 { name: semester },
                 {
                     headers: {

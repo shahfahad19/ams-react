@@ -25,8 +25,7 @@ const Login = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        const baseURL = 'https://amsapi.vercel.app';
-        //const baseURL = 'http://localhost:5000';
+        const baseURL = process.env.REACT_APP_API;
         const loginData = {
             email: email.current.value,
             password: password.current.value,
@@ -152,11 +151,7 @@ const Login = () => {
                                 </div>
                                 <br />
                                 <div className='flex justify-center'>
-                                    <ReCAPTCHA
-                                        sitekey='6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip'
-                                        required
-                                        ref={captcha}
-                                    />
+                                    <ReCAPTCHA sitekey={process.env.REACT_APP_CAPTCHA_KEY} required ref={captcha} />
                                 </div>
                                 <br />
 

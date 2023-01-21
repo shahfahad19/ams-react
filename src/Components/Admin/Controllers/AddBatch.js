@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 
@@ -19,12 +19,10 @@ const AddBatch = () => {
         event.preventDefault();
         setBtnState('loading');
         setAlert({ show: false });
-        //const baseURL = 'https://amsapi.vercel.app/admin/batches';
-        const baseURL = 'https://amsapi.vercel.app/admin/batches';
         let token = ctx.token;
         await axios
             .post(
-                `${baseURL}`,
+                `${ctx.baseURL}/admin/batches`,
                 { name: batch },
                 {
                     headers: {

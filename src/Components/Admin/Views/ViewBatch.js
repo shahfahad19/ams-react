@@ -12,10 +12,8 @@ const ViewBatch = () => {
     const [batch, setBatch] = useState([]);
 
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId;
-
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/batch/${params.batchId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -27,7 +25,7 @@ const ViewBatch = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    });
 
     return (
         <>

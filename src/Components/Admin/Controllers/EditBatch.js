@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
+import React, { useContext, useRef, useState } from 'react';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
@@ -22,10 +22,8 @@ const EditBatch = (props) => {
             name: batchName.current.value,
             archived: archived.current.value === 'True',
         };
-        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId;
-
         await axios
-            .patch(`${baseURL}`, batchData, {
+            .patch(`${ctx.baseURL}/admin/batch/${params.batchId}`, batchData, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -47,10 +45,8 @@ const EditBatch = (props) => {
     };
 
     const generateCode = async () => {
-        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId + '/updatecode';
-
         await axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/batch/${params.batchId}/updatecode`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

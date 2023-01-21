@@ -7,6 +7,7 @@ const AppContext = React.createContext({
     isLoggedIn: false,
     loggedInAs: '',
     userData: {},
+    baseURL: process.env.REACT_APP_API,
     logout: () => {},
     login: () => {},
 });
@@ -40,7 +41,10 @@ export const AppContextProvider = (props) => {
         if (role === 1) role = 'admin';
         if (role === 2) role = 'teacher';
         if (role === 3) role = 'student';
-        //else return;
+        else {
+            setLoggedIn(false);
+            return;
+        }
         axios
             .get(`${baseURL}/${role}`, {
                 credentials: 'include',

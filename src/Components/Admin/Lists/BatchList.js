@@ -10,10 +10,8 @@ const BatchList = (props) => {
     const ctx = useContext(AppContext);
 
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/batches?sort=archived,name';
-
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/batches?sort=archived,name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

@@ -12,9 +12,8 @@ const SubjectList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId + '/subjects';
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}subjects`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

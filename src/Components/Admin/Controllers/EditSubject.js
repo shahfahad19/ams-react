@@ -23,10 +23,8 @@ const EditSubject = (props) => {
             name: subjectName.current.value,
             archived: archived.current.value === 'True',
         };
-        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId;
-
         await axios
-            .patch(`${baseURL}`, subjectData, {
+            .patch(`${ctx.baseURL}/admin/subject/${params.subjectId}`, subjectData, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

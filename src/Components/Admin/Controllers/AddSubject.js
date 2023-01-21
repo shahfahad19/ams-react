@@ -21,11 +21,9 @@ const AddSubject = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        //const baseURL = 'https://amsapi.vercel.app/admin/semester/'+params.semesterId+'/subjects';
-        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId + '/subjects';
         await axios
             .post(
-                `${baseURL}`,
+                `${ctx.baseURL}/admin/semester/${params.semesterId}/subjects}`,
                 { name: subject },
                 {
                     headers: {

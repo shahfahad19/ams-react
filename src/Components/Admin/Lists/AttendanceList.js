@@ -12,10 +12,8 @@ const AttendanceList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId + '/attendance';
-
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/subject/${params.subjectId}/attendance`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

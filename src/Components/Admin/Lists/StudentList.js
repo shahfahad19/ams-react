@@ -12,10 +12,9 @@ const StudentList = () => {
 
     const params = useParams();
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/batch/' + params.batchId + '/students';
         console.log(params.batchId);
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/batch/${params.batchId}students`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

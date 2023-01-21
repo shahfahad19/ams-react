@@ -7,16 +7,13 @@ import SideBarTitle from '../../Utils/SideBarTitle';
 
 const ViewSubject = () => {
     const params = useParams();
-    const [activeTab, setActiveTab] = useState('');
     const ctx = useContext(AppContext);
 
     const [subject, setSubject] = useState([]);
 
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/subject/' + params.subjectId;
-
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/subject/${params.subjectId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

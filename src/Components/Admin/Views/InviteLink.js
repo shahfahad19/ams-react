@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
-const InviteLink = (props) => {
+const InviteLink = () => {
     const [batch, setBatch] = useOutletContext();
     const batchCode = batch.batchCode || undefined;
+    const ctx = useContext(AppContext);
 
     function formChanged() {}
 
@@ -12,13 +14,13 @@ const InviteLink = (props) => {
         const share = await navigator.share({
             title: 'SignUp in AMS App',
             text: 'Click the following link to signup for Attendance Managment System',
-            url: 'http://localhost:3000/signup',
+            url: `${ctx.baseURL}/signup?code=${batchCode}`,
         });
     };
 
     const copyLink = () => {
         if (batchCode === undefined) return;
-        navigator.clipboard.writeText('http://localhost:3000/signup?code=' + batchCode);
+        navigator.clipboard.writeText(`${ctx.baseURL}/signup?code=${batchCode}`);
     };
 
     return (
@@ -56,7 +58,7 @@ const InviteLink = (props) => {
                                 <input
                                     id='link'
                                     onChange={formChanged}
-                                    value={batchCode ? 'http://localhost:3000/signup?code=' + batchCode : '...'}
+                                    value={batchCode ? `${ctx.baseURL}/signup?code=${batchCode}` : '...'}
                                     className='input input-disabled input-sm md:input-md w-full'
                                 />
                             </div>

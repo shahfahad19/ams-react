@@ -14,10 +14,8 @@ const ViewSemester = (props) => {
     });
 
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app/admin/semester/' + params.semesterId;
-
         axios
-            .get(`${baseURL}`, {
+            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
