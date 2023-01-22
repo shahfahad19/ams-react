@@ -13,7 +13,7 @@ const SubjectList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}subjects`, {
+            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}/subjects`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
