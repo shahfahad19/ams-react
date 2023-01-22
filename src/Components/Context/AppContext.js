@@ -6,9 +6,7 @@ const AppContext = React.createContext({
     token: '',
     isLoggedIn: false,
     loggedInAs: '',
-    userData: {
-        confirmed: true,
-    },
+    userData: {},
     baseURL: process.env.REACT_APP_API,
     captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
     logout: () => {},
@@ -18,7 +16,9 @@ const AppContext = React.createContext({
 export const AppContextProvider = (props) => {
     const [isLoggedIn, setLoggedIn] = useState('wait');
     const [loggedInAs, setLoggedInAs] = useState();
-    const [userData, setUserData] = useState();
+    const [userData, setUserData] = useState({
+        confirmed: true,
+    });
     const [token, setToken] = useState();
 
     useEffect(() => {
