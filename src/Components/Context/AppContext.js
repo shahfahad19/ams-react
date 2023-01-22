@@ -6,7 +6,9 @@ const AppContext = React.createContext({
     token: '',
     isLoggedIn: false,
     loggedInAs: '',
-    userData: {},
+    userData: {
+        confirmed: true,
+    },
     baseURL: process.env.REACT_APP_API,
     captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
     logout: () => {},
