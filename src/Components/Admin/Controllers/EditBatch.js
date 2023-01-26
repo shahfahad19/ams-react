@@ -23,7 +23,7 @@ const EditBatch = (props) => {
             archived: archived.current.value === 'True',
         };
         await axios
-            .patch(`${ctx.baseURL}/admin/batch/${params.batchId}`, batchData, {
+            .patch(`${ctx.baseURL}/batches/${params.batchId}`, batchData, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -39,7 +39,20 @@ const EditBatch = (props) => {
                 });
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A batch with this name already exists',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

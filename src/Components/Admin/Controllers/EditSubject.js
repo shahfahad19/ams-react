@@ -24,7 +24,7 @@ const EditSubject = (props) => {
             archived: archived.current.value === 'True',
         };
         await axios
-            .patch(`${ctx.baseURL}/admin/subject/${params.subjectId}`, subjectData, {
+            .patch(`${ctx.baseURL}/subjects/${params.subjectId}`, subjectData, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -41,7 +41,20 @@ const EditSubject = (props) => {
                 });
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A subject with this name already exists in this semester',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

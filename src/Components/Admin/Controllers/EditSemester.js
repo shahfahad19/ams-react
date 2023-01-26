@@ -24,7 +24,7 @@ const EditSemester = () => {
             archived: archived.current.value === 'True',
         };
         await axios
-            .patch(`${ctx.baseURL}/admin/semester/${params.semesterId}`, semesterData, {
+            .patch(`${ctx.baseURL}/semesters/${params.semesterId}`, semesterData, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -40,7 +40,20 @@ const EditSemester = () => {
                 });
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A semester with this name already exists in this batch',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

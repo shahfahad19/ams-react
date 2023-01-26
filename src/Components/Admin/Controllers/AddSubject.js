@@ -23,7 +23,7 @@ const AddSubject = () => {
         setBtnState('loading');
         await axios
             .post(
-                `${ctx.baseURL}/admin/semester/${params.semesterId}/subjects`,
+                `${ctx.baseURL}/subjects/semester/${params.semesterId}`,
                 { name: subject },
                 {
                     headers: {
@@ -44,7 +44,20 @@ const AddSubject = () => {
                 }, 3000);
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A subject with this name already exists in this semester',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

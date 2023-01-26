@@ -6,7 +6,6 @@ import AppContext from '../Context/AppContext';
 import Message from '../Main/Message';
 
 const Login = () => {
-    const [login, loginAs] = useState('Login As');
     const [btnState, setBtnState] = useState('');
     const [alert, setAlert] = useState(false);
     const [err, setError] = useState('');
@@ -30,62 +29,29 @@ const Login = () => {
             password: password.current.value,
         };
         let data = {};
-        let code = 0;
+        await axios
+            .post(`${ctx.baseURL}/user/login?token=${captcha.current.getValue()}`, loginData, {
+                credentials: 'include',
+            })
+            .then((response) => {
+                data = response.data;
+                ctx.isLoggedIn = true;
+                ctx.loggedInAs = response.data.data.user.role;
+                ctx.userData = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+                setError(error.response.data.message.toString());
+                setAlert(true);
+                window.grecaptcha.reset();
+                return;
+            });
 
-        if (role.current.value === 'Admin') {
-            await axios
-                .post(`${ctx.baseURL}/admin/login?token=${captcha.current.getValue()}`, loginData, {
-                    credentials: 'include',
-                })
-                .then((response) => {
-                    data = response.data;
-                    code = 1;
-                })
-                .catch((error) => {
-                    setError(error.response.data.message.toString());
-                    setAlert(true);
-                });
-        } else if (role.current.value === 'Teacher') {
-            await axios
-                .post(`${ctx.baseURL}/teacher/login?token=${captcha.current.getValue()}`, loginData)
-                .then((response) => {
-                    data = response.data;
-                    code = 2;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else if (role.current.value === 'Student') {
-            await axios
-                .post(`${ctx.baseURL}/student/login?token=${captcha.current.getValue()}`, loginData)
-                .then((response) => {
-                    data = response.data;
-                    code = 3;
-                })
-                .catch((error) => {
-                    console.log(error.data);
-                    setAlert(true);
-                });
-        } else {
-            console.log('error');
-        }
+        const loggedIn = saveToken(`${data.token}`);
 
-        const loggedIn = saveToken(`${data.token}${code}`);
-
-        setBtnState('');
-        if (code === 0) {
-            setAlert(true);
-            window.grecaptcha.reset();
-            return;
-        }
         if (loggedIn === true) {
-            ctx.login();
             navigate('/');
         }
-    };
-
-    const changeLogin = () => {
-        loginAs(role.current.value);
     };
 
     const saveToken = (token) => {
@@ -94,7 +60,6 @@ const Login = () => {
                 localStorage.setItem('ams-token', token);
                 return true;
             } catch (err) {
-                localStorage.setItem('ams-token', '');
                 return false;
             }
         } else {
@@ -110,57 +75,36 @@ const Login = () => {
 
                     <form className='font-medium w-full' onSubmit={submitForm}>
                         <div className='form-control'>
-                            <select
-                                className='select w-full select-bordered'
-                                name='role'
-                                type='role'
+                            <input
+                                className='input w-full input-bordered'
+                                type='email'
+                                placeholder='Email'
                                 required
-                                ref={role}
-                                onChange={changeLogin}
-                            >
-                                <option>Login As</option>
-                                <option>Admin</option>
-                                <option>Teacher</option>
-                                <option>Student</option>
-                            </select>
+                                ref={email}
+                            ></input>
+                        </div>
+                        <br />
+                        <div className='form-control'>
+                            <input
+                                className='input w-full input-bordered'
+                                type='password'
+                                placeholder='Password'
+                                required
+                                ref={password}
+                                minLength={8}
+                            ></input>
+                        </div>
+                        <br />
+                        <div className='flex justify-center'>
+                            <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
                         </div>
                         <br />
 
-                        {login !== 'Login As' && (
-                            <>
-                                <div className='form-control'>
-                                    <input
-                                        className='input w-full input-bordered'
-                                        type='email'
-                                        placeholder='Email'
-                                        required
-                                        ref={email}
-                                    ></input>
-                                </div>
-                                <br />
-                                <div className='form-control'>
-                                    <input
-                                        className='input w-full input-bordered'
-                                        type='password'
-                                        placeholder='Password'
-                                        required
-                                        ref={password}
-                                        minLength={8}
-                                    ></input>
-                                </div>
-                                <br />
-                                <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
-                                </div>
-                                <br />
-
-                                <div className='form-control'>
-                                    <button className={` btn btn-primary w-full font-bold ${btnState}`} type='submit'>
-                                        Login
-                                    </button>
-                                </div>
-                            </>
-                        )}
+                        <div className='form-control'>
+                            <button className={` btn btn-primary w-full font-bold ${btnState}`} type='submit'>
+                                Login
+                            </button>
+                        </div>
                         {alert === true && (
                             <>
                                 <br />

@@ -13,7 +13,7 @@ const ViewSubject = () => {
 
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/subject/${params.subjectId}`, {
+            .get(`${ctx.baseURL}/subjects/${params.subjectId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

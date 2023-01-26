@@ -13,7 +13,7 @@ const ViewBatch = () => {
 
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/batch/${params.batchId}`, {
+            .get(`${ctx.baseURL}/batches/${params.batchId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

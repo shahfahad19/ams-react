@@ -14,7 +14,7 @@ const StudentList = () => {
     useEffect(() => {
         console.log(params.batchId);
         axios
-            .get(`${ctx.baseURL}/admin/batch/${params.batchId}/students`, {
+            .get(`${ctx.baseURL}/students/batch/${params.batchId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -33,7 +33,7 @@ const StudentList = () => {
             <SubSectionHeader text='Student List' />
 
             <div className='overflow-x-auto'>
-                <table className='table table-compact w-full md:table-normal'>
+                <table className='table w-full'>
                     <thead>
                         <tr>
                             <th>Roll No.</th>

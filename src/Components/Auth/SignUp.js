@@ -33,78 +33,44 @@ const SignUp = () => {
         event.preventDefault();
         setBtnState('loading');
 
-        let data = {};
-        let code = 0;
-
-        if (role.current.value === 'Admin') {
-            await axios
-                .post(`${ctx.baseURL}/admin/signup?token=${captcha.current.getValue()}`, {
-                    name: name.current.value,
-                    email: email.current.value,
-                    department: department.current.value,
-                    password: password.current.value,
-                    passwordConfirm: confirmPassword.current.value,
-                })
-                .then((response) => {
-                    data = response.data;
-                    code = 1;
-                })
-                .catch((error) => {
-                    console.log(error.response.data);
-                    setError(error.response.data.message);
-                    setAlert(true);
-                });
-        } else if (role.current.value === 'Teacher') {
-            await axios
-                .post(`${ctx.baseURL}/teacher/signup?token=${captcha.current.getValue()}`, {
-                    name: name.current.value,
-                    email: email.current.value,
-                    password: password.current.value,
-                    confirmPassword: confirmPassword.current.value,
-                })
-                .then((response) => {
-                    data = response.data;
-                    code = 2;
-                })
-                .catch((error) => {
-                    setError(error.response.data.message);
-
-                    setAlert(true);
-                });
-        } else if (role.current.value === 'Student') {
-            await axios
-                .post(`${ctx.baseURL}/student/signup?token=${captcha.current.getValue()}`, {
-                    name: name.current.value,
-                    email: email.current.value,
-                    rollNo: rollno.current.value,
-                    batchCode: batch.current.value,
-                    password: password.current.value,
-                    passwordConfirm: confirmPassword.current.value,
-                })
-                .then((response) => {
-                    data = response.data;
-                    code = 3;
-                })
-                .catch((error) => {
-                    setError(error.response.data.message);
-
-                    setAlert(true);
-                });
-        } else {
-            console.log('error');
+        let data = {
+            name: name.current.value,
+            email: email.current.value,
+            role: role.current.value.toLowerCase(),
+            department: undefined,
+            rollNo: undefined,
+            batchCode: undefined,
+            password: password.current.value,
+            passwordConfirm: confirmPassword.current.value,
+        };
+        if (role.current.value === 'Student') {
+            data.batchCode = batch.current.value;
+            data.rollNo = rollno.current.value;
+        } else if (role.current.value === 'Admin') {
+            data.department = department.current.value;
         }
+
+        await axios
+            .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
+            .then((response) => {
+                data = response.data;
+                ctx.isLoggedIn = true;
+                ctx.loggedInAs = response.data.data.user.role;
+                ctx.userData = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error.response.data);
+                setError(error.response.data.message);
+                setAlert(true);
+                window.grecaptcha.reset();
+            });
+
         setBtnState('');
-        if (code === 0) {
-            setAlert(true);
 
-            window.grecaptcha.reset();
-            return;
-        }
-        const signedup = saveToken(`${data.token}${code}`);
+        const signedup = saveToken(`${data.token}`);
 
         setBtnState('');
         if (signedup) {
-            ctx.login();
             navigate('/');
         }
     };
@@ -117,7 +83,6 @@ const SignUp = () => {
         if (token !== '') {
             try {
                 localStorage.setItem('ams-token', token);
-                localStorage.setItem('role', 'a');
                 return true;
             } catch (err) {
                 localStorage.setItem('ams-token', '');

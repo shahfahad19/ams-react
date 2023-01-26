@@ -13,7 +13,7 @@ const SubjectList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}/subjects`, {
+            .get(`${ctx.baseURL}/subjects/semester/${params.semesterId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -32,7 +32,7 @@ const SubjectList = () => {
             <SubSectionHeader text='Subject List' />
 
             <div className='overflow-x-auto'>
-                <table className='table table-compact w-full md:table-normal'>
+                <table className='table w-full'>
                     <thead>
                         <tr>
                             <th>S.No</th>

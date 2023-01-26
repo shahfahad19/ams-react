@@ -10,12 +10,12 @@ const ViewSemester = (props) => {
     const ctx = useContext(AppContext);
     const [semester, setSemester] = useState({
         name: '',
-        batchId: { name: '' },
+        batch: { name: '' },
     });
 
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/semester/${params.semesterId}`, {
+            .get(`${ctx.baseURL}/semesters/${params.semesterId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -33,7 +33,7 @@ const ViewSemester = (props) => {
         <>
             <div className='batch flex flex-col md:flex-row'>
                 <div className='batch-info w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
-                    <SideBarTitle title={semester.batchId.name + ' - ' + semester.name} />
+                    <SideBarTitle title={semester.batch.name + ' - ' + semester.name} />
                     <Menu>
                         <MenuItems>
                             <MenuItem text='Subjects' tab='subjects' />

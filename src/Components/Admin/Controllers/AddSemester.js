@@ -24,7 +24,7 @@ const AddSemester = () => {
 
         await axios
             .post(
-                `${ctx.baseURL}/admin/batch/${params.batchId}/semesters`,
+                `${ctx.baseURL}/semesters/batch/${params.batchId}`,
                 { name: semester },
                 {
                     headers: {
@@ -45,7 +45,20 @@ const AddSemester = () => {
                 }, 3000);
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A semester with this name already exists in this batch',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

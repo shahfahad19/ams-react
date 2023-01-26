@@ -13,7 +13,7 @@ const BatchList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/batch/${params.batchId}/semesters`, {
+            .get(`${ctx.baseURL}/semesters/batch/${params.batchId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -33,12 +33,11 @@ const BatchList = () => {
             <SubSectionHeader text='Semester List' />
 
             <div className='overflow-x-auto'>
-                <table className='table table-compact w-full md:table-normal'>
+                <table className='table w-full'>
                     <thead>
                         <tr>
                             <th>S.No</th>
                             <th>Name</th>
-                            <th>Subjects</th>
                             <th>Archived</th>
                         </tr>
                     </thead>
@@ -50,11 +49,6 @@ const BatchList = () => {
                                         <th>{index + 1}</th>
                                         <td>
                                             <Link to={`/admin/semester/${semester._id}/subjects`}>{semester.name}</Link>
-                                        </td>
-                                        <td>
-                                            <Link to={`/admin/semester/${semester._id}?i=subjects`}>
-                                                {semester.subjects || 0}
-                                            </Link>
                                         </td>
                                         <td>{`${semester.archived
                                             .toString()

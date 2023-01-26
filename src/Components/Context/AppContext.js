@@ -22,7 +22,6 @@ export const AppContextProvider = (props) => {
     const [token, setToken] = useState();
 
     useEffect(() => {
-        const baseURL = 'https://amsapi.vercel.app';
         let token = '';
         try {
             token = localStorage.getItem('ams-token');
@@ -31,40 +30,27 @@ export const AppContextProvider = (props) => {
             setLoggedIn(false);
             return;
         }
-        let role = '';
-        try {
-            role = parseInt(token.charAt(token.length - 1));
-        } catch (err) {
-            setLoggedIn(false);
-            return;
-        }
-
-        token = token.substring(0, token.length - 1);
         setToken(token);
-        if (role === 1) role = 'admin';
-        if (role === 2) role = 'teacher';
-        if (role === 3) role = 'student';
-        axios
-            .get(`${baseURL}/${role}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-            })
-            .then((response) => {
-                setLoggedIn(true);
-                setLoggedInAs(role);
-                setUserData(response.data.data);
-            })
-            .catch((error) => {
-                setLoggedIn(false);
-            });
+        if (token !== '')
+            axios
+                .get(`${process.env.REACT_APP_API}/user`, {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                .then((response) => {
+                    setLoggedIn(true);
+                    setLoggedInAs(response.data.data.user.role);
+                    setUserData(response.data.data);
+                })
+                .catch((error) => {
+                    setLoggedIn(false);
+                });
     }, []);
 
     const loginHandler = () => {
         setLoggedIn('wait');
-
-        const baseURL = 'https://amsapi.vercel.app';
         let token = '';
         try {
             token = localStorage.getItem('ams-token') || '';
@@ -75,15 +61,9 @@ export const AppContextProvider = (props) => {
             setLoggedIn(false);
             return;
         }
-        let role = parseInt(token.charAt(token.length - 1));
 
-        token = token.substring(0, token.length - 1);
-        setToken(token);
-        if (role === 1) role = 'admin';
-        if (role === 2) role = 'teacher';
-        if (role === 3) role = 'student';
         axios
-            .get(`${baseURL}/${role}`, {
+            .get(`${process.env.REACT_APP_API}/user`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -91,7 +71,7 @@ export const AppContextProvider = (props) => {
             })
             .then((response) => {
                 setLoggedIn(true);
-                setLoggedInAs(role);
+                setLoggedInAs(response.data.data.role);
                 setUserData(response.data.data);
             })
             .catch((error) => {

@@ -22,7 +22,7 @@ const AddBatch = () => {
         let token = ctx.token;
         await axios
             .post(
-                `${ctx.baseURL}/admin/batches`,
+                `${ctx.baseURL}/batches`,
                 { name: batch },
                 {
                     headers: {
@@ -43,13 +43,20 @@ const AddBatch = () => {
                 }, 3000);
             })
             .catch((error) => {
-                console.log(error);
-                setAlert({
-                    show: true,
-                    type: 'error',
-                    message: error.message,
-                    showBtn: true,
-                });
+                if (error.response.data.error.code === 11000)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'A batch with this name already exists in your department',
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
             });
         setBtnState('');
     };

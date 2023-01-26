@@ -11,7 +11,7 @@ const BatchList = (props) => {
 
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/batches?sort=archived,name`, {
+            .get(`${ctx.baseURL}/batches?sort=archived,name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -44,7 +44,7 @@ const BatchList = (props) => {
             </div>
 
             <div className='overflow-x-auto'>
-                <table className='table table-compact w-full sm:table-normal'>
+                <table className='table w-full'>
                     <thead>
                         <tr>
                             <th></th>

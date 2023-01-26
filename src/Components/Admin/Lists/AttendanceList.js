@@ -13,7 +13,7 @@ const AttendanceList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/admin/subject/${params.subjectId}/attendance`, {
+            .get(`${ctx.baseURL}/attendances/subject/${params.subjectId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -21,7 +21,6 @@ const AttendanceList = () => {
             })
             .then((response) => {
                 setAttendances(response.data.data.attendances);
-                console.log(response.data.data.attendances);
                 if (response.data.data.attendances.length === 0) setAlert(true);
             })
             .catch((error) => {
