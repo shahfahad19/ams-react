@@ -29,7 +29,7 @@ const SignUp = () => {
         navigate('/');
     }
 
-    const submitForm = async (event) => {
+    const submitForm = (event) => {
         event.preventDefault();
         setBtnState('loading');
 
@@ -50,29 +50,29 @@ const SignUp = () => {
             data.department = department.current.value;
         }
 
-        await axios
+        axios
             .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
             .then((response) => {
+                setBtnState('');
                 data = response.data;
                 ctx.isLoggedIn = true;
                 ctx.loggedInAs = response.data.data.user.role;
                 ctx.userData = response.data.data;
+                const signedup = saveToken(`${data.token}`);
+                if (signedup) {
+                    navigate('/');
+                } else {
+                    setError(`Account created but couldn't login`);
+                    setAlert(true);
+                }
             })
             .catch((error) => {
+                setBtnState('');
                 console.log(error.response.data);
                 setError(error.response.data.message);
                 setAlert(true);
                 window.grecaptcha.reset();
             });
-
-        setBtnState('');
-
-        const signedup = saveToken(`${data.token}`);
-
-        setBtnState('');
-        if (signedup) {
-            navigate('/');
-        }
     };
 
     const changeSignup = () => {
