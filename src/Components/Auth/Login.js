@@ -34,24 +34,26 @@ const Login = () => {
                 credentials: 'include',
             })
             .then((response) => {
+                setBtnState('');
                 data = response.data;
                 ctx.isLoggedIn = true;
                 ctx.loggedInAs = response.data.data.user.role;
                 ctx.userData = response.data.data;
+                const loggedIn = saveToken(`${data.token}`);
+                if (loggedIn) navigate('/');
+                else {
+                    setError('Something went wrong!');
+                    setAlert(true);
+                }
             })
             .catch((error) => {
+                setBtnState('');
                 console.log(error);
                 setError(error.response.data.message.toString());
                 setAlert(true);
                 window.grecaptcha.reset();
                 return;
             });
-
-        const loggedIn = saveToken(`${data.token}`);
-
-        if (loggedIn === true) {
-            navigate('/');
-        }
     };
 
     const saveToken = (token) => {
