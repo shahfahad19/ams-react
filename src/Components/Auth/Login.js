@@ -72,13 +72,13 @@ const Login = () => {
     return (
         <>
             <div className='flex items-center flex-col'>
-                <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                    <div className='font-bold text-2xl text-center mb-3 text-primary'>Login</div>
+                <div className='shadow-xl p-3 w-11/12 md:w-4/12 rounded-xl'>
+                    <div className='font-medium text-2xl text-center mb-3 text-neutral'>Login</div>
 
-                    <form className='font-medium w-full' onSubmit={submitForm}>
+                    <form className='font-regular w-full' onSubmit={submitForm}>
                         <div className='form-control'>
                             <input
-                                className='input w-full input-bordered'
+                                className='input w-full input-bordered border-neutral rounded-full'
                                 type='email'
                                 placeholder='Email'
                                 required
@@ -88,7 +88,7 @@ const Login = () => {
                         <br />
                         <div className='form-control'>
                             <input
-                                className='input w-full input-bordered'
+                                className='input w-full input-bordered border-neutral rounded-full'
                                 type='password'
                                 placeholder='Password'
                                 required
@@ -102,8 +102,11 @@ const Login = () => {
                         </div>
                         <br />
 
-                        <div className='form-control'>
-                            <button className={` btn btn-primary w-full font-bold ${btnState}`} type='submit'>
+                        <div className='form-control flex items-center'>
+                            <button
+                                className={`btn btn-neutral w-fit rounded-lg btn-sm font-medium ${btnState}`}
+                                type='submit'
+                            >
                                 Login
                             </button>
                         </div>
@@ -121,9 +124,9 @@ const Login = () => {
                             </>
                         )}
 
-                        <div className='text-sm m-2 text-center font-bold'>
+                        <div className='text-sm m-2 text-center font-regular'>
                             Don't have an account?&nbsp;
-                            <Link className='link link-info decoration-transparent' to='/signup'>
+                            <Link className='link link-info decoration-transparent font-medium' to='/signup'>
                                 Signup!
                             </Link>
                             <br />

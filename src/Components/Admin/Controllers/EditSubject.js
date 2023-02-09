@@ -32,7 +32,6 @@ const EditSubject = (props) => {
             })
             .then((response) => {
                 setSubject(response.data.data.subject);
-                props.subjectEdited(response.data.data.subject);
                 setAlert({
                     show: true,
                     type: 'success',

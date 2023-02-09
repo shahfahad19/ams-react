@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
+import Table from '../../Utils/Table';
 
 const BatchList = (props) => {
     const [batches, setBatches] = useState([]);
@@ -43,43 +44,36 @@ const BatchList = (props) => {
                 </div>
             </div>
 
-            <div className='overflow-x-auto'>
-                <table className='table w-full'>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Archived</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {batches.length > 0 &&
-                            batches.map((batch, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <th>{index + 1}</th>
-                                        <td>
-                                            <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
-                                                {batch.name}
-                                            </Link>
-                                        </td>
-                                        <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived
-                                            .toString()
-                                            .slice(1)}`}</td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </table>
-                {showAlert && (
-                    <Message
-                        type='error'
-                        text="You haven't added any batches yet"
-                        hideAlert={hideAlert}
-                        showBtn={true}
-                    />
-                )}
-            </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Archived</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {batches.length > 0 &&
+                        batches.map((batch, index) => {
+                            return (
+                                <tr key={index}>
+                                    <th>{index + 1}</th>
+                                    <td>
+                                        <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
+                                            {batch.name}
+                                        </Link>
+                                    </td>
+                                    <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived
+                                        .toString()
+                                        .slice(1)}`}</td>
+                                </tr>
+                            );
+                        })}
+                </tbody>
+            </Table>
+            {showAlert && (
+                <Message type='error' text="You haven't added any batches yet" hideAlert={hideAlert} showBtn={true} />
+            )}
         </div>
     );
 };

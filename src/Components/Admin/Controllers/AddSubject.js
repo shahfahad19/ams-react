@@ -23,7 +23,7 @@ const AddSubject = () => {
         setBtnState('loading');
         await axios
             .post(
-                `${ctx.baseURL}/subjects/semester/${params.semesterId}`,
+                `${ctx.baseURL}/subjects?semester=${params.semesterId}`,
                 { name: subject },
                 {
                     headers: {

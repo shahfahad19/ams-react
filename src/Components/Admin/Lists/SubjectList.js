@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import Table from '../../Utils/Table';
 
 const SubjectList = () => {
     const [subjects, setSubjects] = useState([]);
@@ -13,7 +14,7 @@ const SubjectList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/subjects/semester/${params.semesterId}`, {
+            .get(`${ctx.baseURL}/subjects?semester=${params.semesterId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -31,49 +32,47 @@ const SubjectList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Subject List' />
 
-            <div className='overflow-x-auto'>
-                <table className='table w-full'>
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Name</th>
-                            <th>Teacher</th>
-                            <th>Archived</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {subjects.length > 0 &&
-                            subjects.map((subject, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <th>{index + 1}</th>
-                                        <td>
-                                            <Link to={`/admin/subject/${subject._id}`}>{subject.name}</Link>
-                                        </td>
-                                        <td>
-                                            <Link to={`/admin/subject/${subject._id}?i=attendances`}>
-                                                {subject.subjects || 0}
-                                            </Link>
-                                        </td>
-                                        <td>{`${subject.archived.toString().slice(0, 1).toUpperCase()}${subject.archived
-                                            .toString()
-                                            .slice(1)}`}</td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </table>
-                {showAlert && (
-                    <Message
-                        type='warning'
-                        text="You haven't added any subjects for this batch"
-                        hideAlert={() => {
-                            setAlert(false);
-                        }}
-                        showBtn={true}
-                    />
-                )}
-            </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Teacher</th>
+                        <th>Archived</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {subjects.length > 0 &&
+                        subjects.map((subject, index) => {
+                            return (
+                                <tr key={index}>
+                                    <th>{index + 1}</th>
+                                    <td>
+                                        <Link to={`/admin/subject/${subject._id}`}>{subject.name}</Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/admin/subject/${subject._id}?i=attendances`}>
+                                            {subject.subjects || 0}
+                                        </Link>
+                                    </td>
+                                    <td>{`${subject.archived.toString().slice(0, 1).toUpperCase()}${subject.archived
+                                        .toString()
+                                        .slice(1)}`}</td>
+                                </tr>
+                            );
+                        })}
+                </tbody>
+            </Table>
+            {showAlert && (
+                <Message
+                    type='warning'
+                    text="You haven't added any subjects for this batch"
+                    hideAlert={() => {
+                        setAlert(false);
+                    }}
+                    showBtn={true}
+                />
+            )}
         </div>
     );
 };

@@ -25,6 +25,10 @@ import Redirect from './Components/Utils/Redirect';
 import Welcome from './Components/Welcome';
 import './index.css';
 import Error from './Router/Error';
+import ViewProfile from './Components/Admin/Views/ViewProfile';
+import EditProfile from './Components/Admin/Profile/EditProfile';
+import Profile from './Components/Admin/Profile/Profile';
+import EditPic from './Components/Admin/Profile/EditPic';
 
 const router = createBrowserRouter([
     {
@@ -55,6 +59,28 @@ const router = createBrowserRouter([
                     {
                         path: '',
                         element: <BatchList />,
+                    },
+                    {
+                        path: 'profile',
+                        element: <ViewProfile />,
+                        children: [
+                            {
+                                path: 'view',
+                                element: <Profile />,
+                            },
+                            {
+                                path: 'edit-profile',
+                                element: <EditProfile />,
+                            },
+                            {
+                                path: 'edit-photo',
+                                element: <EditPic />,
+                            },
+                            {
+                                path: 'edit-password',
+                                element: <EditProfile />,
+                            },
+                        ],
                     },
                     {
                         path: 'batch/:batchId',

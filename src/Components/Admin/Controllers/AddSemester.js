@@ -24,7 +24,7 @@ const AddSemester = () => {
 
         await axios
             .post(
-                `${ctx.baseURL}/semesters/batch/${params.batchId}`,
+                `${ctx.baseURL}/semesters?batch=${params.batchId}`,
                 { name: semester },
                 {
                     headers: {

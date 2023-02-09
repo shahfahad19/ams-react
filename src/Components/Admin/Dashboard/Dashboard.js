@@ -44,7 +44,7 @@ const Dashboard = () => {
             {ctx.isLoggedIn === true && (
                 <>
                     <div className='p-2 text-center'>
-                        <h2 className='text-md font-medium'>Department: {ctx.userData.user.department}</h2>
+                        <h2 className='text-md font-medium'>Department: {ctx.userData.department}</h2>
                     </div>
                     <Outlet />
                 </>

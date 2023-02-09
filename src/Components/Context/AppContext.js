@@ -18,6 +18,7 @@ export const AppContextProvider = (props) => {
     const [loggedInAs, setLoggedInAs] = useState();
     const [userData, setUserData] = useState({
         confirmed: true,
+        photo: 'https://res.cloudinary.com/dbph73rvi/image/upload/v1675170781/mdqcinla4xkogsatvbr3.jpg',
     });
     const [token, setToken] = useState();
 
@@ -42,7 +43,7 @@ export const AppContextProvider = (props) => {
                 .then((response) => {
                     setLoggedIn(true);
                     setLoggedInAs(response.data.data.user.role);
-                    setUserData(response.data.data);
+                    setUserData(response.data.data.user);
                 })
                 .catch((error) => {
                     setLoggedIn(false);
@@ -69,11 +70,7 @@ export const AppContextProvider = (props) => {
                     Authorization: 'Bearer ' + token,
                 },
             })
-            .then((response) => {
-                setLoggedIn(true);
-                setLoggedInAs(response.data.data.role);
-                setUserData(response.data.data);
-            })
+            .then((response) => {})
             .catch((error) => {
                 setLoggedIn(false);
             });

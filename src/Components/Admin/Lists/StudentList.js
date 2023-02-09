@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import Table from '../../Utils/Table';
 
 const StudentList = () => {
     const [students, setStudents] = useState([]);
@@ -12,9 +13,8 @@ const StudentList = () => {
 
     const params = useParams();
     useEffect(() => {
-        console.log(params.batchId);
         axios
-            .get(`${ctx.baseURL}/students/batch/${params.batchId}`, {
+            .get(`${ctx.baseURL}/users/students?batch=${params.batchId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -32,48 +32,45 @@ const StudentList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Student List' />
 
-            <div className='overflow-x-auto'>
-                <table className='table w-full'>
-                    <thead>
-                        <tr>
-                            <th>Roll No.</th>
-                            <th>Name</th>
-                            <th>Active</th>
-                            <th>Account Confirmed</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {students.length > 0 &&
-                            students.map((student, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <th>{student.rollNo}</th>
-                                        <td>
-                                            <Link to={`/admin/student/${student._id}/info`}>{student.name}</Link>
-                                        </td>
-                                        <td>{`${student.active.toString().slice(0, 1).toUpperCase()}${student.active
-                                            .toString()
-                                            .slice(1)}`}</td>
-                                        <td>{`${student.confirmed
-                                            .toString()
-                                            .slice(0, 1)
-                                            .toUpperCase()}${student.confirmed.toString().slice(1)}`}</td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </table>
-                {showAlert && (
-                    <Message
-                        type='warning'
-                        text='No students have signed up for this batch yet'
-                        hideAlert={() => {
-                            setAlert(false);
-                        }}
-                        showBtn={true}
-                    />
-                )}
-            </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th>
+                        <th>Active</th>
+                        <th>Account Confirmed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {students.length > 0 &&
+                        students.map((student, index) => {
+                            return (
+                                <tr key={index}>
+                                    <th>{student.rollNo}</th>
+                                    <td>
+                                        <Link to={`/admin/student/${student._id}/info`}>{student.name}</Link>
+                                    </td>
+                                    <td>{`${student.active.toString().slice(0, 1).toUpperCase()}${student.active
+                                        .toString()
+                                        .slice(1)}`}</td>
+                                    <td>{`${student.confirmed.toString().slice(0, 1).toUpperCase()}${student.confirmed
+                                        .toString()
+                                        .slice(1)}`}</td>
+                                </tr>
+                            );
+                        })}
+                </tbody>
+            </Table>
+            {showAlert && (
+                <Message
+                    type='warning'
+                    text='No students have signed up for this batch yet'
+                    hideAlert={() => {
+                        setAlert(false);
+                    }}
+                    showBtn={true}
+                />
+            )}
         </div>
     );
 };
