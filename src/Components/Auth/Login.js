@@ -73,7 +73,7 @@ const Login = () => {
         <>
             <div className='flex items-center flex-col'>
                 <div className='shadow-xl p-3 w-11/12 md:w-4/12 rounded-xl'>
-                    <div className='font-medium text-2xl text-center mb-3 text-neutral'>Login</div>
+                    <div className='font-medium text-2xl text-center mb-3 text-primary'>Login</div>
 
                     <form className='font-regular w-full' onSubmit={submitForm}>
                         <div className='form-control'>

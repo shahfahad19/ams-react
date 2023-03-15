@@ -13,7 +13,7 @@ const Header = () => {
     return (
         <div className='navbar'>
             <div className='flex-1'>
-                <a href='/' className='normal-case text-xl font-bold '>
+                <a href='/' className='normal-case text-xl font-medium '>
                     AMS
                 </a>
             </div>

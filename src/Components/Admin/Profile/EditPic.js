@@ -6,6 +6,7 @@ import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { showAlert } from '../../Utils/sweetAlet';
 
 const EditPic = () => {
     const MySwal = withReactContent(Swal);
@@ -52,9 +53,8 @@ const EditPic = () => {
                 setBtnState('');
                 MySwal.fire({
                     title: <p>Error</p>,
-                    didOpen: () => {
-                        MySwal.fire(<p className='font-regular text-error'>{error.response.data.message}</p>);
-                    },
+                    icon: 'error',
+                    text: error.response.data.message,
                 });
                 window.grecaptcha.reset();
             });

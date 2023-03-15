@@ -6,10 +6,10 @@ const Welcome = () => {
     const ctx = useContext(AppContext);
     return (
         <div className='w-full mt-32 flex flex-col items-center justify-center'>
-            <div className='text-3xl font-bold text-primary align-middle text-center px-2 sm:text-4xl md:text-5xl'>
+            <div className='text-3xl font-medium text-primary align-middle text-center px-2 sm:text-4xl md:text-5xl'>
                 Attendance Managment System
             </div>
-            <div className='text-md font-bold text-center my-3 px-2 md:text-2xl'>
+            <div className='text-md font-regular text-center my-3 px-2 md:text-2xl'>
                 Welcome to the Attendance Managment System
                 {!ctx.isLoggedIn && (
                     <>
@@ -21,16 +21,16 @@ const Welcome = () => {
             <div className='p-3 flex flex-col justify-center items-center md:flex-row'>
                 {ctx.isLoggedIn === 'wait' && (
                     <div>
-                        <p className='text-lg font-bold text-primary text-center p-3'>Please wait</p>
+                        <p className='text-lg font-medium text-primary text-center p-3'>Please wait</p>
                         <progress className='progress progress-primary w-56'></progress>
                     </div>
                 )}
                 {!ctx.isLoggedIn && (
                     <>
-                        <Link className='btn btn-primary m-2 w-32 btn-sm md:btn-md md:w-48' to='/login'>
+                        <Link className='btn btn-neutral rounded-full m-2 w-32 btn-sm md:btn-md md:w-48' to='/login'>
                             Login
                         </Link>
-                        <Link className='btn btn-primary m-2 w-32 btn-sm md:btn-md md:w-48' to='/signup'>
+                        <Link className='btn btn-neutral rounded-full m-2 w-32 btn-sm md:btn-md md:w-48' to='/signup'>
                             Sign Up
                         </Link>
                     </>
@@ -38,14 +38,14 @@ const Welcome = () => {
                 {ctx.isLoggedIn === true && (
                     <>
                         <Link
-                            className='btn btn-primary btn-outline m-2 w-52 btn-sm md:btn-md'
+                            className='btn btn-primary rounded-full btn-outline m-2 w-52 btn-sm md:btn-md'
                             to={'/' + ctx.loggedInAs}
                         >
                             Go to Dashboard
                         </Link>
                         <br />
                         <Link
-                            className='btn btn-error btn-outline m-2 w-44 btn-sm md:btn-md'
+                            className='btn btn-error rounded-full btn-outline m-2 w-44 btn-sm md:btn-md'
                             onClick={() => {
                                 ctx.logout();
                             }}

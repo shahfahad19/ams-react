@@ -7,10 +7,12 @@ const AppContext = React.createContext({
     isLoggedIn: false,
     loggedInAs: '',
     userData: {},
+    theme: '',
     baseURL: process.env.REACT_APP_API,
     captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
     logout: () => {},
     login: () => {},
+    changeTheme: () => {},
 });
 
 export const AppContextProvider = (props) => {
@@ -41,9 +43,9 @@ export const AppContextProvider = (props) => {
                     },
                 })
                 .then((response) => {
-                    setLoggedIn(true);
                     setLoggedInAs(response.data.data.user.role);
                     setUserData(response.data.data.user);
+                    setLoggedIn(true);
                 })
                 .catch((error) => {
                     setLoggedIn(false);
@@ -93,6 +95,7 @@ export const AppContextProvider = (props) => {
                 userData: userData,
                 login: loginHandler,
                 logout: logoutHandler,
+                theme: 'light',
                 baseURL: process.env.REACT_APP_API,
                 captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
             }}

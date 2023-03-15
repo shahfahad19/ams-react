@@ -89,7 +89,7 @@ const SignUp = () => {
         <>
             <div className='flex items-center flex-col m-3'>
                 <div className='shadow-xl p-3 w-11/12 md:w-4/12 rounded-xl'>
-                    <div className='font-medium text-2xl text-center mb-3 text-neutral'>Sign Up</div>
+                    <div className='font-medium text-2xl text-center mb-3 text-primary'>Sign Up</div>
 
                     <form className='flex flex-col space-y-2' onSubmit={handleSubmit(onSubmit)}>
                         {code.length !== 4 && (
@@ -333,7 +333,12 @@ const SignUp = () => {
                                 </div>
 
                                 <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
+                                    <ReCAPTCHA
+                                        theme={ctx.theme === 'dark' ? 'dark' : 'light'}
+                                        sitekey={ctx.captchaKey}
+                                        required
+                                        ref={captcha}
+                                    />
                                 </div>
 
                                 <div className='form-control flex items-center'>
@@ -356,15 +361,15 @@ const SignUp = () => {
                                         />
                                     </>
                                 )}
-                                <div className='text-sm m-2 text-center font-regular'>
-                                    Already have an account?&nbsp;
-                                    <Link className='link link-info font-medium' to='/login'>
-                                        Login!
-                                    </Link>
-                                </div>
                             </>
                         )}
                     </form>
+                    <div className='text-sm m-2 text-center font-regular'>
+                        Already have an account?&nbsp;
+                        <Link className='link link-info font-medium' to='/login'>
+                            Login!
+                        </Link>
+                    </div>
                 </div>
             </div>
         </>

@@ -35,10 +35,13 @@ const BatchList = (props) => {
 
     return (
         <div className='batches'>
-            <div className='flex justify-between items-center p-2 bg-primary'>
-                <h1 className='font-medium text-center text-primary-content text-xl'>Batch List</h1>
+            <div className='flex justify-between items-center p-2'>
+                <h1 className='font-medium text-center text-xl'>Batch List</h1>
                 <div>
-                    <Link className='btn btn-outline text-primary-content btn-xs sm:btn-sm' to='add-batch'>
+                    <Link
+                        className='btn btn-outline rounded-full font-normal normal-case btn-xs sm:btn-sm'
+                        to='add-batch'
+                    >
                         Add New Batch
                     </Link>
                 </div>
@@ -48,8 +51,8 @@ const BatchList = (props) => {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Name</th>
-                        <th>Archived</th>
+                        <th className='normal-case font-medium text-sm'>Name</th>
+                        <th className='normal-case font-medium text-sm'>Archived</th>
                     </tr>
                 </thead>
                 <tbody>

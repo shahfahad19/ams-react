@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { Link } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 
 const ForgotPassword = () => {
-    const [account, setAccount] = useState('Change Account');
     const [btnState, setBtnState] = useState('');
 
     const ctx = useContext(AppContext);
@@ -23,96 +23,53 @@ const ForgotPassword = () => {
             password: password.current.value,
         };
 
-        if (role.current.value === 'Admin') {
-            await axios
-                .post(`${ctx.baseURL}/admin/forgotPassword?token=${captcha.current.getValue()}`, loginData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else if (role.current.value === 'Teacher') {
-            await axios
-                .post(`${ctx.baseURL}/teacher/forgotPassword?token=${captcha.current.getValue()}`, loginData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else if (role.current.value === 'Student') {
-            await axios
-                .post(`${ctx.baseURL}/student/forgotPassword?token=${captcha.current.getValue()}`, loginData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            console.log('error');
-        }
-        setBtnState('');
-    };
+        await axios
+            .post(`${ctx.baseURL}/user/forgotPassword?token=${captcha.current.getValue()}`, loginData)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-    const changeAccount = () => {
-        setAccount(role.current.value);
+        setBtnState('');
     };
 
     return (
         <>
             <div className='flex items-center flex-col'>
-                <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                    <div className='font-bold text-2xl text-center mb-3 text-primary'>Reset Password</div>
+                <div className='rounded-xl shadow-xl p-3 w-11/12 md:w-4/12'>
+                    <div className='font-medium text-2xl text-center mb-3 text-primary'>Reset Password</div>
 
                     <form className='font-medium w-full' onSubmit={submitForm}>
                         <div className='form-control'>
-                            <select
-                                className='select w-full select-bordered'
-                                name='role'
-                                type='role'
+                            <input
+                                className='input w-full input-bordered rounded-full border-neutral'
+                                type='email'
+                                placeholder='Email'
                                 required
-                                ref={role}
-                                onChange={changeAccount}
-                            >
-                                <option>Account Type</option>
-                                <option>Admin</option>
-                                <option>Teacher</option>
-                                <option>Student</option>
-                            </select>
+                                ref={email}
+                            ></input>
+                        </div>
+                        <br />
+                        <div className='flex justify-center'>
+                            <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
                         </div>
                         <br />
 
-                        {account !== 'Account Type' && (
-                            <>
-                                <div className='form-control'>
-                                    <input
-                                        className='input w-full input-bordered'
-                                        type='email'
-                                        placeholder='Email'
-                                        required
-                                        ref={email}
-                                    ></input>
-                                </div>
-                                <br />
-                                <div className='flex justify-center'>
-                                    <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
-                                </div>
-                                <br />
-
-                                <div className='form-control'>
-                                    <button className={` btn btn-primary w-full font-bold ${btnState}`} type='submit'>
-                                        Reset
-                                    </button>
-                                </div>
-                            </>
-                        )}
+                        <div className='form-control flex items-center'>
+                            <button
+                                className={` btn btn-neutral btn-sm rounded-lg w-fit font-bold ${btnState}`}
+                                type='submit'
+                            >
+                                Reset
+                            </button>
+                        </div>
 
                         <div className='text-sm m-2 text-center font-bold'>
-                            <a className='link link-info ' href='/signup'>
+                            <Link className='link link-info ' to='/signup'>
                                 Login
-                            </a>
+                            </Link>
                         </div>
                     </form>
                 </div>
