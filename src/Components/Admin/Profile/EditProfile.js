@@ -68,10 +68,6 @@ const EditProfile = () => {
         navigate('/');
     }
 
-    const changeSignup = () => {
-        signupAs(role.current.value);
-    };
-
     const saveToken = (token) => {
         if (token !== '') {
             try {

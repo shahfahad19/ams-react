@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
+import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleBar';
 import Table from '../../Utils/Table';
 
 const BatchList = (props) => {
@@ -35,17 +36,10 @@ const BatchList = (props) => {
 
     return (
         <div className='batches'>
-            <div className='flex justify-between items-center p-2'>
-                <h1 className='font-medium text-center text-xl'>Batch List</h1>
-                <div>
-                    <Link
-                        className='btn btn-outline rounded-full font-normal normal-case btn-xs sm:btn-sm'
-                        to='add-batch'
-                    >
-                        Add New Batch
-                    </Link>
-                </div>
-            </div>
+            <ListTitleBar>
+                <ListTitle text='Batch List' />
+                <ListTitleButton to='add-batch' />
+            </ListTitleBar>
 
             <Table>
                 <thead>

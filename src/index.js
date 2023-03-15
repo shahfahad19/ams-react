@@ -29,6 +29,7 @@ import ViewProfile from './Components/Admin/Views/ViewProfile';
 import EditProfile from './Components/Admin/Profile/EditProfile';
 import Profile from './Components/Admin/Profile/Profile';
 import EditPic from './Components/Admin/Profile/EditPic';
+import UpdatePassword from './Components/Admin/Profile/UpdatePassword';
 
 const router = createBrowserRouter([
     {
@@ -77,8 +78,8 @@ const router = createBrowserRouter([
                                 element: <EditPic />,
                             },
                             {
-                                path: 'edit-password',
-                                element: <EditProfile />,
+                                path: 'update-password',
+                                element: <UpdatePassword />,
                             },
                         ],
                     },

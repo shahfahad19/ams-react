@@ -71,7 +71,7 @@ const AddSubject = () => {
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
                                 <input
-                                    className='input w-full input-bordered input-sm md:input-md'
+                                    className={ctx.inputClasses}
                                     type='text'
                                     placeholder='Subject Name'
                                     value={subject}
@@ -81,11 +81,8 @@ const AddSubject = () => {
                             </div>
 
                             <br />
-                            <div className='form-control'>
-                                <button
-                                    className={` btn btn-primary w-full font-bold btn-sm md:btn-md ${btnState}`}
-                                    type='submit'
-                                >
+                            <div className='form-control flex items-center'>
+                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
                                     Add Subject
                                 </button>
                             </div>

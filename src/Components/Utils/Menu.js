@@ -5,7 +5,7 @@ const Menu = (props) => {
     return (
         <div>
             <p className='font-medium text-center mb-2'>
-                <span className='text-primary underline underline-offset-4 md:no-underline md:bg-primary rounded-box text-md md:text-primary-content px-3 py-1'>
+                <span className='underline underline-offset-4 md:no-underline md:bg-neutral md:text-neutral-content rounded-box text-md px-3 py-1'>
                     Menu
                 </span>
             </p>
@@ -25,7 +25,10 @@ export const MenuItems = (props) => {
 export const MenuItem = (props) => {
     return (
         <li className='w-1/2 md:w-auto'>
-            <NavLink to={props.tab} className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            <NavLink
+                to={props.tab}
+                className={({ isActive }) => (isActive ? 'bg-neutral text-neutral-content' : undefined)}
+            >
                 {props.text}
             </NavLink>
         </li>

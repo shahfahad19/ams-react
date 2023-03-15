@@ -11,7 +11,7 @@ const Header = () => {
     };
 
     return (
-        <div className='navbar'>
+        <div className='navbar shadow-md mb-4'>
             <div className='flex-1'>
                 <a href='/' className='normal-case text-xl font-medium '>
                     AMS

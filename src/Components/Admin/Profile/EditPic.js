@@ -12,9 +12,9 @@ const EditPic = () => {
     const MySwal = withReactContent(Swal);
     const ctx = useContext(AppContext);
     const [btnState, setBtnState] = useState('');
-    const [alert, setAlert] = useState(false);
-    const [successalert, uploaded] = useState(false);
-    const [err, setError] = useState('');
+    const [alert, setAlert] = useState({
+        show: false,
+    });
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -28,6 +28,9 @@ const EditPic = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setAlert({
+            show: false,
+        });
         setBtnState('loading');
         const formData = new FormData();
         formData.append('image', image);
@@ -40,21 +43,18 @@ const EditPic = () => {
             })
             .then((response) => {
                 setBtnState('');
-                MySwal.fire({
-                    title: <p>Error</p>,
-                    didOpen: () => {
-                        MySwal.fire(<p className='font-regular text-error'>Image updated successfully!</p>);
-                    },
-                }).then(() => {
-                    window.location.reload();
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    message: 'Updated successfully!',
                 });
             })
             .catch((error) => {
                 setBtnState('');
-                MySwal.fire({
-                    title: <p>Error</p>,
-                    icon: 'error',
-                    text: error.response.data.message,
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    message: error.message,
                 });
                 window.grecaptcha.reset();
             });
@@ -102,31 +102,10 @@ const EditPic = () => {
                                     Update Picture
                                 </button>
                             </div>
-                            {alert === true && (
-                                <>
-                                    <br />
-                                    <Message
-                                        type='error'
-                                        text={err}
-                                        hideAlert={() => {
-                                            setAlert(false);
-                                        }}
-                                        showBtn={true}
-                                    />
-                                </>
-                            )}
-                            {successalert === true && (
-                                <>
-                                    <br />
-                                    <Message
-                                        type='success'
-                                        text='Profile picture changed successfully!'
-                                        hideAlert={() => {
-                                            uploaded(false);
-                                        }}
-                                        showBtn={true}
-                                    />
-                                </>
+                            {alert.show === true && (
+                                <div className='my-2'>
+                                    <Message type={alert.type} text={alert.message} showBtn={false} />
+                                </div>
                             )}
                         </form>
                     </div>

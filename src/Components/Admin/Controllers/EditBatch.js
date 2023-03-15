@@ -84,7 +84,7 @@ const EditBatch = (props) => {
                             <div className='form-control'>
                                 <label className='label'>Batch Name</label>
                                 <input
-                                    className='input w-full input-bordered input-sm md:input-md'
+                                    className={ctx.inputClasses}
                                     type='text'
                                     ref={batchName}
                                     required
@@ -95,9 +95,9 @@ const EditBatch = (props) => {
                             <div>
                                 <label className='label'>Batch Code</label>
 
-                                <div className='flex justify-between items-center border border-solid rounded-lg border-base-300'>
+                                <div className='flex justify-between items-center border border-solid rounded-full border-base-300'>
                                     <p className='text-primary pl-4'>{batchData.batchCode || '...'}</p>
-                                    <p onClick={generateCode} className='btn btn-primary btn-sm md:btn-md'>
+                                    <p onClick={generateCode} className='btn btn-neutral rounded-full btn-sm md:btn-md'>
                                         Regenerate
                                     </p>
                                 </div>
@@ -107,11 +107,11 @@ const EditBatch = (props) => {
                                 <span className='label-text-alt'>Regenerate if all students have signed up</span>
                             </label>
                             <br />
-                            <div className='flex justify-between items-center border border-solid rounded-lg border-base-300'>
+                            <div className='flex justify-between items-center border border-solid rounded-full border-base-300'>
                                 <p className='pl-4'>Archived</p>
                                 <div className='form-control'>
                                     <select
-                                        className='select select-bordered select-sm md:select-md'
+                                        className='select select-bordered rounded-full select-sm md:select-md'
                                         defaultValue={batchData.archived ? 'True' : 'False'}
                                         ref={archived}
                                         required
@@ -127,11 +127,8 @@ const EditBatch = (props) => {
                             </label>
                             <br />
 
-                            <div className='form-control'>
-                                <button
-                                    className={` btn btn-primary w-full font-bold btn-sm md:btn-md ${btnState}`}
-                                    type='submit'
-                                >
+                            <div className='form-control flex items-center'>
+                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
                                     Update
                                 </button>
                             </div>

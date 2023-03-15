@@ -20,6 +20,9 @@ const AddSemester = () => {
 
     const submitForm = async (event) => {
         event.preventDefault();
+        setAlert({
+            show: false,
+        });
         setBtnState('loading');
 
         await axios
@@ -72,7 +75,7 @@ const AddSemester = () => {
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
                                 <input
-                                    className='input w-full input-bordered input-sm md:input-md'
+                                    className={ctx.inputClasses}
                                     type='text'
                                     placeholder='Semester Name'
                                     value={semester}
@@ -82,11 +85,8 @@ const AddSemester = () => {
                             </div>
 
                             <br />
-                            <div className='form-control'>
-                                <button
-                                    className={` btn btn-primary w-full font-bold btn-sm md:btn-md ${btnState}`}
-                                    type='submit'
-                                >
+                            <div className='form-control flex items-center'>
+                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
                                     Add Semester
                                 </button>
                             </div>

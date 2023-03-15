@@ -10,6 +10,8 @@ const AppContext = React.createContext({
     theme: '',
     baseURL: process.env.REACT_APP_API,
     captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
+    inputClasses: '',
+    btnClasses: '',
     logout: () => {},
     login: () => {},
     changeTheme: () => {},
@@ -98,6 +100,8 @@ export const AppContextProvider = (props) => {
                 theme: 'light',
                 baseURL: process.env.REACT_APP_API,
                 captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
+                btnClasses: 'btn btn-neutral w-fit rounded-lg btn-sm font-medium',
+                inputClasses: 'input w-full input-bordered border-neutral rounded-full',
             }}
         >
             {props.children}

@@ -21,7 +21,7 @@ const ViewProfile = () => {
                             <MenuItem text='Profile' tab='view' />
                             <MenuItem text='Edit Profile' tab='edit-profile' />
                             <MenuItem text='Update Profile Pic ' tab='edit-photo' />
-                            <MenuItem text='Update Password' tab='edit' />
+                            <MenuItem text='Update Password' tab='update-password' />
                         </MenuItems>
                     </Menu>
                 </div>

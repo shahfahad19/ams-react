@@ -64,7 +64,7 @@ const AddBatch = () => {
     return (
         <>
             <div className='add-batch'>
-                <div className='md:bg-primary md:p-2 text-xl text-primary font-medium text-center md:flex-grow md:text-primary-content'>
+                <div className='md:p-2 text-xl text-neutral font-medium text-center md:flex-grow border-b-2'>
                     Add Batch
                 </div>
                 <div className='semesters mt-2 flex justify-center'>
@@ -72,7 +72,7 @@ const AddBatch = () => {
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
                                 <input
-                                    className='input w-full input-bordered input-sm md:input-md'
+                                    className={ctx.inputClasses}
                                     type='text'
                                     placeholder='Batch Name'
                                     value={batch}
@@ -82,9 +82,9 @@ const AddBatch = () => {
                             </div>
 
                             <br />
-                            <div className='form-control'>
+                            <div className='form-control flex items-center'>
                                 <button
-                                    className={` btn btn-primary w-full font-bold btn-sm md:btn-md ${btnState}`}
+                                    className={`btn btn-neutral w-fit rounded-lg btn-sm font-medium ${btnState}`}
                                     type='submit'
                                 >
                                     Add Batch

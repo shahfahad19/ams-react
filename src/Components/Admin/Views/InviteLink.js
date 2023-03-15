@@ -59,14 +59,20 @@ const InviteLink = () => {
                                     id='link'
                                     onChange={formChanged}
                                     value={batchCode ? `${ctx.baseURL}/signup?code=${batchCode}` : '...'}
-                                    className='input input-disabled input-sm md:input-md w-full'
+                                    className='input input-disabled input-sm md:input-md w-full rounded-none'
                                 />
                             </div>
                             <div className='w-full'>
-                                <button className='btn btn-neutral btn-sm md:btn-md w-1/2' onClick={copyLink}>
+                                <button
+                                    className='btn btn-neutral btn-sm md:btn-md w-1/2 rounded-none'
+                                    onClick={copyLink}
+                                >
                                     Copy
                                 </button>
-                                <button className='btn btn-accent btn-sm md:btn-md w-1/2' onClick={shareLink}>
+                                <button
+                                    className='btn btn-accent btn-sm md:btn-md w-1/2 rounded-none'
+                                    onClick={shareLink}
+                                >
                                     Share
                                 </button>
                             </div>
