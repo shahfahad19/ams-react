@@ -31,12 +31,10 @@ const SignUp = () => {
             .then((response) => {
                 setBtnState('');
                 data = response.data;
-                ctx.isLoggedIn = true;
-                ctx.loggedInAs = response.data.data.user.role;
-                ctx.userData = response.data.data;
+
                 const signedup = saveToken(`${data.token}`);
                 if (signedup) {
-                    navigate('/');
+                    window.location.assign('/');
                 } else {
                     setError(`Account created but couldn't login`);
                     setAlert(true);

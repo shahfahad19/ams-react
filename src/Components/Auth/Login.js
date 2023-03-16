@@ -36,12 +36,10 @@ const Login = () => {
             .then((response) => {
                 setBtnState('');
                 data = response.data;
-                ctx.isLoggedIn = true;
-                ctx.loggedInAs = response.data.data.user.role;
-                ctx.userData = response.data.data;
                 const loggedIn = saveToken(`${data.token}`);
-                if (loggedIn) navigate('/');
-                else {
+                if (loggedIn) {
+                    window.location.assign('/');
+                } else {
                     setError('Something went wrong!');
                     setAlert(true);
                 }

@@ -14,7 +14,7 @@ const BatchList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/semesters?batch=${params.batchId}`, {
+            .get(`${ctx.baseURL}/semesters?batch=${params.batchId}&sort=archived,name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

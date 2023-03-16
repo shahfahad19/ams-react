@@ -14,7 +14,7 @@ const SubjectList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/subjects?semester=${params.semesterId}`, {
+            .get(`${ctx.baseURL}/subjects?semester=${params.semesterId}&sort=archived,name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -48,13 +48,9 @@ const SubjectList = () => {
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link to={`/admin/subject/${subject._id}`}>{subject.name}</Link>
+                                        <Link to={`/admin/subject/${subject._id}/attendance`}>{subject.name}</Link>
                                     </td>
-                                    <td>
-                                        <Link to={`/admin/subject/${subject._id}?i=attendances`}>
-                                            {subject.subjects || 0}
-                                        </Link>
-                                    </td>
+                                    <td>{subject.teacher ? subject.teacher.name : 'Not Assigned'}</td>
                                     <td>{`${subject.archived.toString().slice(0, 1).toUpperCase()}${subject.archived
                                         .toString()
                                         .slice(1)}`}</td>

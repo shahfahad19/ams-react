@@ -30,6 +30,7 @@ import EditProfile from './Components/Admin/Profile/EditProfile';
 import Profile from './Components/Admin/Profile/Profile';
 import EditPic from './Components/Admin/Profile/EditPic';
 import UpdatePassword from './Components/Admin/Profile/UpdatePassword';
+import EditTeacher from './Components/Admin/Controllers/EditTeacher';
 
 const router = createBrowserRouter([
     {
@@ -154,6 +155,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'edit',
                                 element: <EditSubject />,
+                            },
+                            {
+                                path: 'teacher',
+                                element: <EditTeacher />,
                             },
                         ],
                     },

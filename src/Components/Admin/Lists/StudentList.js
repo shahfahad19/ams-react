@@ -22,6 +22,7 @@ const StudentList = () => {
             })
             .then((response) => {
                 setStudents(response.data.data.students);
+                console.log(response.data.data);
                 if (response.data.data.students.length === 0) setAlert(true);
             })
             .catch((error) => {
@@ -37,7 +38,6 @@ const StudentList = () => {
                     <tr>
                         <th>Roll No.</th>
                         <th>Name</th>
-                        <th>Active</th>
                         <th>Account Confirmed</th>
                     </tr>
                 </thead>
@@ -48,11 +48,8 @@ const StudentList = () => {
                                 <tr key={index}>
                                     <th>{student.rollNo}</th>
                                     <td>
-                                        <Link to={`/admin/student/${student._id}/info`}>{student.name}</Link>
+                                        <Link to={`/student/${student._id}/info`}>{student.name}</Link>
                                     </td>
-                                    <td>{`${student.active.toString().slice(0, 1).toUpperCase()}${student.active
-                                        .toString()
-                                        .slice(1)}`}</td>
                                     <td>{`${student.confirmed.toString().slice(0, 1).toUpperCase()}${student.confirmed
                                         .toString()
                                         .slice(1)}`}</td>

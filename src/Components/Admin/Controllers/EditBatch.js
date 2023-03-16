@@ -59,7 +59,7 @@ const EditBatch = (props) => {
 
     const generateCode = async () => {
         await axios
-            .get(`${ctx.baseURL}/admin/batch/${params.batchId}/updatecode`, {
+            .get(`${ctx.baseURL}/batches/${params.batchId}/updatecode`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

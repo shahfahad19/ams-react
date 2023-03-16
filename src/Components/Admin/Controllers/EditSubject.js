@@ -68,7 +68,7 @@ const EditSubject = (props) => {
                             <div className='form-control'>
                                 <label className='label'>Subject Name</label>
                                 <input
-                                    className='input w-full input-bordered input-sm md:input-md'
+                                    className={ctx.inputClasses}
                                     type='text'
                                     ref={subjectName}
                                     required
@@ -76,11 +76,11 @@ const EditSubject = (props) => {
                                 ></input>
                             </div>
                             <br />
-                            <div className='flex justify-between items-center border border-solid rounded-lg border-base-300'>
+                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
                                 <p className='pl-4'>Archived</p>
                                 <div className='form-control'>
                                     <select
-                                        className='select select-bordered select-sm md:select-md'
+                                        className='select select-bordered select-sm md:select-md rounded-full'
                                         defaultValue={subject.archived ? 'True' : 'False'}
                                         ref={archived}
                                         required
@@ -96,13 +96,9 @@ const EditSubject = (props) => {
                                     If this subject's classes are finished, archive it.
                                 </span>
                             </label>
-                            <br />
 
-                            <div className='form-control'>
-                                <button
-                                    className={` btn btn-primary w-full font-bold btn-sm md:btn-md ${btnState}`}
-                                    type='submit'
-                                >
+                            <div className='form-control flex items-center'>
+                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
                                     Update
                                 </button>
                             </div>
