@@ -54,7 +54,7 @@ const EditPic = () => {
                 setAlert({
                     show: true,
                     type: 'error',
-                    message: error.message,
+                    message: error.response.data.message,
                 });
                 window.grecaptcha.reset();
             });

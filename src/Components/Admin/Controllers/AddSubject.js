@@ -55,7 +55,7 @@ const AddSubject = () => {
                     setAlert({
                         show: true,
                         type: 'error',
-                        message: error.message,
+                        message: error.response.data.message,
                         showBtn: true,
                     });
             });
