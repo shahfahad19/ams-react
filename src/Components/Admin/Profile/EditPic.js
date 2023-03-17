@@ -50,6 +50,7 @@ const EditPic = () => {
                 });
             })
             .catch((error) => {
+                console.log(error.response.data);
                 setBtnState('');
                 setAlert({
                     show: true,
