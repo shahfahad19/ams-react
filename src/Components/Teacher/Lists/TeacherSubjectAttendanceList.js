@@ -2,11 +2,12 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
+import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 
-const BatchList = () => {
-    const [semesters, setSemesters] = useState([]);
+const TeacherSubjectAttendanceList = () => {
+    const [attendances, setAttendances] = useState([]);
     const [loading, isLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
@@ -14,7 +15,7 @@ const BatchList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/semesters?batch=${params.batchId}&sort=archived,name`, {
+            .get(`${ctx.baseURL}/attendances?subject=${params.subjectId}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -22,41 +23,42 @@ const BatchList = () => {
             })
             .then((response) => {
                 setErrorMessage('');
+                setAttendances(response.data.data.attendances);
+                if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
                 isLoading(false);
-                setSemesters(response.data.data.semesters);
-                if (response.data.data.semesters.length === 0) setErrorMessage('No semesters found');
             })
             .catch((error) => {
-                if (error.response) setErrorMessage(error.response.data.message);
-                else setErrorMessage(error.message);
-                isLoading(false);
                 console.log(error);
+                setErrorMessage(error.response.data.message || error.message);
+                isLoading(false);
             });
     }, []);
     return (
         <div className='flex-grow'>
-            <SubSectionHeader text='Semester List' />
+            <SubSectionHeader text='Attendance List' />
 
             <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>Name</th>
-                        <th>Archived</th>
+                        <th>Date</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Leave</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {semesters.length > 0 &&
-                        semesters.map((semester, index) => {
+                    {attendances.length > 0 &&
+                        attendances.map((attendance, index) => {
                             return (
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link to={`/admin/semester/${semester._id}/subjects`}>{semester.name}</Link>
+                                        <Link to={`/admin/attendance/${attendance._id}`}>{attendance.date}</Link>
                                     </td>
-                                    <td>{`${semester.archived.toString().slice(0, 1).toUpperCase()}${semester.archived
-                                        .toString()
-                                        .slice(1)}`}</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
                                 </tr>
                             );
                         })}
@@ -66,4 +68,4 @@ const BatchList = () => {
     );
 };
 
-export default BatchList;
+export default TeacherSubjectAttendanceList;

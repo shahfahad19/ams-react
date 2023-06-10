@@ -6,7 +6,7 @@ import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { showAlert } from '../../Utils/sweetAlet';
+import { showAlert } from '../../Utils/sweetAlert';
 
 const EditPic = () => {
     const MySwal = withReactContent(Swal);

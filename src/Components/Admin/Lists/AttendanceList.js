@@ -2,13 +2,13 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 
 const AttendanceList = () => {
     const [attendances, setAttendances] = useState([]);
-    const [showAlert, setAlert] = useState(false);
+    const [loading, isLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     const params = useParams();
@@ -21,18 +21,24 @@ const AttendanceList = () => {
                 },
             })
             .then((response) => {
+                setErrorMessage('');
                 setAttendances(response.data.data.attendances);
-                if (response.data.data.attendances.length === 0) setAlert(true);
+                if (response.data.data.attendances.length === 0)
+                    setAttendances('No attendance has been recorded for this subject yet');
+                isLoading(false);
             })
             .catch((error) => {
                 console.log(error);
+                if (error.response) setErrorMessage(error.response.data.message);
+                else setErrorMessage(error.message);
+                isLoading(false);
             });
     }, []);
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Attendance List' />
 
-            <Table>
+            <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th>S.No</th>
@@ -59,16 +65,6 @@ const AttendanceList = () => {
                         })}
                 </tbody>
             </Table>
-            {showAlert && (
-                <Message
-                    type='warning'
-                    text='No attendance has been recorded for this subject yet'
-                    hideAlert={() => {
-                        setAlert(false);
-                    }}
-                    showBtn={true}
-                />
-            )}
         </div>
     );
 };

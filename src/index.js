@@ -8,7 +8,7 @@ import AddSubject from './Components/Admin/Controllers/AddSubject';
 import EditBatch from './Components/Admin/Controllers/EditBatch';
 import EditSemester from './Components/Admin/Controllers/EditSemester';
 import EditSubject from './Components/Admin/Controllers/EditSubject';
-import { default as AdminDashboard } from './Components/Admin/Dashboard/Dashboard';
+import AdminDashboard from './Components/Admin/AdminDashboard';
 import BatchList from './Components/Admin/Lists/BatchList';
 import SemesterList from './Components/Admin/Lists/SemesterList';
 import StudentList from './Components/Admin/Lists/StudentList';
@@ -31,6 +31,12 @@ import Profile from './Components/Admin/Profile/Profile';
 import EditPic from './Components/Admin/Profile/EditPic';
 import UpdatePassword from './Components/Admin/Profile/UpdatePassword';
 import EditTeacher from './Components/Admin/Controllers/EditTeacher';
+import TeacherDashboard from './Components/Teacher/TeacherDashboard';
+import TeacherSubjectsList from './Components/Teacher/Lists/TeacherSubjectsList';
+import TeacherViewSubject from './Components/Teacher/Views/TeacherViewSubject';
+import TakeAttendance from './Components/Teacher/Controllers/TakeAttendance';
+import TeacherSubjectAttendanceList from './Components/Teacher/Lists/TeacherSubjectAttendanceList';
+import RemoveSubject from './Components/Teacher/Controllers/RemoveSubject';
 
 const router = createBrowserRouter([
     {
@@ -54,6 +60,7 @@ const router = createBrowserRouter([
                 path: 'forgot-password',
                 element: <ForgotPassword />,
             },
+            // Paths for Admin (Department Admin)
             {
                 path: 'admin',
                 element: <AdminDashboard />,
@@ -159,6 +166,38 @@ const router = createBrowserRouter([
                             {
                                 path: 'teacher',
                                 element: <EditTeacher />,
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                path: 'teacher',
+                element: <TeacherDashboard />,
+                children: [
+                    {
+                        path: '',
+                        element: <TeacherSubjectsList />,
+                    },
+                    {
+                        path: 'subject/:subjectId',
+                        element: <TeacherViewSubject />,
+                        children: [
+                            {
+                                path: '',
+                                element: <TeacherSubjectAttendanceList />,
+                            },
+                            {
+                                path: 'attendance',
+                                element: <TeacherSubjectAttendanceList />,
+                            },
+                            {
+                                path: 'take-attendance',
+                                element: <TakeAttendance />,
+                            },
+                            {
+                                path: 'remove',
+                                element: <RemoveSubject />,
                             },
                         ],
                     },

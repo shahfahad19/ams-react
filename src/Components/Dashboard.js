@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
+import AppContext from '../Context/AppContext';
+import Message from '../Main/Message';
 
 const Dashboard = () => {
     const ctx = useContext(AppContext);

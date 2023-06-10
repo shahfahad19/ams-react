@@ -2,13 +2,13 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 
 const StudentList = () => {
     const [students, setStudents] = useState([]);
-    const [showAlert, setAlert] = useState(false);
+    const [loading, isLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     const params = useParams();
@@ -21,11 +21,17 @@ const StudentList = () => {
                 },
             })
             .then((response) => {
+                setErrorMessage('');
+                isLoading(false);
                 setStudents(response.data.data.students);
                 console.log(response.data.data);
-                if (response.data.data.students.length === 0) setAlert(true);
+                if (response.data.data.students.length === 0)
+                    setErrorMessage('No student has signed up for this batch yet');
             })
             .catch((error) => {
+                if (error.response) setErrorMessage(error.response.data.message);
+                else setErrorMessage(error.message);
+                isLoading(false);
                 console.log(error);
             });
     }, []);
@@ -33,7 +39,7 @@ const StudentList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Student List' />
 
-            <Table>
+            <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th>Roll No.</th>
@@ -58,16 +64,6 @@ const StudentList = () => {
                         })}
                 </tbody>
             </Table>
-            {showAlert && (
-                <Message
-                    type='warning'
-                    text='No students have signed up for this batch yet'
-                    hideAlert={() => {
-                        setAlert(false);
-                    }}
-                    showBtn={true}
-                />
-            )}
         </div>
     );
 };

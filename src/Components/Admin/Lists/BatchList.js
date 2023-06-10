@@ -8,7 +8,8 @@ import Table from '../../Utils/Table';
 
 const BatchList = (props) => {
     const [batches, setBatches] = useState([]);
-    const [showAlert, setAlert] = useState(false);
+    const [loading, isLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     useEffect(() => {
@@ -20,19 +21,20 @@ const BatchList = (props) => {
                 },
             })
             .then((response) => {
+                setErrorMessage('');
+                isLoading(false);
                 setBatches(response.data.data.batches);
                 if (response.data.data.batches.length === 0) {
-                    setAlert(true);
+                    setErrorMessage('No batches found');
                 }
             })
             .catch((error) => {
+                if (error.response) setErrorMessage(error.response.data.message);
+                else setErrorMessage(error.message);
+                isLoading(false);
                 console.log(error);
             });
     }, []);
-
-    const hideAlert = () => {
-        setAlert(false);
-    };
 
     return (
         <div className='batches'>
@@ -41,7 +43,7 @@ const BatchList = (props) => {
                 <ListTitleButton to='add-batch' />
             </ListTitleBar>
 
-            <Table>
+            <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th></th>
@@ -68,9 +70,6 @@ const BatchList = (props) => {
                         })}
                 </tbody>
             </Table>
-            {showAlert && (
-                <Message type='error' text="You haven't added any batches yet" hideAlert={hideAlert} showBtn={true} />
-            )}
         </div>
     );
 };

@@ -2,13 +2,13 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 
 const SubjectList = () => {
     const [subjects, setSubjects] = useState([]);
-    const [showAlert, setAlert] = useState(false);
+    const [loading, isLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     const params = useParams();
@@ -21,10 +21,15 @@ const SubjectList = () => {
                 },
             })
             .then((response) => {
+                setErrorMessage('');
+                isLoading(false);
                 setSubjects(response.data.data.subjects);
-                if (response.data.data.subjects.length === 0) setAlert(true);
+                if (response.data.data.subjects.length === 0) setErrorMessage('No subjects found');
             })
             .catch((error) => {
+                if (error.response) setErrorMessage(error.response.data.message);
+                else setErrorMessage(error.message);
+                isLoading(false);
                 console.log(error);
             });
     }, []);
@@ -32,7 +37,7 @@ const SubjectList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Subject List' />
 
-            <Table>
+            <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th>S.No</th>
@@ -59,16 +64,6 @@ const SubjectList = () => {
                         })}
                 </tbody>
             </Table>
-            {showAlert && (
-                <Message
-                    type='warning'
-                    text="You haven't added any subjects for this batch"
-                    hideAlert={() => {
-                        setAlert(false);
-                    }}
-                    showBtn={true}
-                />
-            )}
         </div>
     );
 };
