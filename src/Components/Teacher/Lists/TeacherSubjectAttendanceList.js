@@ -33,41 +33,53 @@ const TeacherSubjectAttendanceList = () => {
                 isLoading(false);
             });
     }, []);
+
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Attendance List' />
 
+            {attendances.length === 0 && (
+                <div className='flex justify-center items-center h-60'>
+                    <div className='loader'></div>
+                </div>
+            )}
             {attendances.length > 0 && (
-                <Table loading={loading} error={errorMessage}>
+                <table className='table w-full table-compact'>
                     <thead>
                         <tr>
-                            <th colSpan='2'>Dates</th>
-                            <th colSpan={attendances[0].dates.length + 1}>Date</th>
-                        </tr>
-                        <tr>
-                            <th>R.no</th>
-                            <th>Name</th>
+                            <th className='normal-case font-semibold border border-neutral'>R.no</th>
+                            <th className='normal-case font-semibold border border-neutral'>Name</th>
                             {attendances.length > 0 &&
                                 attendances[0].dates.map((date) => (
-                                    <th key={date}>
-                                        {new Date(date).toLocaleDateString('en-UK', {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: '2-digit',
-                                            hour: 'numeric',
-                                            minute: '2-digit',
-                                            hour12: true,
-                                        })}
+                                    <th
+                                        key={date}
+                                        className='text-center text-xs normal-case font-semibold border border-neutral'
+                                    >
+                                        <div>
+                                            {new Date(date).toLocaleDateString('en-UK', {
+                                                day: '2-digit',
+                                                month: 'short',
+                                                year: '2-digit',
+                                            })}
+                                        </div>
+                                        <div className='border border-neutral'></div>
+                                        <div>
+                                            {new Date(date).toLocaleTimeString('en-UK', {
+                                                hour: 'numeric',
+                                                minute: '2-digit',
+                                                hour12: true,
+                                            })}
+                                        </div>
                                     </th>
                                 ))}
-                            <th>Percentage</th>
+                            <th className='text-center normal-case font-semibold border border-neutral'>Percentage</th>
                         </tr>
                     </thead>
                     <tbody>
                         {attendances.map((attendance) => (
                             <tr key={attendance._id}>
-                                <td className='py-2 px-4 border-b'>{attendance.rollNo}</td>
-                                <td className='py-2 px-4 border-b'>{attendance.name}</td>
+                                <td className='border border-neutral'>{attendance.rollNo}</td>
+                                <td className='border border-neutral text-bold'>{attendance.name}</td>
                                 {attendance.attendance.map((att, i) => (
                                     <td
                                         key={i}
@@ -77,13 +89,15 @@ const TeacherSubjectAttendanceList = () => {
                                                 : att.status[0] === 'a'
                                                 ? 'text-error'
                                                 : 'text-warning'
-                                        } text-center`}
+                                        } text-center font-bold border border-neutral`}
                                     >
                                         {att.status[0].toUpperCase()}
                                     </td>
                                 ))}
                                 <td
-                                    className={parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-neutral'}
+                                    className={`${
+                                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                                    } text-center border border-neutral font-semibold`}
                                 >
                                     {attendance.percentage === '100%'
                                         ? attendance.percentage
@@ -92,7 +106,7 @@ const TeacherSubjectAttendanceList = () => {
                             </tr>
                         ))}
                     </tbody>
-                </Table>
+                </table>
             )}
         </div>
     );

@@ -4,6 +4,8 @@ import AppContext from '../../Context/AppContext';
 import axios from 'axios';
 import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 const TakeAttendance = () => {
     const params = useParams();
@@ -15,6 +17,8 @@ const TakeAttendance = () => {
     const [attendanceList, setAttendanceList] = useState([]);
     const [isAttendanceComplete, setAttendanceComplete] = useState(false);
     const [editingEnabled, enableEditing] = useState(false);
+    const [attendanceSaved, saveAttendance] = useState(false);
+    const MySwal = withReactContent(Swal);
 
     useEffect(() => {
         axios
@@ -80,26 +84,49 @@ const TakeAttendance = () => {
             subject: subject._id,
             attendance: attendanceList,
         };
-        console.log(attendanceData);
-        await axios
-            .post(`${ctx.baseURL}/attendances`, attendanceData, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+
+        MySwal.fire({
+            title: 'Saving Attendance',
+            allowOutsideClick: false,
+            didOpen: () => {
+                MySwal.showLoading();
+                axios
+                    .post(`${ctx.baseURL}/attendances`, attendanceData, {
+                        credentials: 'include',
+                        headers: {
+                            Authorization: 'Bearer ' + ctx.token,
+                        },
+                    })
+                    .then((response) => {
+                        saveAttendance(true);
+                        MySwal.close();
+                        MySwal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Attendance saved successfully.',
+                        });
+                    })
+                    .catch((error) => {
+                        MySwal.close();
+
+                        let errorMessage = '';
+                        if (error.response) errorMessage = error.response.data.message;
+                        errorMessage = error.message;
+                        if (error.response)
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: errorMessage,
+                            });
+                    });
+            },
+        });
     };
 
     return (
-        <div className='flex-grow'>
+        <div className='flex-grow relative'>
             <SubSectionHeader text='Take Attendance' />
-            {!isAttendanceComplete && students.length > 0 && (
+            {!attendanceSaved && !isAttendanceComplete && students.length > 0 && (
                 <div className='flex flex-col md:space-x-10 mt-4 space-y-4 md:space-y-10 items-center justify-center'>
                     <div className='flex flex-col items-center'>
                         <p className='text-lg md:text-xl font-semibold mb-4 text-center'>
@@ -132,7 +159,7 @@ const TakeAttendance = () => {
                 </div>
             )}
 
-            {isAttendanceComplete && (
+            {!attendanceSaved && isAttendanceComplete && (
                 <>
                     <h4 className='text-lg font-semibold mb-4 text-center p-2'>Attendance Complete</h4>
                     <Table>
@@ -199,6 +226,11 @@ const TakeAttendance = () => {
             )}
             {students.length === 0 && (
                 <div className='flex items-center justify-center text-xl h-44'>Loading students...</div>
+            )}
+            {attendanceSaved && (
+                <div className='flex items-center justify-center text-xl h-44'>
+                    <p className='text-green-500'>Attendance Saved</p>
+                </div>
             )}
         </div>
     );
