@@ -21,8 +21,8 @@ const Welcome = () => {
             <div className='p-3 flex flex-col justify-center items-center md:flex-row'>
                 {ctx.isLoggedIn === 'wait' && (
                     <div>
-                        <p className='text-lg font-medium text-primary text-center p-3'>Please wait</p>
-                        <progress className='progress progress-primary w-56'></progress>
+                        <p className='text-lg font-medium text-neutral text-center p-3'>Please wait</p>
+                        <progress className='progress progress-neutral w-56'></progress>
                     </div>
                 )}
                 {!ctx.isLoggedIn && (

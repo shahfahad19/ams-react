@@ -14,7 +14,7 @@ const StudentList = () => {
     const params = useParams();
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/users/students?batch=${params.batchId}`, {
+            .get(`${ctx.baseURL}/users/students?batch=${params.batchId}&sort=rollNo`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

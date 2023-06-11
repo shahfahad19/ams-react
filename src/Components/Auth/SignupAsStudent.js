@@ -21,6 +21,7 @@ const SignupAsStudent = () => {
     } = useForm();
 
     const submitForm = (data) => {
+        data.role = 'student';
         setBtnState('loading');
         axios
             .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
@@ -152,6 +153,7 @@ const SignupAsStudent = () => {
                         type='text'
                         placeholder='Enter Batch Code provided by department'
                         defaultValue={code}
+                        value='79B7'
                         {...register('batchCode', {
                             required: {
                                 value: true,
@@ -183,6 +185,7 @@ const SignupAsStudent = () => {
                             errors.password && 'input-error'
                         }`}
                         type='password'
+                        value='12345678'
                         placeholder='********'
                         {...register('password', {
                             required: {
@@ -190,8 +193,8 @@ const SignupAsStudent = () => {
                                 message: 'Password is required',
                             },
                             minLength: {
-                                value: 6,
-                                message: 'Password should at least be be 6 characters',
+                                value: 8,
+                                message: 'Password should at least be be 9 characters',
                             },
                             maxLength: {
                                 value: 25,
@@ -212,6 +215,7 @@ const SignupAsStudent = () => {
                         className={`input input-bordered w-full border-neutral rounded-full ${
                             errors.passwordConfirm && 'input-error'
                         }`}
+                        value='12345678'
                         type='password'
                         placeholder='********'
                         {...register('passwordConfirm', {

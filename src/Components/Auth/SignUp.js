@@ -15,7 +15,7 @@ const SignUp = () => {
     if (code === null || code === undefined) code = '';
     else code = code.toUpperCase();
     useEffect(() => {
-        if (code.length === 4) {
+        if (code.length !== 4) {
             signupAs('student');
         } else {
             signupAs('signup');

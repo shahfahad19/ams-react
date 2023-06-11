@@ -24,7 +24,7 @@ const AttendanceList = () => {
                 setErrorMessage('');
                 setAttendances(response.data.data.attendances);
                 if (response.data.data.attendances.length === 0)
-                    setAttendances('No attendance has been recorded for this subject yet');
+                    setErrorMessage('No attendance has been recorded for this subject yet');
                 isLoading(false);
             })
             .catch((error) => {

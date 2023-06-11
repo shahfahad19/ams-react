@@ -21,6 +21,7 @@ const SignupAsTeacher = () => {
     } = useForm();
 
     const submitForm = (data) => {
+        data.role = 'teacher';
         setBtnState('loading');
         axios
             .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
