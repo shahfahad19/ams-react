@@ -18,6 +18,8 @@ const TakeAttendance = () => {
     const [isAttendanceComplete, setAttendanceComplete] = useState(false);
     const [editingEnabled, enableEditing] = useState(false);
     const [attendanceSaved, saveAttendance] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
+
     const MySwal = withReactContent(Swal);
 
     useEffect(() => {
@@ -41,6 +43,9 @@ const TakeAttendance = () => {
                         }
                     )
                     .then((studentsRes) => {
+                        if (studentsRes.data.data.students.length === 0) {
+                            setErrorMessage('No student have signed up for this batch yet');
+                        }
                         setStudents(studentsRes.data.data.students);
                         setAttendanceList(
                             studentsRes.data.data.students.map((student) => ({
@@ -224,7 +229,7 @@ const TakeAttendance = () => {
                     </div>
                 </>
             )}
-            {students.length === 0 && (
+            {!errorMessage && students.length === 0 && (
                 <div className='flex items-center justify-center text-xl h-44'>Loading students...</div>
             )}
             {attendanceSaved && (
@@ -232,6 +237,7 @@ const TakeAttendance = () => {
                     <p className='text-green-500'>Attendance Saved</p>
                 </div>
             )}
+            {errorMessage && <div className='text-center mt-16 text-error text-xl'>{errorMessage}</div>}
         </div>
     );
 };

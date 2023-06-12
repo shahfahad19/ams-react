@@ -153,7 +153,6 @@ const SignupAsStudent = () => {
                         type='text'
                         placeholder='Enter Batch Code provided by department'
                         defaultValue={code}
-                        value='79B7'
                         {...register('batchCode', {
                             required: {
                                 value: true,
@@ -185,7 +184,6 @@ const SignupAsStudent = () => {
                             errors.password && 'input-error'
                         }`}
                         type='password'
-                        value='12345678'
                         placeholder='********'
                         {...register('password', {
                             required: {
@@ -215,7 +213,6 @@ const SignupAsStudent = () => {
                         className={`input input-bordered w-full border-neutral rounded-full ${
                             errors.passwordConfirm && 'input-error'
                         }`}
-                        value='12345678'
                         type='password'
                         placeholder='********'
                         {...register('passwordConfirm', {

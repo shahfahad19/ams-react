@@ -73,15 +73,26 @@ const AddSemester = () => {
                 <div className='semesters mt-2 flex justify-center'>
                     <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
                         <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
-                                <input
-                                    className={ctx.inputClasses}
-                                    type='text'
-                                    placeholder='Semester Name'
-                                    value={semester}
-                                    onChange={semesterNameHandler}
-                                    required
-                                ></input>
+                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
+                                <p className='pl-4'>Semester</p>
+                                <div className='form-control'>
+                                    <select
+                                        className='select select-bordered select-sm md:select-md rounded-full'
+                                        value={semester}
+                                        onChange={(event) => semesterNameHandler(event)}
+                                        required
+                                    >
+                                        <option value=''>Select</option>
+                                        <option value='1'>1</option>
+                                        <option value='2'>2</option>
+                                        <option value='3'>3</option>
+                                        <option value='4'>4</option>
+                                        <option value='5'>5</option>
+                                        <option value='6'>6</option>
+                                        <option value='7'>7</option>
+                                        <option value='8'>8</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <br />

@@ -37,6 +37,10 @@ import TeacherViewSubject from './Components/Teacher/Views/TeacherViewSubject';
 import TakeAttendance from './Components/Teacher/Controllers/TakeAttendance';
 import TeacherSubjectAttendanceList from './Components/Teacher/Lists/TeacherSubjectAttendanceList';
 import RemoveSubject from './Components/Teacher/Controllers/RemoveSubject';
+import SuperAdminDashboard from './Components/SuperAdmin/SuperAdminDashboard';
+import MainView from './Components/SuperAdmin/Views/MainView';
+import DepartmentList from './Components/SuperAdmin/Lists/DepartmentList';
+import AddDepartment from './Components/SuperAdmin/Controllers/AddDepartment';
 
 const router = createBrowserRouter([
     {
@@ -59,6 +63,21 @@ const router = createBrowserRouter([
             {
                 path: 'forgot-password',
                 element: <ForgotPassword />,
+            },
+
+            {
+                path: 'super-admin',
+                element: <SuperAdminDashboard />,
+                children: [
+                    {
+                        path: '',
+                        element: <DepartmentList />,
+                    },
+                    {
+                        path: 'add-department',
+                        element: <AddDepartment />,
+                    },
+                ],
             },
             // Paths for Admin (Department Admin)
             {

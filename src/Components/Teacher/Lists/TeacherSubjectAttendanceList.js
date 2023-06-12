@@ -38,7 +38,7 @@ const TeacherSubjectAttendanceList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Attendance List' />
 
-            {attendances.length === 0 && (
+            {!errorMessage && attendances.length === 0 && (
                 <div className='flex justify-center items-center h-60'>
                     <div className='loader'></div>
                 </div>
@@ -107,6 +107,9 @@ const TeacherSubjectAttendanceList = () => {
                         ))}
                     </tbody>
                 </table>
+            )}
+            {errorMessage && (
+                <div className='text-center mt-16 text-error text-xl'>No attendances found for this subject</div>
             )}
         </div>
     );

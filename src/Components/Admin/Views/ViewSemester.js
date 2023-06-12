@@ -33,7 +33,10 @@ const ViewSemester = (props) => {
         <>
             <div className='batch flex flex-col md:flex-row'>
                 <div className='batch-info w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
-                    <SideBarTitle title={semester.batch.name + ' - ' + semester.name} />
+                    {semester.name === '' && <SideBarTitle title='Loading...' />}
+                    {semester.name !== '' && (
+                        <SideBarTitle title={'Batch ' + semester.batch.name + ' - Semester ' + semester.name} />
+                    )}
                     <Menu>
                         <MenuItems>
                             <MenuItem text='Subjects' tab='subjects' />

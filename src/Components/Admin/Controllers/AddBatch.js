@@ -72,13 +72,14 @@ const AddBatch = () => {
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
                                 <input
-                                    className={ctx.inputClasses}
-                                    type='text'
-                                    placeholder='Batch Name'
+                                    className='select select-bordered select-sm md:select-md rounded-full'
                                     value={batch}
-                                    onChange={batchNameHandler}
+                                    type='number'
+                                    onChange={(event) => batchNameHandler(event)}
                                     required
-                                ></input>
+                                    placeholder='Enter batch no.'
+                                    min='1'
+                                />
                             </div>
 
                             <br />

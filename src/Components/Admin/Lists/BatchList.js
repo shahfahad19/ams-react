@@ -59,7 +59,7 @@ const BatchList = (props) => {
                                     <th>{index + 1}</th>
                                     <td>
                                         <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
-                                            {batch.name}
+                                            Batch {batch.name}
                                         </Link>
                                     </td>
                                     <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived

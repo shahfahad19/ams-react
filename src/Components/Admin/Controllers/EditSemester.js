@@ -65,15 +65,26 @@ const EditSemester = () => {
                 <div className='flex justify-center'>
                     <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
                         <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
-                                <label className='label'>Semester Name</label>
-                                <input
-                                    className={ctx.inputClasses}
-                                    type='text'
-                                    ref={semesterName}
-                                    required
-                                    defaultValue={semester.name}
-                                ></input>
+                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
+                                <p className='pl-4'>Semester</p>
+                                <div className='form-control'>
+                                    <select
+                                        className='select select-bordered select-sm md:select-md rounded-full'
+                                        ref={semesterName}
+                                        defaultValue={semester.name}
+                                        required
+                                    >
+                                        <option value=''>Select</option>
+                                        <option value='1'>1</option>
+                                        <option value='2'>2</option>
+                                        <option value='3'>3</option>
+                                        <option value='4'>4</option>
+                                        <option value='5'>5</option>
+                                        <option value='6'>6</option>
+                                        <option value='7'>7</option>
+                                        <option value='8'>8</option>
+                                    </select>
+                                </div>
                             </div>
                             <br />
                             <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
