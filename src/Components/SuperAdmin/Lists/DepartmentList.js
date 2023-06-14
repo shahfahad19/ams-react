@@ -58,14 +58,11 @@ const DepartmentList = (props) => {
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link
-                                            to={`/super-admin/department/${department._id}/batches`}
-                                            key={department._id}
-                                        >
+                                        <Link to={`/super-admin/department/${department._id}`} key={department._id}>
                                             {department.department}
                                         </Link>
                                     </td>
-                                    <td>{department.name}</td>
+                                    <td>{department.email}</td>
                                 </tr>
                             );
                         })}

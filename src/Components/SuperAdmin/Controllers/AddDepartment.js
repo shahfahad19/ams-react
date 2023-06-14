@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 
@@ -11,25 +11,25 @@ const AddDepartment = () => {
     });
     const ctx = useContext(AppContext);
 
-    const departmentNameHandler = (event) => {
-        setDepartment(event.target.value);
-    };
+    const emailRef = useRef();
+    const departmentRef = useRef();
 
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
         setAlert({ show: false });
         let token = ctx.token;
+
+        const reqBody = {
+            department: departmentRef.current.value,
+            email: emailRef.current.value,
+        };
         await axios
-            .post(
-                `${ctx.baseURL}/departments`,
-                { name: department },
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                    },
-                }
-            )
+            .post(`${ctx.baseURL}/users/departments`, reqBody, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
             .then((response) => {
                 setDepartment('');
                 setAlert({
@@ -43,18 +43,34 @@ const AddDepartment = () => {
                 }, 3000);
             })
             .catch((error) => {
-                if (error.response.data.error.code === 11000)
+                console.log(error);
+                if (error.response) {
+                    if (error.response.data.message.includes('department'))
+                        setAlert({
+                            show: true,
+                            type: 'error',
+                            message: reqBody.department + ' department already exists',
+                            showBtn: true,
+                        });
+                    else if (error.response.data.message.includes('email'))
+                        setAlert({
+                            show: true,
+                            type: 'error',
+                            message: reqBody.email + ' already has an account',
+                            showBtn: true,
+                        });
+                    else
+                        setAlert({
+                            show: true,
+                            type: 'error',
+                            message: error.response.data.message,
+                            showBtn: true,
+                        });
+                } else
                     setAlert({
                         show: true,
                         type: 'error',
-                        message: 'A department with this name already exists',
-                        showBtn: true,
-                    });
-                else
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: error.response.data.message,
+                        message: error.message,
                         showBtn: true,
                     });
             });
@@ -75,6 +91,7 @@ const AddDepartment = () => {
                                     className={ctx.inputClasses}
                                     type='email'
                                     required
+                                    ref={emailRef}
                                     placeholder='Department Admin Email'
                                 />
                             </div>
@@ -82,9 +99,8 @@ const AddDepartment = () => {
                             <div className='form-control'>
                                 <select
                                     className='select select-bordered select-sm md:select-md rounded-full'
-                                    value={department}
                                     type='number'
-                                    onChange={(event) => departmentNameHandler(event)}
+                                    ref={departmentRef}
                                     required
                                     placeholder='Enter department no.'
                                     min='1'

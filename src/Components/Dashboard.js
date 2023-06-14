@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import AppContext from '../Context/AppContext';
-import Message from '../Main/Message';
+import Error404 from './Utils/Error404';
+import AppContext from './Context/AppContext';
+import CustomError from './Utils/CustomError';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const ctx = useContext(AppContext);
     return (
         <>
@@ -13,39 +14,72 @@ const Dashboard = () => {
                     <progress className='progress progress-primary w-56'></progress>
                 </div>
             )}
-            {!ctx.userData.confirmed && (
-                <div className='alert alert-warning shadow-lg flex flex-row'>
-                    <div>
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            className='stroke-current flex-shrink-0 h-6 w-6'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth='2'
-                                d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
-                            />
-                        </svg>
 
-                        <span className='text-sm md:text-md'>
-                            Please confirm your account. If you haven't received confirmation email, check spam folder.
-                            <br />
-                            <Link to={'/resendConfirmationEmail?r=1'} className='link'>
-                                Click here to resend confirmation email
-                            </Link>
-                        </span>
-                    </div>
-                </div>
-            )}
-
-            {ctx.isLoggedIn === true && (
+            {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && (
                 <>
+                    {!ctx.userData.confirmed && ctx.userData.role !== 'admin' && (
+                        <div className='alert alert-warning shadow-lg flex flex-row'>
+                            <div>
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    className='stroke-current flex-shrink-0 h-6 w-6'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
+                                >
+                                    <path
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
+                                        strokeWidth='2'
+                                        d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+                                    />
+                                </svg>
+
+                                <span className='text-sm md:text-md'>
+                                    Please confirm your account. If you haven't received confirmation email, check spam
+                                    folder.
+                                    <br />
+                                    <Link to={'/resendConfirmationEmail?r=1'} className='link'>
+                                        Click here to resend confirmation email
+                                    </Link>
+                                </span>
+                            </div>
+                        </div>
+                    )}
+
+                    {ctx.userData.role === 'admin' && !ctx.userData.approved && (
+                        <div className='alert alert-warning shadow-lg flex flex-row'>
+                            <div>
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    className='stroke-current flex-shrink-0 h-6 w-6'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
+                                >
+                                    <path
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
+                                        strokeWidth='2'
+                                        d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+                                    />
+                                </svg>
+
+                                <span className='text-sm md:text-md'>
+                                    You are logged in with default password.
+                                    <br />
+                                    <Link to={'/admin/profile/update-password'} className='link'>
+                                        Click here to update password
+                                    </Link>
+                                </span>
+                            </div>
+                        </div>
+                    )}
                     <Outlet />
                 </>
             )}
+
+            {ctx.isLoggedIn === true && ctx.loggedInAs !== props.role && <Error404 link={`/${ctx.loggedInAs}`} />}
+
+            {ctx.error && <CustomError error={ctx.error} />}
         </>
     );
 };

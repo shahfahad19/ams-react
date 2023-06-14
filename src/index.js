@@ -41,6 +41,7 @@ import SuperAdminDashboard from './Components/SuperAdmin/SuperAdminDashboard';
 import MainView from './Components/SuperAdmin/Views/MainView';
 import DepartmentList from './Components/SuperAdmin/Lists/DepartmentList';
 import AddDepartment from './Components/SuperAdmin/Controllers/AddDepartment';
+import ViewDepartment from './Components/SuperAdmin/Views/ViewDepartment';
 
 const router = createBrowserRouter([
     {
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
                     {
                         path: 'add-department',
                         element: <AddDepartment />,
+                    },
+                    {
+                        path: 'department/:departmentId',
+                        element: <ViewDepartment />,
                     },
                 ],
             },

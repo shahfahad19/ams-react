@@ -16,7 +16,6 @@ const EditProfile = () => {
     const [err, setError] = useState('');
     const role = useRef();
     const navigate = useNavigate();
-    const captcha = useRef();
     const {
         register,
         watch,
@@ -28,27 +27,16 @@ const EditProfile = () => {
         data.role = signup;
         setBtnState('loading');
         axios
-            .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
+            .post(`${ctx.baseURL}/user/updateProfile`, data)
             .then((response) => {
                 setBtnState('');
-                data = response.data;
-                ctx.isLoggedIn = true;
-                ctx.loggedInAs = response.data.data.user.role;
-                ctx.userData = response.data.data;
-                const signedup = saveToken(`${data.token}`);
-                if (signedup) {
-                    navigate('/');
-                } else {
-                    setError(`Account created but couldn't login`);
-                    setAlert(true);
-                }
+                console.log(response);
             })
             .catch((error) => {
                 setBtnState('');
                 console.log(error.response.data);
                 setError(error.response.data.message);
                 setAlert(true);
-                window.grecaptcha.reset();
             });
     };
 
@@ -99,7 +87,7 @@ const EditProfile = () => {
                                 <input
                                     className={`input input-bordered w-full ${errors.name && 'input-error'}`}
                                     type='text'
-                                    defaultValue={ctx.userData.name}
+                                    defaultValue={ctx.userData.approved ? ctx.userData.name : ''}
                                     placeholder='Full Name'
                                     {...register('name', {
                                         required: {

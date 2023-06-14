@@ -4,6 +4,8 @@ import Message from '../../Main/Message';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import { useForm } from 'react-hook-form';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 const UpdatePassword = () => {
     const ctx = useContext(AppContext);
@@ -12,16 +14,14 @@ const UpdatePassword = () => {
         show: false,
     });
 
+    const MySwal = withReactContent(Swal);
+
     const {
         register,
         watch,
         handleSubmit,
         formState: { errors },
     } = useForm();
-
-    const oldpass = useRef();
-    const newpass = useRef();
-    const newpassagain = useRef();
 
     const submitForm = (data) => {
         setAlert({
@@ -37,10 +37,15 @@ const UpdatePassword = () => {
             })
             .then((response) => {
                 setBtnState('');
-                setAlert({
-                    show: true,
-                    type: 'success',
-                    message: 'Updated successfully!',
+                ctx.logout();
+
+                MySwal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    message: `Password updated successfully. For your security reasons you have been logged out. Please login with your new password!`,
+                    showConfirmButton: true,
+                }).then(() => {
+                    window.location.assign('/login');
                 });
             })
             .catch((error) => {
@@ -81,7 +86,7 @@ const UpdatePassword = () => {
                                             message: 'Current Password is required',
                                         },
                                         minLength: {
-                                            value: 6,
+                                            value: 8,
                                             message: 'Password should at least be be 6 characters',
                                         },
                                         maxLength: {
@@ -111,7 +116,7 @@ const UpdatePassword = () => {
                                             message: 'Enter new password',
                                         },
                                         minLength: {
-                                            value: 6,
+                                            value: 8,
                                             message: 'Password should at least be be 6 characters',
                                         },
                                         maxLength: {
