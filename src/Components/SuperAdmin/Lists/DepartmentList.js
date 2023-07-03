@@ -58,7 +58,11 @@ const DepartmentList = (props) => {
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link to={`/super-admin/department/${department._id}`} key={department._id}>
+                                        <Link
+                                            className='underline underline-offset-2'
+                                            to={`/super-admin/department/${department._id}`}
+                                            key={department._id}
+                                        >
                                             {department.department}
                                         </Link>
                                     </td>

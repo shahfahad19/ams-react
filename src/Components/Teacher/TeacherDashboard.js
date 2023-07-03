@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from '../Dashboard';
 
 const TeacherDashboard = () => {
-    return <Dashboard role='super-admin' />;
+    return <Dashboard role='teacher' />;
 };
 
 export default TeacherDashboard;

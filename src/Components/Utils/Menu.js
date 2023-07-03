@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Menu = (props) => {
     return (
@@ -23,9 +23,16 @@ export const MenuItems = (props) => {
 };
 
 export const MenuItem = (props) => {
+    const navigate = useNavigate();
+
+    const check = (event) => {
+        event.preventDefault();
+        navigate(props.tab, { replace: true });
+    };
     return (
-        <li className='w-1/2 md:w-auto'>
+        <li className='w-1/2 inline-block md:w-auto'>
             <NavLink
+                onClick={check}
                 to={props.tab}
                 className={({ isActive }) => (isActive ? 'bg-neutral text-neutral-content' : undefined)}
             >

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import BackButton from '../../Utils/BackButton';
 
 const AddSemester = () => {
     const [btnState, setBtnState] = useState('');
@@ -114,6 +115,7 @@ const AddSemester = () => {
                                 />
                             </div>
                         )}
+                        <BackButton to={'/admin/batch/' + params.batchId + '/semesters'} text='Semesters' />
                     </div>
                 </div>
             </div>

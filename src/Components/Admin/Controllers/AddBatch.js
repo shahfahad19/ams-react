@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
+import { Link } from 'react-router-dom';
+import BackButton from '../../Utils/BackButton';
 
 const AddBatch = () => {
     const [btnState, setBtnState] = useState('');
@@ -92,6 +94,7 @@ const AddBatch = () => {
                                 </button>
                             </div>
                         </form>
+
                         {alert.show === true && (
                             <div className='my-2'>
                                 <Message
@@ -104,6 +107,7 @@ const AddBatch = () => {
                                 />
                             </div>
                         )}
+                        <BackButton to='/admin/batches' text='Batch List' />
                     </div>
                 </div>
             </div>

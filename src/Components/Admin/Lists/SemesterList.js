@@ -35,7 +35,7 @@ const BatchList = () => {
     }, []);
     return (
         <div className='flex-grow'>
-            <SubSectionHeader text='Semester List' />
+            <SubSectionHeader text='Semester List' showBtn={true} btnText='Add Semester' btnLink='../add-semester' />
 
             <Table loading={loading} error={errorMessage}>
                 <thead>

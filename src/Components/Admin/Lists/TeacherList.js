@@ -7,15 +7,15 @@ import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleB
 import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
-const BatchList = (props) => {
-    const [batches, setBatches] = useState([]);
+const TeacherList = (props) => {
+    const [teachers, setTeachers] = useState([]);
     const [loading, isLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     useEffect(() => {
         axios
-            .get(`${ctx.baseURL}/batches?sort=archived,name`, {
+            .get(`${ctx.baseURL}/users/teachers?sort=name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -24,9 +24,9 @@ const BatchList = (props) => {
             .then((response) => {
                 setErrorMessage('');
                 isLoading(false);
-                setBatches(response.data.data.batches);
-                if (response.data.data.batches.length === 0) {
-                    setErrorMessage('No batches found');
+                setTeachers(response.data.data.teachers);
+                if (response.data.data.teachers.length === 0) {
+                    setErrorMessage('No teachers found');
                 }
             })
             .catch((error) => {
@@ -39,30 +39,29 @@ const BatchList = (props) => {
 
     return (
         <div className='flex-grow'>
-            <SubSectionHeader text='Batch List' showBtn={true} btnLink='/admin/add-batch' btnText='Add Batch' />
-
+            <SubSectionHeader text='Teachers' showBtn={true} btnLink='../add-teacher' btnText='Add Teacher' />
             <Table loading={loading} error={errorMessage}>
                 <thead>
                     <tr>
                         <th></th>
                         <th className='normal-case font-medium text-sm'>Name</th>
-                        <th className='normal-case font-medium text-sm'>Archived</th>
+                        <th className='normal-case font-medium text-sm'>Email</th>
+                        <th className='normal-case font-medium text-sm'>Gender</th>
+                        <th className='normal-case font-medium text-sm'>Designation</th>
+                        <th className='normal-case font-medium text-sm'>Approved</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {batches.length > 0 &&
-                        batches.map((batch, index) => {
+                    {teachers.length > 0 &&
+                        teachers.map((teacher, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} className=''>
                                     <th>{index + 1}</th>
-                                    <td>
-                                        <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
-                                            Batch {batch.name}
-                                        </Link>
-                                    </td>
-                                    <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived
-                                        .toString()
-                                        .slice(1)}`}</td>
+                                    <td>{teacher.name}</td>
+                                    <td>{teacher.email}</td>
+                                    <td>{teacher.gender}</td>
+                                    <td>{teacher.designation}</td>
+                                    <td>{teacher.approved.toString()}</td>
                                 </tr>
                             );
                         })}
@@ -72,4 +71,4 @@ const BatchList = (props) => {
     );
 };
 
-export default BatchList;
+export default TeacherList;

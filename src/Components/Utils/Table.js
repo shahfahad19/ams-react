@@ -4,7 +4,9 @@ import './Table.css';
 const Table = (props) => {
     return (
         <div className='overflow-x-auto'>
-            <table className='table w-full table-zebra table-compact md:table-normal'>{props.children}</table>
+            <table className={`table w-full table-zebra table-compact md:table-normal ${props.className}`}>
+                {props.children}
+            </table>
             {props.loading && props.loading === true && (
                 <div className='relative h-80'>
                     <div className='loader-wrapper'>

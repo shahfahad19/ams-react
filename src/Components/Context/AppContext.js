@@ -12,6 +12,7 @@ const AppContext = React.createContext({
     captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
     inputClasses: '',
     btnClasses: '',
+    selectClasses: '',
     error: {},
     logout: () => {},
     login: () => {},
@@ -109,6 +110,7 @@ export const AppContextProvider = (props) => {
                 error: error,
                 btnClasses: 'btn btn-neutral w-fit rounded-lg btn-sm font-medium',
                 inputClasses: 'input w-full input-bordered border-neutral rounded-full',
+                selectClasses: 'select w-full select-bordered border-neutral rounded-full',
             }}
         >
             {props.children}

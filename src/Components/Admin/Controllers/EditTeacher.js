@@ -4,34 +4,50 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import Table from '../../Utils/Table';
 
 const EditTeacher = (props) => {
+    const [teachers, setTeachers] = useState([]);
+    const [loading, isLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const [subject, setSubject] = useOutletContext();
-    const [btnState, setBtnState] = useState();
     const [assignbtnState, setassignBtnState] = useState();
     const [dltbtnState, setdltBtnState] = useState();
     const params = useParams();
-    const teacherEmail = useRef();
     const [alert, setAlert] = useState({
         show: false,
     });
-    const [teacherAlert, setTeacherAlert] = useState({
-        show: false,
-        search: false,
-    });
+    const [showTeacherList, setTeacherListShow] = useState(false);
     const [teacher, setTeacher] = useState({
         show: false,
     });
     const ctx = useContext(AppContext);
 
     useEffect(() => {
-        setTeacherAlert({
-            show: false,
-        });
+        setTeacherListShow(false);
         if (subject.teacher === undefined || subject.teacher === null) {
-            setTeacherAlert({
-                show: true,
-            });
+            setTeacherListShow(true);
+            axios
+                .get(`${ctx.baseURL}/users/teachers?sort=name`, {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
+                    },
+                })
+                .then((response) => {
+                    setErrorMessage('');
+                    isLoading(false);
+                    setTeachers(response.data.data.teachers);
+                    if (response.data.data.teachers.length === 0) {
+                        setErrorMessage('No teachers found');
+                    }
+                })
+                .catch((error) => {
+                    if (error.response) setErrorMessage(error.response.data.message);
+                    else setErrorMessage(error.message);
+                    isLoading(false);
+                    console.log(error);
+                });
         } else {
             setTeacher({
                 show: true,
@@ -41,56 +57,13 @@ const EditTeacher = (props) => {
         }
     }, []);
 
-    const submitForm = async (event) => {
-        event.preventDefault();
-        setTeacher({
-            show: false,
-        });
-        setAlert({
-            show: false,
-        });
-        setBtnState('loading');
-        await axios
-            .get(`${ctx.baseURL}/users/teachers?email=${teacherEmail.current.value}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                if (response.data.results > 0) {
-                    setTeacher({
-                        show: true,
-                        search: true,
-                        data: response.data.data.teachers[0],
-                    });
-                } else {
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: 'No teacher was found with this email',
-                        showBtn: true,
-                    });
-                }
-            })
-            .catch((error) => {
-                setAlert({
-                    show: true,
-                    type: 'error',
-                    message: error.response.data.message,
-                    showBtn: true,
-                });
-            });
-        setBtnState('');
-    };
-
-    const assignTeacher = async () => {
+    const assignTeacher = async (teacherId) => {
         setassignBtnState('loading');
         await axios
             .patch(
                 `${ctx.baseURL}/subjects/${params.subjectId}`,
                 {
-                    teacher: teacher.data._id,
+                    teacher: teacherId,
                 },
                 {
                     credentials: 'include',
@@ -100,6 +73,7 @@ const EditTeacher = (props) => {
                 }
             )
             .then((response) => {
+                console.log(response);
                 setSubject(response.data.data.subject);
                 setAlert({
                     show: true,
@@ -107,11 +81,11 @@ const EditTeacher = (props) => {
                     message: 'Teacher assigned successfully',
                     showBtn: true,
                 });
-                setTeacherAlert({ show: false });
+                setTeacherListShow(false);
                 setTeacher({
                     show: true,
                     search: false,
-                    data: teacher.data,
+                    data: response.data.data.subject.teacher,
                 });
             })
             .catch((error) => {
@@ -145,9 +119,7 @@ const EditTeacher = (props) => {
                 setTeacher({
                     show: false,
                 });
-                setTeacherAlert({
-                    show: true,
-                });
+                setTeacherListShow(true);
 
                 setAlert({
                     show: true,
@@ -155,6 +127,27 @@ const EditTeacher = (props) => {
                     message: 'Teacher removed successfully',
                     showBtn: true,
                 });
+                axios
+                    .get(`${ctx.baseURL}/users/teachers?sort=name`, {
+                        credentials: 'include',
+                        headers: {
+                            Authorization: 'Bearer ' + ctx.token,
+                        },
+                    })
+                    .then((response) => {
+                        setErrorMessage('');
+                        isLoading(false);
+                        setTeachers(response.data.data.teachers);
+                        if (response.data.data.teachers.length === 0) {
+                            setErrorMessage('No teachers found');
+                        }
+                    })
+                    .catch((error) => {
+                        if (error.response) setErrorMessage(error.response.data.message);
+                        else setErrorMessage(error.message);
+                        isLoading(false);
+                        console.log(error);
+                    });
             })
             .catch((error) => {
                 console.log(error);
@@ -171,58 +164,56 @@ const EditTeacher = (props) => {
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Teacher' />
-            {subject.name && (
-                <div className='flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        {teacherAlert.show && (
-                            <form className='font-medium w-full' onSubmit={submitForm}>
-                                <div className='form-control'>
-                                    <label className='label'>Teacher Email</label>
-                                    <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
-                                        <input
-                                            className='input rounded-full w-full border-none focus:outline-none active:outline-none outline-none'
-                                            type='email'
-                                            ref={teacherEmail}
-                                            required
-                                            placeholder='name@example.com'
-                                        ></input>
-                                        <button className={`btn rounded-full ${btnState}`} type='submit'>
-                                            Search
-                                        </button>
-                                    </div>
-                                </div>
-                                <br />
-                                <div className='form-control flex items-center'></div>
-                            </form>
-                        )}
-
-                        {teacher.show && teacher.search && (
-                            <div className='border border-base rounded-lg'>
-                                <table className='table'>
-                                    <tbody>
-                                        <tr>
+            {showTeacherList && (
+                <>
+                    <div className='p-2 font-semibold text-center text-xl'>Assign a teacher from the list</div>
+                    <Table loading={loading} error={errorMessage} className='table-compact'>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th className='normal-case font-medium text-sm'>Name</th>
+                                <th className='normal-case font-medium text-sm'>Gender</th>
+                                <th className='normal-case font-medium text-sm'>Designation</th>
+                                <th className='normal-case font-medium text-sm'>Assign</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {teachers.length > 0 &&
+                                teachers.map((teacher, index) => {
+                                    return (
+                                        <tr key={index} className=''>
+                                            <th>{index + 1}</th>
                                             <td>
                                                 <label tabIndex={0} className='rounded-full avatar'>
                                                     <div className='w-10 rounded-full'>
-                                                        <img src={teacher.data.photo} alt='profile_pic' />
+                                                        <img src={teacher.photo} alt='profile_pic' />
                                                     </div>
                                                 </label>
                                             </td>
-                                            <td className='w-full'>{teacher.data.name}</td>
+                                            <td>{teacher.name}</td>
+                                            <td>{teacher.gender}</td>
+                                            <td>{teacher.designation}</td>
                                             <td>
                                                 <button
-                                                    onClick={assignTeacher}
+                                                    onClick={() => {
+                                                        assignTeacher(teacher._id);
+                                                    }}
                                                     className={`btn btn-sm rounded-full ${assignbtnState}`}
                                                 >
                                                     Assign
                                                 </button>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-
+                                    );
+                                })}
+                        </tbody>
+                    </Table>
+                </>
+            )}
+            {subject.name && (
+                <div className='flex justify-center'>
+                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
                         {teacher.show && !teacher.search && (
                             <div className='border border-base rounded-lg p-4'>
                                 <div className='flex flex-col sm:flex-row items-center space-x-5'>

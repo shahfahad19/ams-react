@@ -38,10 +38,12 @@ import TakeAttendance from './Components/Teacher/Controllers/TakeAttendance';
 import TeacherSubjectAttendanceList from './Components/Teacher/Lists/TeacherSubjectAttendanceList';
 import RemoveSubject from './Components/Teacher/Controllers/RemoveSubject';
 import SuperAdminDashboard from './Components/SuperAdmin/SuperAdminDashboard';
-import MainView from './Components/SuperAdmin/Views/MainView';
+import MainView from './Components/Admin/Views/MainView';
 import DepartmentList from './Components/SuperAdmin/Lists/DepartmentList';
 import AddDepartment from './Components/SuperAdmin/Controllers/AddDepartment';
 import ViewDepartment from './Components/SuperAdmin/Views/ViewDepartment';
+import TeacherList from './Components/Admin/Lists/TeacherList';
+import AddTeacher from './Components/Admin/Controllers/AddTeacher';
 
 const router = createBrowserRouter([
     {
@@ -91,7 +93,21 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <BatchList />,
+                        element: <MainView />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='/admin/batches' />,
+                            },
+                            {
+                                path: 'batches',
+                                element: <BatchList />,
+                            },
+                            {
+                                path: 'teachers',
+                                element: <TeacherList />,
+                            },
+                        ],
                     },
                     {
                         path: 'profile',
@@ -116,6 +132,10 @@ const router = createBrowserRouter([
                         ],
                     },
                     {
+                        path: 'batch/:batchId/add-semester',
+                        element: <AddSemester />,
+                    },
+                    {
                         path: 'batch/:batchId',
                         element: <ViewBatch />,
                         children: [
@@ -132,10 +152,6 @@ const router = createBrowserRouter([
                                 element: <InviteLink />,
                             },
                             {
-                                path: 'add-semester',
-                                element: <AddSemester />,
-                            },
-                            {
                                 path: '',
                                 element: <Redirect to='semesters' />,
                             },
@@ -148,6 +164,11 @@ const router = createBrowserRouter([
                     {
                         path: 'add-batch',
                         element: <AddBatch />,
+                    },
+
+                    {
+                        path: 'add-teacher',
+                        element: <AddTeacher />,
                     },
                     {
                         path: 'semester/:semesterId',

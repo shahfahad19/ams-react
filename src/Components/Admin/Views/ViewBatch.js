@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
+import BackButton from '../../Utils/BackButton';
 
 const ViewBatch = () => {
     const params = useParams();
@@ -29,6 +30,7 @@ const ViewBatch = () => {
 
     return (
         <>
+            <BackButton to='/admin/batches' text='Batch List' className='m-2' />
             <div className='batch flex flex-col md:flex-row'>
                 <div className='batch-info w-auto md:w-40 flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
                     {batch.name === undefined && <SideBarTitle title='Loading...' />}
@@ -37,7 +39,6 @@ const ViewBatch = () => {
                     <Menu>
                         <MenuItems>
                             <MenuItem text='Semesters' tab='semesters' />
-                            <MenuItem text='Add Semester' tab='add-semester' />
                             <MenuItem text='Students' tab='students' />
                             <MenuItem text='Edit Batch' tab='edit' />
                             <MenuItem text='Invite Link' tab='invite' />
