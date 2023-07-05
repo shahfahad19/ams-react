@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItem, MenuItems } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
+import BackButton from '../../Utils/BackButton';
 
 const ViewSemester = (props) => {
     const params = useParams();
@@ -40,7 +41,6 @@ const ViewSemester = (props) => {
                     <Menu>
                         <MenuItems>
                             <MenuItem text='Subjects' tab='subjects' />
-                            <MenuItem text='Add Subject' tab='add-subject' />
                             <MenuItem text='Edit Semester' tab='edit' />
                         </MenuItems>
                     </Menu>

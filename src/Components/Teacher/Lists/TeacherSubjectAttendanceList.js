@@ -62,7 +62,7 @@ const TeacherSubjectAttendanceList = () => {
                                                 year: '2-digit',
                                             })}
                                         </div>
-                                        <div className='border border-neutral'></div>
+                                        <div className='border border-neutral border-b-0'></div>
                                         <div>
                                             {new Date(date).toLocaleTimeString('en-UK', {
                                                 hour: 'numeric',

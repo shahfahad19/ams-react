@@ -30,7 +30,6 @@ const ViewBatch = () => {
 
     return (
         <>
-            <BackButton to='/admin/batches' text='Batch List' className='m-2' />
             <div className='batch flex flex-col md:flex-row'>
                 <div className='batch-info w-auto md:w-40 flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
                     {batch.name === undefined && <SideBarTitle title='Loading...' />}

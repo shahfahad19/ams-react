@@ -71,8 +71,6 @@ const TakeAttendance = () => {
         }
         setAttendanceList(updatedAttendance);
 
-        console.log('Editing' + editingEnabled);
-
         if (currentStudentIndex === students.length - 1) {
             setAttendanceComplete(true);
         } else {
@@ -114,15 +112,15 @@ const TakeAttendance = () => {
                     .catch((error) => {
                         MySwal.close();
 
-                        let errorMessage = '';
+                        let errorMessage = error.message;
+
                         if (error.response) errorMessage = error.response.data.message;
-                        errorMessage = error.message;
-                        if (error.response)
-                            MySwal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: errorMessage,
-                            });
+
+                        MySwal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: errorMessage,
+                        });
                     });
             },
         });

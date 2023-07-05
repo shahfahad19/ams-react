@@ -44,6 +44,7 @@ const TeacherSubjectsList = () => {
                         <th>S.No</th>
                         <th>Name</th>
                         <th>Department</th>
+                        <th>Credit Hours</th>
                         <th>Batch</th>
                         <th>Semester</th>
                     </tr>
@@ -64,6 +65,8 @@ const TeacherSubjectsList = () => {
                                         </Link>
                                     </td>
                                     <td>{subject.department}</td>
+                                    <td>{subject.creditHours}</td>
+
                                     <td>{subject.batchName}</td>
                                     <td>{subject.semesterName}</td>
                                 </tr>

@@ -1,22 +1,21 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import BackButton from '../../Utils/BackButton';
 
 const AddSubject = () => {
     const [btnState, setBtnState] = useState('');
-    const [subject, setSubject] = useState('');
+    const subject = useRef();
+    const creditHours = useRef();
+
     const [alert, setAlert] = useState({
         show: false,
     });
     const params = useParams();
     const ctx = useContext(AppContext);
-
-    const subjectNameHandler = (event) => {
-        setSubject(event.target.value);
-    };
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -24,7 +23,10 @@ const AddSubject = () => {
         await axios
             .post(
                 `${ctx.baseURL}/subjects?semester=${params.semesterId}`,
-                { name: subject },
+                {
+                    name: subject.current.value,
+                    creditHours: creditHours.current.value,
+                },
                 {
                     headers: {
                         Authorization: 'Bearer ' + ctx.token,
@@ -32,7 +34,8 @@ const AddSubject = () => {
                 }
             )
             .then((response) => {
-                setSubject('');
+                subject.current.value = '';
+                creditHours.current.value = '';
                 setAlert({
                     show: true,
                     type: 'success',
@@ -70,14 +73,29 @@ const AddSubject = () => {
                     <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
+                                <label className='label'>
+                                    <span className='label-text'>Subject Name</span>
+                                </label>
                                 <input
                                     className={ctx.inputClasses}
                                     type='text'
                                     placeholder='Subject Name'
-                                    value={subject}
-                                    onChange={subjectNameHandler}
+                                    ref={subject}
                                     required
                                 ></input>
+                            </div>
+
+                            <br />
+
+                            <div className='form-control'>
+                                <label className='label'>
+                                    <span className='label-text'>Credit Hours</span>
+                                </label>
+                                <select className={ctx.selectClasses} ref={creditHours} required>
+                                    <option value=''>Select Credit Hours</option>
+                                    <option value='3'>3 Hours</option>
+                                    <option value='4'>4 Hours</option>
+                                </select>
                             </div>
 
                             <br />
@@ -99,6 +117,7 @@ const AddSubject = () => {
                                 />
                             </div>
                         )}
+                        <BackButton to={'/admin/semester/' + params.semesterId + '/subjects'} text='Subjects' />
                     </div>
                 </div>
             </div>

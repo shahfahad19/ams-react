@@ -44,6 +44,8 @@ import AddDepartment from './Components/SuperAdmin/Controllers/AddDepartment';
 import ViewDepartment from './Components/SuperAdmin/Views/ViewDepartment';
 import TeacherList from './Components/Admin/Lists/TeacherList';
 import AddTeacher from './Components/Admin/Controllers/AddTeacher';
+import StudentDashboard from './Components/Student/StudentDashboard';
+import StudentAttendance from './Components/Student/StudentAttendance';
 
 const router = createBrowserRouter([
     {
@@ -136,6 +138,10 @@ const router = createBrowserRouter([
                         element: <AddSemester />,
                     },
                     {
+                        path: 'semester/:semesterId/add-subject',
+                        element: <AddSubject />,
+                    },
+                    {
                         path: 'batch/:batchId',
                         element: <ViewBatch />,
                         children: [
@@ -185,10 +191,6 @@ const router = createBrowserRouter([
                             {
                                 path: 'edit',
                                 element: <EditSemester />,
-                            },
-                            {
-                                path: 'add-subject',
-                                element: <AddSubject />,
                             },
                         ],
                     },
@@ -245,6 +247,16 @@ const router = createBrowserRouter([
                                 element: <RemoveSubject />,
                             },
                         ],
+                    },
+                ],
+            },
+            {
+                path: 'student',
+                element: <StudentDashboard />,
+                children: [
+                    {
+                        path: '',
+                        element: <StudentAttendance />,
                     },
                 ],
             },
