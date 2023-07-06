@@ -80,12 +80,72 @@ const router = createBrowserRouter([
                         element: <DepartmentList />,
                     },
                     {
+                        path: 'student/:studentId',
+                        element: <ViewStudent />,
+                    },
+                    {
                         path: 'add-department',
                         element: <AddDepartment />,
                     },
                     {
                         path: 'department/:departmentId',
                         element: <ViewDepartment />,
+                        children: [
+                            {
+                                path: 'batches',
+                                element: <BatchList />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'batch/:batchId',
+                        element: <ViewBatch />,
+                        children: [
+                            {
+                                path: 'semesters',
+                                element: <SemesterList />,
+                            },
+                            {
+                                path: 'invite',
+                                element: <InviteLink />,
+                            },
+                            {
+                                path: '',
+                                element: <Redirect to='semesters' />,
+                            },
+                            {
+                                path: 'students',
+                                element: <StudentList />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'semester/:semesterId',
+                        element: <ViewSemester />,
+                        children: [
+                            {
+                                path: '',
+                                element: <SubjectList />,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <SubjectList />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'subject/:subjectId',
+                        element: <ViewSubject />,
+                        children: [
+                            {
+                                path: '',
+                                element: <AttendanceList />,
+                            },
+                            {
+                                path: 'attendance',
+                                element: <AttendanceList />,
+                            },
+                        ],
                     },
                 ],
             },

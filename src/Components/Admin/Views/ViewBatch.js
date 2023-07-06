@@ -39,7 +39,7 @@ const ViewBatch = () => {
                         <MenuItems>
                             <MenuItem text='Semesters' tab='semesters' />
                             <MenuItem text='Students' tab='students' />
-                            <MenuItem text='Edit Batch' tab='edit' />
+                            {ctx.userData.role === 'admin' && <MenuItem text='Edit Batch' tab='edit' />}
                             <MenuItem text='Invite Link' tab='invite' />
                         </MenuItems>
                     </Menu>

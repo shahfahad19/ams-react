@@ -32,13 +32,17 @@ const ViewSubject = () => {
             <div className='batch flex flex-col md:flex-row'>
                 <div className='batch-info w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
                     <SideBarTitle title={subject.name || 'Subject'} />
-                    <Menu>
-                        <MenuItems>
-                            <MenuItem text='Attendance' tab='attendance' />
-                            <MenuItem text='Edit Subject' tab='edit' />
-                            <MenuItem text='Teacher' tab='teacher' />
-                        </MenuItems>
-                    </Menu>
+                    {ctx.userData.role === 'admin' && (
+                        <Menu>
+                            <MenuItems>
+                                <>
+                                    <MenuItem text='Attendance' tab='attendance' />
+                                    <MenuItem text='Edit Subject' tab='edit' />
+                                    <MenuItem text='Teacher' tab='teacher' />
+                                </>
+                            </MenuItems>
+                        </Menu>
+                    )}
                 </div>
                 <Outlet context={[subject, setSubject]} />
             </div>

@@ -54,7 +54,7 @@ const StudentList = () => {
                                 <tr key={index}>
                                     <th>{student.rollNo}</th>
                                     <td>
-                                        <Link to={`/admin/student/${student._id}`} className='underline'>
+                                        <Link to={`/${ctx.userData.role}/student/${student._id}`} className='underline'>
                                             {student.name}
                                         </Link>
                                     </td>

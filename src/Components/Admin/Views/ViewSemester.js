@@ -38,12 +38,14 @@ const ViewSemester = (props) => {
                     {semester.name !== '' && (
                         <SideBarTitle title={'Batch ' + semester.batch.name + ' - Semester ' + semester.name} />
                     )}
-                    <Menu>
-                        <MenuItems>
-                            <MenuItem text='Subjects' tab='subjects' />
-                            <MenuItem text='Edit Semester' tab='edit' />
-                        </MenuItems>
-                    </Menu>
+                    {ctx.userData.role === 'admin' && (
+                        <Menu>
+                            <MenuItems>
+                                <MenuItem text='Subjects' tab='subjects' />
+                                <MenuItems text='Edit Semester' tab='edit' />
+                            </MenuItems>
+                        </Menu>
+                    )}
                 </div>
                 <Outlet context={[semester, setSemester]} />
             </div>

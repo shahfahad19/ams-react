@@ -52,7 +52,7 @@ const BatchList = () => {
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link to={`/admin/semester/${semester._id}/subjects`}>
+                                        <Link to={`/${ctx.userData.role}/semester/${semester._id}/subjects`}>
                                             Semester {semester.name}
                                         </Link>
                                     </td>

@@ -43,7 +43,6 @@ const ViewDepartment = () => {
                         <MenuItems>
                             <MenuItem text='Info' tab='info' />
                             <MenuItem text='Batches' tab='batches' />
-                            <MenuItem text='Subjects' tab='subjects' />
                             <MenuItem text='Teachers' tab='teachers' />
                         </MenuItems>
                     </Menu>

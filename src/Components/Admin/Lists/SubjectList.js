@@ -56,7 +56,7 @@ const SubjectList = () => {
                                     <td>
                                         <Link
                                             className='underline underline-offset-2'
-                                            to={`/admin/subject/${subject._id}/attendance`}
+                                            to={`/${ctx.userData.role}/subject/${subject._id}/attendance`}
                                         >
                                             {subject.name}
                                         </Link>

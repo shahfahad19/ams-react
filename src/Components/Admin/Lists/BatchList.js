@@ -1,27 +1,32 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
-import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleBar';
 import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const BatchList = (props) => {
+    const params = useParams();
     const [batches, setBatches] = useState([]);
     const [loading, isLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     useEffect(() => {
+        let url = `${ctx.baseURL}/batches`;
+        if (params.departmentId != undefined && ctx.userData.role === 'super-admin') {
+            url = `${ctx.baseURL}/batches?dept=${params.departmentId}`;
+        }
+        console.log(url);
         axios
-            .get(`${ctx.baseURL}/batches?sort=archived,name`, {
+            .get(url, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
                 },
             })
             .then((response) => {
+                console.log(response);
                 setErrorMessage('');
                 isLoading(false);
                 setBatches(response.data.data.batches);
@@ -56,7 +61,7 @@ const BatchList = (props) => {
                                 <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>
-                                        <Link to={`/admin/batch/${batch._id}/semesters`} key={batch._id}>
+                                        <Link to={`/${ctx.userData.role}/batch/${batch._id}/semesters`} key={batch._id}>
                                             Batch {batch.name}
                                         </Link>
                                     </td>
