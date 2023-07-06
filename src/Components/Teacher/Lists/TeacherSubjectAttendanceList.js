@@ -1,10 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
-import Table from '../../Utils/Table';
 
 const TeacherSubjectAttendanceList = () => {
     const [attendances, setAttendances] = useState([]);

@@ -46,6 +46,7 @@ import TeacherList from './Components/Admin/Lists/TeacherList';
 import AddTeacher from './Components/Admin/Controllers/AddTeacher';
 import StudentDashboard from './Components/Student/StudentDashboard';
 import StudentAttendance from './Components/Student/StudentAttendance';
+import ViewStudent from './Components/Admin/Views/ViewStudent';
 
 const router = createBrowserRouter([
     {
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
                     {
                         path: 'batch/:batchId/add-semester',
                         element: <AddSemester />,
+                    },
+                    {
+                        path: 'student/:studentId',
+                        element: <ViewStudent />,
                     },
                     {
                         path: 'semester/:semesterId/add-subject',

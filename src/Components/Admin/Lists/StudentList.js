@@ -54,7 +54,9 @@ const StudentList = () => {
                                 <tr key={index}>
                                     <th>{student.rollNo}</th>
                                     <td>
-                                        <Link to={`/student/${student._id}/info`}>{student.name}</Link>
+                                        <Link to={`/admin/student/${student._id}`} className='underline'>
+                                            {student.name}
+                                        </Link>
                                     </td>
                                     <td>{`${student.confirmed.toString().slice(0, 1).toUpperCase()}${student.confirmed
                                         .toString()
