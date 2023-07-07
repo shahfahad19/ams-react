@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
 import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleBar';
@@ -8,14 +8,19 @@ import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const TeacherList = (props) => {
+    const params = useParams();
     const [teachers, setTeachers] = useState([]);
     const [loading, isLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
     useEffect(() => {
+        const url =
+            ctx.userData.role === 'super-admin'
+                ? `${ctx.baseURL}/users/teachers?dept=${params.departmentId}&sort=name`
+                : `${ctx.baseURL}/users/teachers?sort=name`;
         axios
-            .get(`${ctx.baseURL}/users/teachers?sort=name`, {
+            .get(url, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,

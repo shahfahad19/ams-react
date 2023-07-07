@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AppContext from '../../Context/AppContext';
 
 const SubjectInfoTable = (props) => {
+    const ctx = useContext(AppContext);
     const subject = props.subject;
     return (
         <table className='table table-compact border'>
@@ -19,9 +21,13 @@ const SubjectInfoTable = (props) => {
                     <td>{subject.teacherName}</td>
                 </tr>
                 <tr>
-                    <th colSpan={2} className='select-none'>
-                        &nbsp;
-                    </th>
+                    {ctx.userData.role === 'student' && <th colSpan={2} className='select-none'></th>}
+                    {ctx.userData.role !== 'student' && (
+                        <>
+                            <th>Teacher Email</th>
+                            <td>{subject.teacherEmail}</td>
+                        </>
+                    )}
                 </tr>
             </tbody>
         </table>

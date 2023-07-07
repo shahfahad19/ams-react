@@ -7,6 +7,7 @@ import SubSectionHeader from '../../Utils/SubSectionHeader';
 const TeacherSubjectAttendanceList = () => {
     const [attendances, setAttendances] = useState([]);
     const [loading, isLoading] = useState(true);
+    const [dates, setDates] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
@@ -22,11 +23,12 @@ const TeacherSubjectAttendanceList = () => {
             .then((response) => {
                 setErrorMessage('');
                 setAttendances(response.data.data.attendances);
+                setDates(response.data.data.dates);
+
                 if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
                 isLoading(false);
             })
             .catch((error) => {
-                console.log(error);
                 setErrorMessage(error.response.data.message || error.message);
                 isLoading(false);
             });
@@ -74,24 +76,39 @@ const TeacherSubjectAttendanceList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {attendances.map((attendance) => (
+                        {attendances.map((attendance, index) => (
                             <tr key={attendance._id}>
                                 <td className='border border-neutral'>{attendance.rollNo}</td>
                                 <td className='border border-neutral text-bold'>{attendance.name}</td>
-                                {attendance.attendance.map((att, i) => (
-                                    <td
-                                        key={i}
-                                        className={`${
-                                            att.status[0] === 'p'
-                                                ? 'text-success'
-                                                : att.status[0] === 'a'
-                                                ? 'text-error'
-                                                : 'text-warning'
-                                        } text-center font-bold border border-neutral`}
-                                    >
-                                        {att.status[0].toUpperCase()}
-                                    </td>
+
+                                {dates.map((date, index) => (
+                                    <React.Fragment key={index}>
+                                        {attendance.dates.indexOf(date) === -1 && (
+                                            <td className='border border-neutral bg-stone-200 text-center font-medium'>
+                                                X
+                                            </td>
+                                        )}
+                                        {attendance.dates.indexOf(date) > -1 && (
+                                            <td
+                                                key={index}
+                                                className={`${
+                                                    attendance.attendance[attendance.dates.indexOf(date)].status[0] ===
+                                                    'p'
+                                                        ? 'text-success'
+                                                        : attendance.attendance[attendance.dates.indexOf(date)]
+                                                              .status[0] === 'a'
+                                                        ? 'text-error'
+                                                        : 'text-warning'
+                                                } text-center font-medium border border-neutral`}
+                                            >
+                                                {attendance.attendance[
+                                                    attendance.dates.indexOf(date)
+                                                ].status[0].toUpperCase()}
+                                            </td>
+                                        )}
+                                    </React.Fragment>
                                 ))}
+
                                 <td
                                     className={`${
                                         parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
