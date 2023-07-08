@@ -48,6 +48,7 @@ import StudentDashboard from './Components/Student/StudentDashboard';
 import StudentAttendance from './Components/Student/StudentAttendance';
 import ViewStudent from './Components/Admin/Views/ViewStudent';
 import DepartmentInfo from './Components/SuperAdmin/Controllers/DepartmentInfo';
+import DefaultSubjectList from './Components/SuperAdmin/Lists/DefaultSubjectList';
 
 const router = createBrowserRouter([
     {
@@ -109,8 +110,13 @@ const router = createBrowserRouter([
                                 path: 'teachers',
                                 element: <TeacherList />,
                             },
+                            {
+                                path: 'subjects',
+                                element: <DefaultSubjectList />,
+                            },
                         ],
                     },
+
                     {
                         path: 'batch/:batchId',
                         element: <ViewBatch />,

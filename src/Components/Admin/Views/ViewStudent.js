@@ -116,7 +116,8 @@ const ViewStudent = () => {
                     </div>
                     <div className='m-3 w-full lg:w-2/3'>
                         <p className='text-lg font-medium text-center'>
-                            Select Semester and Subject To {data[0].studentData.name}'s Attendance
+                            Select Semester and Subject to see{' '}
+                            <span className='text-primary'>{data[0].studentData.name}'s</span> attendance
                         </p>
                         <div className='form-control'>
                             <label className='label'>

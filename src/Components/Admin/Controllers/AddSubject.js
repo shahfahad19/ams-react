@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
@@ -9,13 +9,59 @@ import BackButton from '../../Utils/BackButton';
 const AddSubject = () => {
     const [btnState, setBtnState] = useState('');
     const subject = useRef();
-    const creditHours = useRef();
 
     const [alert, setAlert] = useState({
         show: false,
     });
     const params = useParams();
     const ctx = useContext(AppContext);
+    const [subjectList, setSubjectList] = useState({
+        loaded: false,
+        subjects: [],
+    });
+
+    useEffect(() => {
+        axios
+            .get(
+                `${ctx.baseURL}/subjects/defaultSubjects?department=${ctx.userData._id}&semester=${params.semesterId}&sort=name`,
+                {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
+                    },
+                }
+            )
+            .then((response) => {
+                setSubjectList({
+                    loaded: true,
+                    subjects: response.data.data.subjects,
+                });
+                if (response.data.data.subjects.length === 0) {
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: 'No subjects available for your department. Contact administrator',
+                        showBtn: true,
+                    });
+                }
+            })
+            .catch((error) => {
+                if (error.response)
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.response.data.message,
+                        showBtn: true,
+                    });
+                else
+                    setAlert({
+                        show: true,
+                        type: 'error',
+                        message: error.message,
+                        showBtn: true,
+                    });
+            });
+    }, []);
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -24,8 +70,7 @@ const AddSubject = () => {
             .post(
                 `${ctx.baseURL}/subjects?semester=${params.semesterId}`,
                 {
-                    name: subject.current.value,
-                    creditHours: creditHours.current.value,
+                    subject: subject.current.value,
                 },
                 {
                     headers: {
@@ -35,7 +80,6 @@ const AddSubject = () => {
             )
             .then((response) => {
                 subject.current.value = '';
-                creditHours.current.value = '';
                 setAlert({
                     show: true,
                     type: 'success',
@@ -76,29 +120,22 @@ const AddSubject = () => {
                                 <label className='label'>
                                     <span className='label-text'>Subject Name</span>
                                 </label>
-                                <input
-                                    className={ctx.inputClasses}
-                                    type='text'
-                                    placeholder='Subject Name'
-                                    ref={subject}
-                                    required
-                                ></input>
-                            </div>
-
-                            <br />
-
-                            <div className='form-control'>
-                                <label className='label'>
-                                    <span className='label-text'>Credit Hours</span>
-                                </label>
-                                <select className={ctx.selectClasses} ref={creditHours} required>
-                                    <option value=''>Select Credit Hours</option>
-                                    <option value='3'>3 Hours</option>
-                                    <option value='4'>4 Hours</option>
+                                <select className={ctx.selectClasses} ref={subject} required>
+                                    {!subjectList.loaded && <option value=''>Loading Subjects...</option>}
+                                    {subjectList.loaded && <option value=''>Select Subject</option>}
+                                    {subjectList.loaded &&
+                                        subjectList.subjects.map((subject, index) => {
+                                            return (
+                                                <option key={index} value={subject._id}>
+                                                    {subject.name} ({subject.creditHours} credit hrs)
+                                                </option>
+                                            );
+                                        })}
                                 </select>
                             </div>
 
                             <br />
+
                             <div className='form-control flex items-center'>
                                 <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
                                     Add Subject
