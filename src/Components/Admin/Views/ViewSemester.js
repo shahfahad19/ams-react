@@ -42,7 +42,7 @@ const ViewSemester = (props) => {
                         <Menu>
                             <MenuItems>
                                 <MenuItem text='Subjects' tab='subjects' />
-                                <MenuItems text='Edit Semester' tab='edit' />
+                                <MenuItem text='Edit Semester' tab='edit' />
                             </MenuItems>
                         </Menu>
                     )}

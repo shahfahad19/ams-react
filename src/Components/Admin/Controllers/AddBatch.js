@@ -74,7 +74,7 @@ const AddBatch = () => {
                         <form className='font-medium w-full' onSubmit={submitForm}>
                             <div className='form-control'>
                                 <input
-                                    className='select select-bordered select-sm md:select-md rounded-full'
+                                    className={ctx.inputClasses}
                                     value={batch}
                                     type='number'
                                     onChange={(event) => batchNameHandler(event)}

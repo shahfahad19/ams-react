@@ -33,6 +33,7 @@ const BatchList = () => {
                 console.log(error);
             });
     }, []);
+
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Semester List' showBtn={true} btnText='Add Semester' btnLink='../add-semester' />
