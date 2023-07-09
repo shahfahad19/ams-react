@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import BatchDeleteBtn from '../Components/BatchDeleteBtn';
 
 const EditBatch = (props) => {
     const [batchData, setBatchData] = useOutletContext();
@@ -13,9 +13,6 @@ const EditBatch = (props) => {
     const params = useParams();
     const batchName = useRef();
     const archived = useRef();
-    const [alert, setAlert] = useState({
-        show: false,
-    });
     const MySwal = withReactContent(Swal);
 
     const navigate = useNavigate();
@@ -36,28 +33,13 @@ const EditBatch = (props) => {
             })
             .then((response) => {
                 setBatchData(response.data.data.batch);
-                setAlert({
-                    show: true,
-                    type: 'success',
-                    message: 'Edited Successfully',
-                    showBtn: true,
-                });
+                ctx.showSwal(1, 'Batch updated!');
             })
             .catch((error) => {
-                if (error.response.data.error.code === 11000)
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: 'A batch with this name already exists',
-                        showBtn: true,
-                    });
-                else
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: error.response.data.message,
-                        showBtn: true,
-                    });
+                if (error.response) {
+                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Batch with name already exists!');
+                    else ctx.showSwal(0, error.response.data.message);
+                } else ctx.showSwal(0, error.message);
             });
         setBtnState('');
     };
@@ -71,112 +53,14 @@ const EditBatch = (props) => {
                 },
             })
             .then((response) => {
+                ctx.showSwal(1, 'Batch code updated');
                 setBatchData({ ...batchData, batchCode: response.data.data.batch.batchCode });
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response) ctx.showSwal(0, error.response.data.message);
+                else ctx.showSwal(0, error.message);
             });
         setBtnState('');
-    };
-
-    const deleteBatch = () => {
-        MySwal.fire({
-            html: `
-                <div class="swal2-title">Are you sure?</div>
-                <div class="swal2-content">This batch, its semesters, its subjects and its attendances will be deleted permanently from the database.
-                <br/>
-                <span class="text-info">If you want to keep this batch, archive it instead!</span></div>
-            `,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: 'Add Subject',
-                    html: `
-                    <div class="swal2-content">Confirm Batch Name</div>
-                <input id="batch-name" class="swal2-input" placeholder="Batch Name">
-            `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true, // Show loading spinner
-
-                    preConfirm: () => {
-                        const batchName = document.getElementById('batch-name').value;
-
-                        // Check if fields are not selected
-                        if (!batchName) {
-                            Swal.showValidationMessage('Enter semester name');
-                            return false; // Prevent closing the modal
-                        } else if (batchName !== 'Batch ' + batchData.name) {
-                            Swal.showValidationMessage(
-                                'Batch name does not match, make sure you are deleting the intended batch!'
-                            );
-                            return false; // Prevent closing the modal
-                        }
-
-                        return { batchName };
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        MySwal.fire({
-                            title: 'Deleting Batch',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                MySwal.showLoading();
-
-                                // axios req
-                                axios
-                                    .delete(`${ctx.baseURL}/batches/${params.batchId}`, {
-                                        credentials: 'include',
-                                        headers: {
-                                            Authorization: 'Bearer ' + ctx.token,
-                                        },
-                                    })
-                                    .then((response) => {
-                                        MySwal.close();
-
-                                        MySwal.fire({
-                                            icon: 'success',
-                                            title: 'Deleted!',
-                                            text: 'Batch Deleted successfully',
-                                            showConfirmButton: true,
-                                        }).then(() => {
-                                            navigate(-1, { replace: true });
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                        MySwal.close();
-
-                                        if (error.response) {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Something went wrong!',
-                                                text: error.response.data.message,
-                                                showConfirmButton: true,
-                                                confirmButtonText: 'Ok',
-                                            });
-                                        } else {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Something went wrong!',
-                                                text: error.message,
-                                                showConfirmButton: true,
-                                                confirmButtonText: 'Ok',
-                                            });
-                                        }
-                                    });
-                            },
-                        });
-                    }
-                });
-            }
-        });
     };
 
     return (
@@ -230,7 +114,10 @@ const EditBatch = (props) => {
                             </div>
                             <label className='label'>
                                 <span className='label-text-alt'></span>
-                                <span className='label-text-alt'>If a batch is graduated, set it to True</span>
+                                <span className='label-text-alt'>
+                                    If a batch is graduated, set it to True (All its semesters and subjects will also be
+                                    archived)
+                                </span>
                             </label>
                             <br />
 
@@ -241,22 +128,14 @@ const EditBatch = (props) => {
                             </div>
                         </form>
                         <div className='form-control flex items-center flex-row justify-center mt-3'>
-                            <button className={`${ctx.btnClasses} btn-error`} onClick={deleteBatch}>
-                                Delete Batch
-                            </button>
+                            <BatchDeleteBtn
+                                ctx={ctx}
+                                params={params}
+                                navigate={navigate}
+                                MySwal={MySwal}
+                                batchData={batchData}
+                            />
                         </div>
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
             )}

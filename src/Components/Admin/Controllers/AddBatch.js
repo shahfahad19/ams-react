@@ -1,16 +1,12 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
-import { Link } from 'react-router-dom';
 import BackButton from '../../Utils/BackButton';
 
 const AddBatch = () => {
     const [btnState, setBtnState] = useState('');
     const [batch, setBatch] = useState('');
-    const [alert, setAlert] = useState({
-        show: false,
-    });
+
     const ctx = useContext(AppContext);
 
     const batchNameHandler = (event) => {
@@ -20,7 +16,6 @@ const AddBatch = () => {
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-        setAlert({ show: false });
         let token = ctx.token;
         await axios
             .post(
@@ -34,31 +29,13 @@ const AddBatch = () => {
             )
             .then((response) => {
                 setBatch('');
-                setAlert({
-                    show: true,
-                    type: 'success',
-                    message: 'Added Successfully',
-                    showBtn: true,
-                });
-                setTimeout(() => {
-                    setAlert({ show: false });
-                }, 3000);
+                ctx.showSwal(1, 'Batch created successfully!');
             })
             .catch((error) => {
-                if (error.response.data.error.code === 11000)
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: 'A batch with this name already exists in your department',
-                        showBtn: true,
-                    });
-                else
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: error.response.data.message,
-                        showBtn: true,
-                    });
+                if (error.response) {
+                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Batch already exists!');
+                    else ctx.showSwal(0, error.response.data.message);
+                } else ctx.showSwal(0, error.message);
             });
         setBtnState('');
     };
@@ -95,18 +72,6 @@ const AddBatch = () => {
                             </div>
                         </form>
 
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
                         <BackButton to='/admin/batches' text='Batch List' />
                     </div>
                 </div>

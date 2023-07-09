@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import TickMark from '../../Utils/TickMark';
+import CrossMark from '../../Utils/CrossMark';
 
 const BatchList = (props) => {
     const params = useParams();
@@ -17,7 +19,6 @@ const BatchList = (props) => {
         if (params.departmentId != undefined && ctx.userData.role === 'super-admin') {
             url = `${ctx.baseURL}/batches?dept=${params.departmentId}`;
         }
-        console.log(url);
         axios
             .get(url, {
                 credentials: 'include',
@@ -26,7 +27,6 @@ const BatchList = (props) => {
                 },
             })
             .then((response) => {
-                console.log(response);
                 setErrorMessage('');
                 isLoading(false);
                 setBatches(response.data.data.batches);
@@ -38,7 +38,6 @@ const BatchList = (props) => {
                 if (error.response) setErrorMessage(error.response.data.message);
                 else setErrorMessage(error.message);
                 isLoading(false);
-                console.log(error);
             });
     }, []);
 
@@ -51,7 +50,7 @@ const BatchList = (props) => {
                     <tr>
                         <th></th>
                         <th className='normal-case font-medium text-sm'>Name</th>
-                        <th className='normal-case font-medium text-sm'>Archived</th>
+                        <th className='normal-case font-medium text-sm'>Active</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,9 +64,10 @@ const BatchList = (props) => {
                                             Batch {batch.name}
                                         </Link>
                                     </td>
-                                    <td>{`${batch.archived.toString().slice(0, 1).toUpperCase()}${batch.archived
-                                        .toString()
-                                        .slice(1)}`}</td>
+                                    <td>
+                                        {!batch.archived && <TickMark />}
+                                        {batch.archived && <CrossMark />}
+                                    </td>
                                 </tr>
                             );
                         })}

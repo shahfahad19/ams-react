@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 import withReactContent from 'sweetalert2-react-content';
@@ -18,9 +17,7 @@ const EditTeacher = (props) => {
     const params = useParams();
     const MySwal = withReactContent(Swal);
     const department = useRef();
-    const [alert, setAlert] = useState({
-        show: false,
-    });
+
     const [teacher, setTeacher] = useState({
         show: false,
     });
@@ -80,11 +77,7 @@ const EditTeacher = (props) => {
 
                         console.log(response);
                         setSubject(response.data.data.subject);
-                        MySwal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: 'Teacher assigned successfully',
-                        });
+                        ctx.showSwal(1, 'Teacher Assigned Successfully');
                         setTeacher({
                             show: true,
                             search: false,
@@ -92,12 +85,8 @@ const EditTeacher = (props) => {
                         });
                     })
                     .catch((error) => {
-                        MySwal.close();
-                        MySwal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: 'Something went wrong',
-                        });
+                        if (error.response) ctx.showSwal(0, error.response.data.message);
+                        else ctx.showSwal(0, error.message);
                     });
             },
         });
@@ -143,24 +132,13 @@ const EditTeacher = (props) => {
                                     show: false,
                                 });
 
-                                MySwal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: 'Teacher removed successfully',
-                                });
+                                ctx.showSwal(1, 'Teacher removed successfully');
                             })
                             .catch((error) => {
                                 MySwal.close();
 
-                                let errorMessage = '';
-                                if (error.response) errorMessage = error.response.data.message;
-                                errorMessage = error.message;
-                                if (error.response)
-                                    MySwal.fire({
-                                        icon: 'error',
-                                        title: 'Error!',
-                                        text: errorMessage,
-                                    });
+                                if (error.response) ctx.showSwal(0, error.response.data.message);
+                                else ctx.showSwal(0, error.message);
                             });
                     },
                 });
@@ -200,7 +178,7 @@ const EditTeacher = (props) => {
                         <option value=''>Select department</option>
                         {data.map((teacher, index) => {
                             return (
-                                <option value={index} key={teacher.departmentName}>
+                                <option value={index} key={index}>
                                     {teacher.departmentName}
                                 </option>
                             );
@@ -281,19 +259,6 @@ const EditTeacher = (props) => {
                                 </div>
                             </div>
                         </div>
-
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
             )}

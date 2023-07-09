@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
+import TickMark from '../../Utils/TickMark';
+import CrossMark from '../../Utils/CrossMark';
 
 const BatchList = () => {
     const [semesters, setSemesters] = useState([]);
@@ -43,7 +45,7 @@ const BatchList = () => {
                     <tr>
                         <th>S.No</th>
                         <th>Name</th>
-                        <th>Archived</th>
+                        <th>Active</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,9 +59,10 @@ const BatchList = () => {
                                             Semester {semester.name}
                                         </Link>
                                     </td>
-                                    <td>{`${semester.archived.toString().slice(0, 1).toUpperCase()}${semester.archived
-                                        .toString()
-                                        .slice(1)}`}</td>
+                                    <td>
+                                        {!semester.archived && <TickMark />}
+                                        {semester.archived && <CrossMark />}
+                                    </td>
                                 </tr>
                             );
                         })}

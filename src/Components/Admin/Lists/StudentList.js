@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
+import TickMark from '../../Utils/TickMark';
+import CrossMark from '../../Utils/CrossMark';
 
 const StudentList = () => {
     const [students, setStudents] = useState([]);
@@ -43,6 +45,8 @@ const StudentList = () => {
                 <thead>
                     <tr>
                         <th>Roll No.</th>
+                        <th>Photo</th>
+
                         <th>Name</th>
                         <th>Account Confirmed</th>
                     </tr>
@@ -53,14 +57,24 @@ const StudentList = () => {
                             return (
                                 <tr key={index}>
                                     <th>{student.rollNo}</th>
+
+                                    <td>
+                                        <label className='avatar'>
+                                            <div className='w-12 rounded-md'>
+                                                <img src={student.photo} alt='profile_pic' />
+                                            </div>
+                                        </label>
+                                    </td>
+
                                     <td>
                                         <Link to={`/${ctx.userData.role}/student/${student._id}`} className='underline'>
                                             {student.name}
                                         </Link>
                                     </td>
-                                    <td>{`${student.confirmed.toString().slice(0, 1).toUpperCase()}${student.confirmed
-                                        .toString()
-                                        .slice(1)}`}</td>
+                                    <td>
+                                        {student.confirmed && <TickMark />}
+                                        {!student.confirmed && <CrossMark />}
+                                    </td>
                                 </tr>
                             );
                         })}

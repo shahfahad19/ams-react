@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
-import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleBar';
 import Table from '../../Utils/Table';
+import TickMark from '../../Utils/TickMark';
+import CrossMark from '../../Utils/CrossMark';
+
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const TeacherList = (props) => {
@@ -49,8 +50,10 @@ const TeacherList = (props) => {
                 <thead>
                     <tr>
                         <th></th>
+                        <th className='normal-case font-medium text-sm'>Photo</th>
                         <th className='normal-case font-medium text-sm'>Name</th>
                         <th className='normal-case font-medium text-sm'>Email</th>
+
                         <th className='normal-case font-medium text-sm'>Gender</th>
                         <th className='normal-case font-medium text-sm'>Designation</th>
                         <th className='normal-case font-medium text-sm'>Approved</th>
@@ -62,11 +65,21 @@ const TeacherList = (props) => {
                             return (
                                 <tr key={index} className=''>
                                     <th>{index + 1}</th>
+                                    <td>
+                                        <label className='avatar'>
+                                            <div className='w-10 rounded-full'>
+                                                <img src={teacher.photo} alt='profile_pic' />
+                                            </div>
+                                        </label>
+                                    </td>
                                     <td>{teacher.name}</td>
                                     <td>{teacher.email}</td>
-                                    <td>{teacher.gender}</td>
+                                    <td>{teacher.gender === 'male' ? 'Male' : 'Female'}</td>
                                     <td>{teacher.designation}</td>
-                                    <td>{teacher.approved.toString()}</td>
+                                    <td>
+                                        {teacher.approved && <TickMark />}
+                                        {!teacher.approved && <CrossMark />}
+                                    </td>
                                 </tr>
                             );
                         })}

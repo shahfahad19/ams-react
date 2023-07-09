@@ -1,14 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import BackButton from '../../Utils/BackButton';
 
 const AddTeacher = () => {
     const [btnState, setBtnState] = useState('');
-    const [alert, setAlert] = useState({
-        show: false,
-    });
+
     const ctx = useContext(AppContext);
 
     const name = useRef();
@@ -27,7 +24,6 @@ const AddTeacher = () => {
             departmentId: ctx.userData._id,
         };
         setBtnState('loading');
-        setAlert({ show: false });
         let token = ctx.token;
         await axios
             .post(`${ctx.baseURL}/users/teachers`, formData, {
@@ -40,32 +36,14 @@ const AddTeacher = () => {
                 gender.current.value = '';
                 email.current.value = '';
                 designation.current.value = '';
-                setAlert({
-                    show: true,
-                    type: 'success',
-                    message: 'Added Successfully',
-                    showBtn: true,
-                });
-                setTimeout(() => {
-                    setAlert({ show: false });
-                }, 3000);
+                ctx.showSwal(1, 'Teacher added successfully!');
             })
             .catch((error) => {
-                console.log(error);
-                if (error.response.data.error.code === 11000)
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: 'A user with this email already exists',
-                        showBtn: true,
-                    });
-                else
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: error.response.data.message,
-                        showBtn: true,
-                    });
+                if (error.response) {
+                    if (error.response.data.error.code === 11000)
+                        ctx.showSwal(0, 'This email is linked to another account');
+                    else ctx.showSwal(0, error.response.data.message);
+                } else ctx.showSwal(0, error.message);
             });
         setBtnState('');
     };
@@ -128,20 +106,6 @@ const AddTeacher = () => {
                                 </button>
                             </div>
                         </form>
-
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
-                        <br />
 
                         <BackButton to='/admin/teachers' text='Teachers List' className='text-sm' />
                     </div>

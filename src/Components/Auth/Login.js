@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import Message from '../Main/Message';
 
@@ -11,6 +11,8 @@ const Login = () => {
     const [err, setError] = useState('');
     const navigate = useNavigate();
     const ctx = useContext(AppContext);
+    const [searchParams, setSearchParams] = useSearchParams();
+
     // REDIRECTING IF USER IS ALREADY LOGGED IN
     if (ctx.isLoggedIn === true) {
         navigate('/');
@@ -18,8 +20,13 @@ const Login = () => {
     ctx.header = 'Login';
     const email = useRef();
     const password = useRef();
-    const role = useRef();
     const captcha = useRef();
+
+    useEffect(() => {
+        if (searchParams.get('profileCompleted') === 'true') {
+            ctx.showSwal(1, 'Profile updated successfully!, please login with your updated password!');
+        }
+    }, []);
 
     const submitForm = async (event) => {
         event.preventDefault();

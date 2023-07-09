@@ -1,5 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const AppContext = React.createContext({
     header: '',
@@ -17,12 +20,17 @@ const AppContext = React.createContext({
     logout: () => {},
     login: () => {},
     changeTheme: () => {},
+    showSwal: () => {},
+    Swal: () => {},
+    navigate: () => {},
 });
 
 export const AppContextProvider = (props) => {
     const [isLoggedIn, setLoggedIn] = useState('wait');
     const [loggedInAs, setLoggedInAs] = useState();
     const [error, setError] = useState();
+    const navigate = useNavigate();
+    const MySwal = withReactContent(Swal);
 
     const [userData, setUserData] = useState({
         confirmed: true,
@@ -95,6 +103,14 @@ export const AppContextProvider = (props) => {
         setToken('');
     };
 
+    const showSwalHandler = (type, message) => {
+        MySwal.fire({
+            icon: type === 0 ? 'error' : 'success',
+            title: type === 0 ? 'Error' : 'Success',
+            text: message,
+        });
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -111,6 +127,9 @@ export const AppContextProvider = (props) => {
                 btnClasses: 'btn btn-neutral w-fit rounded-lg btn-sm font-medium',
                 inputClasses: 'input w-full input-bordered border-neutral rounded-full',
                 selectClasses: 'select w-full select-bordered border-neutral rounded-full',
+                showSwal: showSwalHandler,
+                Swal: MySwal,
+                navigate: navigate,
             }}
         >
             {props.children}

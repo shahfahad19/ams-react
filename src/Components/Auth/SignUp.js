@@ -9,7 +9,6 @@ import axios from 'axios';
 const SignUp = () => {
     const ctx = useContext(AppContext);
     const [searchParams, setSearchParams] = useSearchParams();
-    const role = useRef();
     const navigate = useNavigate();
 
     let code = searchParams.get('code');
@@ -150,6 +149,10 @@ const SignUp = () => {
                                     required: {
                                         value: true,
                                         message: 'Please enter your registration no.',
+                                    },
+                                    pattern: {
+                                        value: /^\d{2}-\d{5}-\d{5}$/,
+                                        message: 'Invalid registration no.',
                                     },
                                 })}
                             />

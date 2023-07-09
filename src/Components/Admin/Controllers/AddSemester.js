@@ -2,16 +2,12 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
 
 const AddSemester = () => {
     const [btnState, setBtnState] = useState('');
     const [semester, setSemester] = useState('');
-    const [alert, setAlert] = useState({
-        show: false,
-    });
     const params = useParams();
     const ctx = useContext(AppContext);
 
@@ -21,9 +17,7 @@ const AddSemester = () => {
 
     const submitForm = async (event) => {
         event.preventDefault();
-        setAlert({
-            show: false,
-        });
+
         setBtnState('loading');
 
         await axios
@@ -38,31 +32,13 @@ const AddSemester = () => {
             )
             .then((response) => {
                 setSemester('');
-                setAlert({
-                    show: true,
-                    type: 'success',
-                    message: 'Added Successfully',
-                    showBtn: true,
-                });
-                setTimeout(() => {
-                    setAlert({ show: false });
-                }, 3000);
+                ctx.showSwal(1, 'Semester created successfully!');
             })
             .catch((error) => {
-                if (error.response.data.error.code === 11000)
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: 'A semester with this name already exists in this batch',
-                        showBtn: true,
-                    });
-                else
-                    setAlert({
-                        show: true,
-                        type: 'error',
-                        message: error.response.data.message,
-                        showBtn: true,
-                    });
+                if (error.response) {
+                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Semester already exists!');
+                    else ctx.showSwal(0, error.response.data.message);
+                } else ctx.showSwal(0, error.message);
             });
         setBtnState('');
     };
@@ -103,18 +79,7 @@ const AddSemester = () => {
                                 </button>
                             </div>
                         </form>
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
+
                         <BackButton to={'/admin/batch/' + params.batchId + '/semesters'} text='Semesters' />
                     </div>
                 </div>

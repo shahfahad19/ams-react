@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import Message from '../../Main/Message';
+import DepartmentDeleteBtn from '../Components/DepartmentDeleteBtn';
 
 const DepartmentInfo = () => {
     const ctx = useContext(AppContext);
     const params = useParams();
     const [department, setDepartment] = useOutletContext();
+    const navigate = useNavigate();
 
     const MySwal = withReactContent(Swal);
 
@@ -121,6 +123,13 @@ const DepartmentInfo = () => {
                             <button className='btn btn-accent' onClick={changeAdmin}>
                                 Change Admin
                             </button>
+                            <DepartmentDeleteBtn
+                                department={department}
+                                navigate={navigate}
+                                params={params}
+                                ctx={ctx}
+                                MySwal={MySwal}
+                            />
                         </div>
                     )}
                 </div>

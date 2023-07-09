@@ -3,6 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import Error404 from './Utils/Error404';
 import AppContext from './Context/AppContext';
 import CustomError from './Utils/CustomError';
+import CompleteTeacherSignup from './Teacher/CompleteTeacherSignup';
 
 const Dashboard = (props) => {
     const ctx = useContext(AppContext);
@@ -15,7 +16,7 @@ const Dashboard = (props) => {
                 </div>
             )}
 
-            {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && (
+            {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && ctx.userData.approved && (
                 <>
                     {!ctx.userData.confirmed && ctx.userData.role !== 'admin' && (
                         <div className='alert alert-warning shadow-lg flex flex-row'>
@@ -80,6 +81,8 @@ const Dashboard = (props) => {
             {ctx.isLoggedIn === true && ctx.loggedInAs !== props.role && <Error404 link={`/${ctx.loggedInAs}`} />}
 
             {ctx.error && <CustomError error={ctx.error} />}
+
+            {ctx.isLoggedIn === true && !ctx.userData.approved && <CompleteTeacherSignup ctx={ctx} />}
         </>
     );
 };
