@@ -16,7 +16,7 @@ const Dashboard = (props) => {
                 </div>
             )}
 
-            {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && ctx.userData.approved && (
+            {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && (
                 <>
                     {!ctx.userData.confirmed && ctx.userData.role !== 'admin' && (
                         <div className='alert alert-warning shadow-lg flex flex-row'>
