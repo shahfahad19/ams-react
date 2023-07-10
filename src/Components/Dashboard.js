@@ -82,7 +82,7 @@ const Dashboard = (props) => {
 
             {ctx.error && <CustomError error={ctx.error} />}
 
-            {ctx.isLoggedIn === true && !ctx.userData.approved && <CompleteTeacherSignup ctx={ctx} />}
+            {/* {ctx.isLoggedIn === true && !ctx.userData.approved && <CompleteTeacherSignup ctx={ctx} />} */}
         </>
     );
 };
