@@ -47,7 +47,7 @@ const Dashboard = (props) => {
                         </div>
                     )}
 
-                    {ctx.userData.role === 'admin' && !ctx.userData.approved && (
+                    {/* {ctx.userData.role === 'admin' && !ctx.userData.approved && (
                         <div className='alert alert-warning shadow-lg flex flex-row'>
                             <div>
                                 <svg
@@ -73,7 +73,7 @@ const Dashboard = (props) => {
                                 </span>
                             </div>
                         </div>
-                    )}
+                    )} */}
                     <Outlet />
                 </>
             )}
