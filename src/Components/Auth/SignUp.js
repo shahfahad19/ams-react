@@ -152,7 +152,7 @@ const SignUp = () => {
                                     },
                                     pattern: {
                                         value: /^\d{2}-\d{5}-\d{5}$/,
-                                        message: 'Invalid registration no.',
+                                        message: 'Invalid registration no. Format is 12-12345-12345',
                                     },
                                 })}
                             />
