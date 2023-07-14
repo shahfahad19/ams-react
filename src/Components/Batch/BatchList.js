@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import AppContext from '../../Context/AppContext';
-import Table from '../../Utils/Table';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
-import TickMark from '../../Utils/TickMark';
-import CrossMark from '../../Utils/CrossMark';
+import AppContext from '../Context/AppContext';
+import SubSectionHeader from '../Utils/SubSectionHeader';
+import Table from '../Utils/Table';
+import CrossMark from '../Utils/CrossMark';
+import TickMark from '../Utils/TickMark';
 
 const BatchList = (props) => {
     const params = useParams();
@@ -42,8 +42,8 @@ const BatchList = (props) => {
     }, []);
 
     return (
-        <div className='flex-grow'>
-            <SubSectionHeader text='Batch List' showBtn={true} btnLink='/admin/add-batch' btnText='Add Batch' />
+        <div>
+            <SubSectionHeader text='Batch List' showBtn={true} btnText='Add Batch' btnLink='../add-batch' />
 
             <Table loading={loading} error={errorMessage}>
                 <thead>

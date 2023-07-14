@@ -11,7 +11,8 @@ const BackButton = (props) => {
 
     return (
         <>
-            <Link onClick={goBack} className={props.className}>
+            <br />
+            <Link onClick={goBack} className={'text-sm ' + props.className}>
                 &#8592; Back to {props.text}
             </Link>
         </>

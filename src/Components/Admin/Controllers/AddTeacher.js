@@ -2,115 +2,184 @@ import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import BackButton from '../../Utils/BackButton';
+import DepartmentName from '../Components/DepartmentName';
+import {
+    FormControl,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormSubmitBtn,
+    FormTitle,
+    FormWrapper,
+} from '../../Utils/Form';
+import Alert from '../../Utils/Alert';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
+import { useForm } from 'react-hook-form';
 
 const AddTeacher = () => {
     const [btnState, setBtnState] = useState('');
 
     const ctx = useContext(AppContext);
 
-    const name = useRef();
-    const designation = useRef();
-    const email = useRef();
-    const gender = useRef();
+    const [alert, setAlert] = useState({ show: false });
+    const {
+        register,
+        watch,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm();
 
-    const submitForm = async (event) => {
-        event.preventDefault();
-        const formData = {
-            name: name.current.value,
-            designation: designation.current.value,
-            email: email.current.value,
-            gender: gender.current.value,
-            department: ctx.userData.department,
-            departmentId: ctx.userData._id,
-        };
-        setBtnState('loading');
+    const submitForm = async (data) => {
+        setBtnState('btn-loading');
+
+        setAlert({ show: false });
+
         let token = ctx.token;
         await axios
-            .post(`${ctx.baseURL}/users/teachers`, formData, {
+            .post(`${ctx.baseURL}/users/teachers`, data, {
                 headers: {
                     Authorization: 'Bearer ' + token,
                 },
             })
             .then((response) => {
-                name.current.value = '';
-                gender.current.value = '';
-                email.current.value = '';
-                designation.current.value = '';
-                ctx.showSwal(1, 'Teacher added successfully!');
+                reset();
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Teacher added successfully',
+                });
             })
             .catch((error) => {
+                let errorMessage = error.message;
                 if (error.response) {
                     if (error.response.data.error.code === 11000)
-                        ctx.showSwal(0, 'This email is linked to another account');
-                    else ctx.showSwal(0, error.response.data.message);
-                } else ctx.showSwal(0, error.message);
+                        errorMessage = 'This email is linked to another account';
+                    else errorMessage = error.response.data.message;
+                }
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
         setBtnState('');
     };
 
     return (
         <>
-            <div className='add-teacher'>
-                <div className='md:p-2 text-xl text-neutral font-medium text-center md:flex-grow border-b-2'>
-                    Add Teacher
-                </div>
-                <div className='semesters mt-2 flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
+            <DepartmentName name={ctx.userData.department} />
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../teachers'>Teachers</BreadCrumb>
+                <BreadCrumb>Add Teacher</BreadCrumb>
+            </BreadCrumbs>
+            <FormWrapper>
+                <form className='font-medium w-full' onSubmit={handleSubmit(submitForm)}>
+                    <FormTitle>Add Teacher</FormTitle>
+                    <FormGroup>
+                        <FormField>
+                            <FormLabel>Teacher Name</FormLabel>
+                            <FormControl>
                                 <input
-                                    className={ctx.inputClasses}
-                                    ref={name}
+                                    className={`${ctx.inputClasses}${errors.name ? ' input-error' : ''}`}
                                     type='text'
-                                    required
                                     placeholder="Enter Teacher's Name"
+                                    {...register('name', {
+                                        required: {
+                                            value: true,
+                                            message: 'Teacher name required',
+                                        },
+                                        minLength: {
+                                            value: 3,
+                                            message: 'Minimum 3 characters required',
+                                        },
+                                        maxLength: {
+                                            value: 35,
+                                            message: 'Maximum length is exceeded (35)',
+                                        },
+                                    })}
                                 />
-                            </div>
+                            </FormControl>
+                            {errors.name && <FormLabelAlt>{errors.name.message}</FormLabelAlt>}
+                        </FormField>
 
-                            <br />
-                            <div className='form-control'>
+                        <FormField>
+                            <FormLabel>Teacher Email</FormLabel>
+                            <FormControl>
                                 <input
-                                    className={ctx.inputClasses}
-                                    ref={email}
+                                    className={`${ctx.inputClasses}${errors.email ? ' input-error' : ''}`}
                                     type='email'
-                                    required
                                     placeholder="Enter Teacher's Email"
+                                    {...register('email', {
+                                        required: {
+                                            value: true,
+                                            message: 'Email required',
+                                        },
+                                        pattern: {
+                                            value: /^[\S-]+@([\S-]+\.)+\S{2,4}$/g,
+                                            message: 'Email is not valid',
+                                        },
+                                    })}
                                 />
-                            </div>
+                            </FormControl>
+                            {errors.email && <FormLabelAlt>{errors.email.message}</FormLabelAlt>}
+                        </FormField>
 
-                            <br />
-
-                            <div className='form-control'>
-                                <select ref={designation} className={ctx.selectClasses} required>
+                        <FormField>
+                            <FormLabel>Designation</FormLabel>
+                            <FormControl>
+                                <select
+                                    className={`${ctx.selectClasses}${errors.designation ? ' select-error' : ''}`}
+                                    {...register('designation', {
+                                        required: {
+                                            value: true,
+                                            message: 'Designation required',
+                                        },
+                                    })}
+                                >
                                     <option value=''>Select Designation</option>
                                     <option value='Assistant Professor'>Assistant Professor</option>
                                     <option value='Associate Professor'>Associate Professor</option>
                                     <option value='Lecturer'>Lecturer</option>
                                 </select>
-                            </div>
+                            </FormControl>
+                            {errors.designation && <FormLabelAlt>{errors.designation.message}</FormLabelAlt>}
+                        </FormField>
 
-                            <br />
-
-                            <div className='form-control'>
-                                <select ref={gender} className={ctx.selectClasses} required>
+                        <FormField>
+                            <FormLabel>Gender</FormLabel>
+                            <FormControl>
+                                <select
+                                    className={`${ctx.selectClasses}${errors.gender ? ' select-error' : ''}`}
+                                    {...register('gender', {
+                                        required: {
+                                            value: true,
+                                            message: 'Gender required',
+                                        },
+                                    })}
+                                >
                                     <option value=''>Gender</option>
                                     <option value='male'>Male</option>
                                     <option value='female'>Female</option>
                                 </select>
-                            </div>
+                            </FormControl>
+                            {errors.gender && <FormLabelAlt>{errors.gender.message}</FormLabelAlt>}
+                        </FormField>
 
-                            <br />
-                            <div className='form-control flex items-center'>
-                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
-                                    Add teacher
-                                </button>
-                            </div>
-                        </form>
+                        <FormSubmitBtn className={btnState}>Add Teacher</FormSubmitBtn>
+                    </FormGroup>
+                </form>
 
-                        <BackButton to='/admin/teachers' text='Teachers List' className='text-sm' />
-                    </div>
-                </div>
-            </div>
+                <Alert
+                    alert={alert}
+                    closeAlert={() => {
+                        setAlert({ show: false });
+                    }}
+                />
+                <BackButton to='/admin/teachers' text='Teachers List' />
+            </FormWrapper>
         </>
     );
 };

@@ -3,14 +3,14 @@ import './Table.css';
 
 const Table = (props) => {
     return (
-        <div className='overflow-x-auto'>
-            <table className={`table w-full table-zebra table-compact md:table-normal ${props.className}`}>
-                {props.children}
-            </table>
+        <div className='flex w-full flex-col overflow-x-auto'>
+            <table className={`table table-zebra ${props.className}`}>{props.children}</table>
             {props.loading && props.loading === true && (
                 <div className='relative h-80'>
                     <div className='loader-wrapper'>
-                        <div className='loader'></div>
+                        <svg className='spinner-ring' viewBox='25 25 50 50' strokeWidth='5'>
+                            <circle cx='50' cy='50' r='20' />
+                        </svg>
                     </div>
                 </div>
             )}

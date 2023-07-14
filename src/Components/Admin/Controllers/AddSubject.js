@@ -4,14 +4,21 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
+import DepartmentName from '../Components/DepartmentName';
+import { FormControl, FormField, FormLabel, FormTitle, FormWrapper } from '../../Utils/Form';
+import Alert from '../../Utils/Alert';
 
 const AddSubject = () => {
     const [btnState, setBtnState] = useState('');
     const subject = useRef();
 
     const [newSubject, setNewSubject] = useState();
+    const [semester, setSemester] = useState();
     const params = useParams();
     const ctx = useContext(AppContext);
+    const [alert, setAlert] = useState({ show: false });
+
     const [subjectList, setSubjectList] = useState({
         loaded: false,
         subjects: [],
@@ -33,6 +40,7 @@ const AddSubject = () => {
                     loaded: true,
                     subjects: response.data.data.subjects,
                 });
+                setSemester(response.data.data.semester);
 
                 if (response.data.data.subjects.length === 0) {
                     ctx.showSwal(0, 'No Subjects Available!');
@@ -47,7 +55,8 @@ const AddSubject = () => {
 
     const submitForm = async (event) => {
         event.preventDefault();
-        setBtnState('loading');
+        setBtnState('btn-loading');
+        setAlert({ show: false });
         await axios
             .post(
                 `${ctx.baseURL}/subjects?semester=${params.semesterId}`,
@@ -62,56 +71,74 @@ const AddSubject = () => {
             )
             .then((response) => {
                 subject.current.value = '';
-                ctx.showSwal(1, 'Subject added successfully!');
                 setNewSubject(response.data.data.subject);
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Subject added successfully',
+                });
             })
             .catch((error) => {
+                let errorMessage = error.message;
                 if (error.response) {
-                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Subject already exists!');
-                    else ctx.showSwal(0, error.response.data.message);
-                } else ctx.showSwal(0, error.message);
+                    if (error.response.data.error.code === 11000) errorMessage = 'Subject already exists';
+                    else errorMessage = error.response.data.message;
+                }
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
         setBtnState('');
     };
 
     return (
         <>
-            <div className='flex-grow'>
-                <SubSectionHeader text='Add Subject' />
-                <div className='semesters mt-2 flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
-                                <label className='label'>
-                                    <span className='label-text'>Subject Name</span>
-                                </label>
-                                <select className={ctx.selectClasses} ref={subject} required>
-                                    {!subjectList.loaded && <option value=''>Loading Subjects...</option>}
-                                    {subjectList.loaded && <option value=''>Select Subject</option>}
-                                    {subjectList.loaded &&
-                                        subjectList.subjects.map((subject, index) => {
-                                            return (
-                                                <option key={index} value={subject._id}>
-                                                    {subject.name} ({subject.creditHours} credit hrs)
-                                                </option>
-                                            );
-                                        })}
-                                </select>
-                            </div>
+            <DepartmentName name={ctx.userData.department} className='mb-2' />
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../batches'>Batches</BreadCrumb>
+                {semester && <BreadCrumb to={'../batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>}
+                <BreadCrumb>Add Semester</BreadCrumb>
+            </BreadCrumbs>
+            <FormWrapper>
+                <form className='font-medium w-full' onSubmit={submitForm}>
+                    <FormTitle>Add Subject</FormTitle>
+                    <FormField>
+                        <FormLabel>Subject</FormLabel>
+                        <FormControl>
+                            <select className={ctx.selectClasses} ref={subject} required>
+                                {!subjectList.loaded && <option value=''>Loading Subjects...</option>}
+                                {subjectList.loaded && <option value=''>Select Subject</option>}
+                                {subjectList.loaded &&
+                                    subjectList.subjects.map((subject, index) => {
+                                        return (
+                                            <option key={index} value={subject._id}>
+                                                {subject.name} ({subject.creditHours} credit hrs)
+                                            </option>
+                                        );
+                                    })}
+                            </select>
+                        </FormControl>
+                    </FormField>
 
-                            <br />
+                    <br />
 
-                            <div className='form-control flex items-center'>
-                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
-                                    Add Subject
-                                </button>
-                            </div>
-                        </form>
-
-                        <BackButton to={'/admin/semester/' + params.semesterId + '/subjects'} text='Subjects' />
+                    <div className='form-control flex items-center'>
+                        <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
+                            Add Subject
+                        </button>
                     </div>
-                </div>
-            </div>
+                </form>
+                <Alert
+                    alert={alert}
+                    closeAlert={() => {
+                        setAlert({ show: false });
+                    }}
+                />
+                <BackButton to={'/admin/semester/' + params.semesterId + '/subjects'} text='Subjects' />
+            </FormWrapper>
         </>
     );
 };

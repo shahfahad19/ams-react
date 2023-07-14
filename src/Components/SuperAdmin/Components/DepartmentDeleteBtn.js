@@ -4,10 +4,10 @@ const DepartmentDeleteBtn = ({ department, navigate, params, ctx, MySwal }) => {
     const deleteDepartment = () => {
         MySwal.fire({
             html: `
-                <div class="swal2-title">Are you sure?</div>
-                <div class="swal2-content">This department and all its data will be deleted permanently from the database.
+                <div className="swal2-title">Are you sure?</div>
+                <div className="swal2-content">This department and all its data will be deleted permanently from the database.
                 <br/>
-                <span class="text-info">This action cannot be undone later</span></div>
+                <span className="text-info">This action cannot be undone later</span></div>
             `,
             icon: 'warning',
             showCancelButton: true,
@@ -19,8 +19,8 @@ const DepartmentDeleteBtn = ({ department, navigate, params, ctx, MySwal }) => {
             if (result.isConfirmed) {
                 MySwal.fire({
                     html: `
-                    <div class="swal2-content">Confirm Department Name</div>
-                <input id="department-name" class="swal2-input" placeholder="Department Name">
+                    <div className="swal2-content">Confirm Department Name</div>
+                <input id="department-name" className="swal2-input" placeholder="Department Name">
             `,
                     showCancelButton: true,
                     confirmButtonText: 'Submit',

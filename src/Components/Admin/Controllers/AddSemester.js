@@ -1,24 +1,47 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
+import Alert from '../../Utils/Alert';
+import Form, { FormControl, FormField, FormLabel, FormSubmitBtn, FormTitle, FormWrapper } from '../../Utils/Form';
+import DepartmentName from '../Components/DepartmentName';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const AddSemester = () => {
     const [btnState, setBtnState] = useState('');
     const [semester, setSemester] = useState('');
     const params = useParams();
     const ctx = useContext(AppContext);
+    const [alert, setAlert] = useState({ show: false });
+    const [batch, setBatch] = useState();
 
     const semesterNameHandler = (event) => {
         setSemester(event.target.value);
     };
 
+    useEffect(() => {
+        axios
+            .get(`${ctx.baseURL}/batches/${params.batchId}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setBatch(response.data.data.batch);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     const submitForm = async (event) => {
         event.preventDefault();
 
-        setBtnState('loading');
+        setBtnState('btn-loading');
+        setAlert({ show: false });
 
         await axios
             .post(
@@ -32,58 +55,79 @@ const AddSemester = () => {
             )
             .then((response) => {
                 setSemester('');
-                ctx.showSwal(1, 'Semester created successfully!');
+
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Semester added successfully',
+                });
             })
             .catch((error) => {
+                let errorMessage = error.message;
                 if (error.response) {
-                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Semester already exists!');
-                    else ctx.showSwal(0, error.response.data.message);
-                } else ctx.showSwal(0, error.message);
+                    if (error.response.data.error.code === 11000) errorMessage = 'Semester already exists';
+                    else errorMessage = error.response.data.message;
+                }
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
         setBtnState('');
     };
 
     return (
         <>
-            <div className='flex-grow'>
-                <SubSectionHeader text='Add Semester' />
-                <div className='semesters mt-2 flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
-                                <p className='pl-4'>Semester</p>
-                                <div className='form-control'>
-                                    <select
-                                        className='select select-bordered select-sm md:select-md rounded-full'
-                                        value={semester}
-                                        onChange={(event) => semesterNameHandler(event)}
-                                        required
-                                    >
-                                        <option value=''>Select</option>
-                                        <option value='1'>1</option>
-                                        <option value='2'>2</option>
-                                        <option value='3'>3</option>
-                                        <option value='4'>4</option>
-                                        <option value='5'>5</option>
-                                        <option value='6'>6</option>
-                                        <option value='7'>7</option>
-                                        <option value='8'>8</option>
-                                    </select>
-                                </div>
-                            </div>
+            <DepartmentName name={ctx.userData.department} className='mb-2' />
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../batches'>Batches</BreadCrumb>
+                {batch && (
+                    <>
+                        <BreadCrumb to={'../batch/' + batch._id}>Batch {batch.name}</BreadCrumb>
+                        <BreadCrumb>Add Semester</BreadCrumb>
+                    </>
+                )}
+                {!batch && <BreadCrumb>Loading...</BreadCrumb>}
+            </BreadCrumbs>
 
-                            <br />
-                            <div className='form-control flex items-center'>
-                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
-                                    Add Semester
-                                </button>
-                            </div>
-                        </form>
+            <FormWrapper>
+                <Form onSubmit={submitForm}>
+                    <FormTitle>Add Semester</FormTitle>
+                    <FormField>
+                        <FormLabel>Semester</FormLabel>
+                        <FormControl>
+                            <select
+                                className={ctx.selectClasses}
+                                value={semester}
+                                onChange={(event) => semesterNameHandler(event)}
+                                required
+                            >
+                                <option value=''>Select Semester</option>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                                <option value='8'>8</option>
+                            </select>
+                        </FormControl>
+                    </FormField>
 
-                        <BackButton to={'/admin/batch/' + params.batchId + '/semesters'} text='Semesters' />
-                    </div>
-                </div>
-            </div>
+                    <FormSubmitBtn className={btnState}>Add Semester</FormSubmitBtn>
+                </Form>
+                <Alert
+                    alert={alert}
+                    closeAlert={() => {
+                        setAlert({ show: false });
+                    }}
+                />
+
+                <BackButton to={'/admin/batch/' + params.batchId + '/semesters'} text='Semesters' />
+            </FormWrapper>
         </>
     );
 };

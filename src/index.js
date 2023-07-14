@@ -2,14 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
-import AddBatch from './Components/Admin/Controllers/AddBatch';
 import AddSemester from './Components/Admin/Controllers/AddSemester';
 import AddSubject from './Components/Admin/Controllers/AddSubject';
-import EditBatch from './Components/Admin/Controllers/EditBatch';
 import EditSemester from './Components/Admin/Controllers/EditSemester';
 import EditSubject from './Components/Admin/Controllers/EditSubject';
 import AdminDashboard from './Components/Admin/AdminDashboard';
-import BatchList from './Components/Admin/Lists/BatchList';
 import SemesterList from './Components/Admin/Lists/SemesterList';
 import StudentList from './Components/Admin/Lists/StudentList';
 import SubjectList from './Components/Admin/Lists/SubjectList';
@@ -49,6 +46,9 @@ import StudentAttendance from './Components/Student/StudentAttendance';
 import ViewStudent from './Components/Admin/Views/ViewStudent';
 import DepartmentInfo from './Components/SuperAdmin/Controllers/DepartmentInfo';
 import DefaultSubjectList from './Components/SuperAdmin/Lists/DefaultSubjectList';
+import BatchList from './Components/Batch/BatchList';
+import AddBatch from './Components/Batch/AddBatch';
+import EditBatch from './Components/Batch/EditBatch';
 
 const router = createBrowserRouter([
     {
@@ -267,7 +267,7 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: '',
-                                element: <SubjectList />,
+                                element: <Redirect to='subjects' />,
                             },
                             {
                                 path: 'subjects',
@@ -285,7 +285,7 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: '',
-                                element: <TeacherSubjectAttendanceList />,
+                                element: <Redirect to='attendance' />,
                             },
                             {
                                 path: 'attendance',

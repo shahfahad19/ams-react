@@ -5,10 +5,10 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
     const deleteSemester = () => {
         MySwal.fire({
             html: `
-                <div class="swal2-title">Are you sure?</div>
-                <div class="swal2-content">This semester and all its data will be deleted permanently from the database.
+                <div className="swal2-title">Are you sure?</div>
+                <div className="swal2-content">This semester and all its data will be deleted permanently from the database.
                 <br/>
-                <span class="text-info">If you want to keep this semester, archive it instead!</span></div>
+                <span className="text-info">If you want to keep this semester, archive it instead!</span></div>
             `,
             icon: 'warning',
             showCancelButton: true,
@@ -21,13 +21,12 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
                 MySwal.fire({
                     title: 'Add Subject',
                     html: `
-                    <div class="swal2-content">Confirm Semester Name</div>
-                <input id="semester-name" class="swal2-input" placeholder="Semester Name">
+                    <div className="swal2-content">Confirm Semester Name</div>
+                <input id="semester-name" className="swal2-input" placeholder="Semester Name">
             `,
                     showCancelButton: true,
                     confirmButtonText: 'Submit',
                     showLoaderOnConfirm: true,
-                    
 
                     preConfirm: () => {
                         const semesterName = document.getElementById('semester-name').value;

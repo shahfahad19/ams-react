@@ -7,9 +7,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Jost', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
         },
     },
-    plugins: [require('daisyui')],
+    plugins: [require('rippleui')],
 };

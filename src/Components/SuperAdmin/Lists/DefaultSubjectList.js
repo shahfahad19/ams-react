@@ -44,8 +44,8 @@ const DefaultSubjectList = () => {
         MySwal.fire({
             title: 'Add Subject',
             html: `
-                <input id="subject-name" class="swal2-input" placeholder="Enter Subject Name">
-                <select id="credit-hours" class="swal2-select">
+                <input id="subject-name" className="swal2-input" placeholder="Enter Subject Name">
+                <select id="credit-hours" className="swal2-select">
                     <option value="">Select Credit Hours</option>
                     <option value="3">3 Hours</option>
                     <option value="4">4 Hours</option>

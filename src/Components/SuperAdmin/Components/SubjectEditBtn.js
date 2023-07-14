@@ -15,8 +15,10 @@ const SubjectEditBtn = (props) => {
         MySwal.fire({
             title: 'Edit Subject',
             html: `
-                <input id="subject-name" class="swal2-input" placeholder="Enter Subject Name" value="${subject.name}">
-                <select id="credit-hours" class="swal2-select">
+                <input id="subject-name" className="swal2-input" placeholder="Enter Subject Name" value="${
+                    subject.name
+                }">
+                <select id="credit-hours" className="swal2-select">
                     <option value="">Select Credit Hours</option>
                     <option value="3" ${subject.creditHours === 3 && 'selected'}>3 Hours</option>
                     <option value="4" ${subject.creditHours === 4 && 'selected'}>4 Hours</option>

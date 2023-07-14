@@ -85,6 +85,7 @@ const SignUp = () => {
                                 <span className='label-text'>Name</span>
                                 {errors.name && <span className='label-text text-error'>{errors.name.message}</span>}
                             </label>
+
                             <input
                                 className={`input input-bordered w-full border-neutral rounded-full ${
                                     errors.name && 'input-error'
@@ -101,8 +102,8 @@ const SignUp = () => {
                                         message: 'Minimum 3 characters required',
                                     },
                                     maxLength: {
-                                        value: 20,
-                                        message: 'Maximum length is exceeded (20)',
+                                        value: 35,
+                                        message: 'Maximum length is exceeded (35)',
                                     },
                                 })}
                             />
@@ -239,7 +240,7 @@ const SignUp = () => {
                                     },
                                     minLength: {
                                         value: 8,
-                                        message: 'Password should at least be be 9 characters',
+                                        message: 'Password should at least be be 8 characters',
                                     },
                                     maxLength: {
                                         value: 25,

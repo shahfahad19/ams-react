@@ -5,10 +5,10 @@ const SubjectDeleteBtn = ({ ctx, MySwal, navigate, subject, params }) => {
     const deleteSubject = () => {
         MySwal.fire({
             html: `
-                <div class="swal2-title">Are you sure?</div>
-                <div class="swal2-content">This subject and all its data will be deleted permanently from the database.
+                <div className="swal2-title">Are you sure?</div>
+                <div className="swal2-content">This subject and all its data will be deleted permanently from the database.
                 <br/>
-                <span class="text-info">If you want to keep this subject, archive it instead!</span></div>
+                <span className="text-info">If you want to keep this subject, archive it instead!</span></div>
             `,
             icon: 'warning',
             showCancelButton: true,
@@ -21,8 +21,8 @@ const SubjectDeleteBtn = ({ ctx, MySwal, navigate, subject, params }) => {
                 MySwal.fire({
                     title: 'Add Subject',
                     html: `
-                    <div class="swal2-content">Confirm Subject Name</div>
-                <input id="subject-name" class="swal2-input" placeholder="Subject Name">
+                    <div className="swal2-content">Confirm Subject Name</div>
+                <input id="subject-name" className="swal2-input" placeholder="Subject Name">
             `,
                     showCancelButton: true,
                     confirmButtonText: 'Submit',

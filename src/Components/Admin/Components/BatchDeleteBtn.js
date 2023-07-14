@@ -5,10 +5,10 @@ const BatchDeleteBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
     const deleteBatch = () => {
         MySwal.fire({
             html: `
-                <div class="swal2-title">Are you sure?</div>
-                <div class="swal2-content">This batch and all its data will be deleted permanently from the database.
+                <div className="swal2-title">Are you sure?</div>
+                <div className="swal2-content">This batch and all its data will be deleted permanently from the database.
                 <br/>
-                <span class="text-info">If you want to keep this batch, archive it instead!</span></div>
+                <span className="text-info">If you want to keep this batch, archive it instead!</span></div>
             `,
             icon: 'warning',
             showCancelButton: true,
@@ -20,8 +20,8 @@ const BatchDeleteBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
             if (result.isConfirmed) {
                 MySwal.fire({
                     html: `
-                         <div class="swal2-content">Confirm Batch Name</div>
-                        <input id="batch-name" class="swal2-input" placeholder="Batch Name">
+                         <div className="swal2-content">Confirm Batch Name</div>
+                        <input id="batch-name" className="swal2-input" placeholder="Batch Name">
                     `,
                     showCancelButton: true,
                     showLoaderOnConfirm: true, // Show loading spinner
@@ -31,7 +31,7 @@ const BatchDeleteBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
 
                         // Check if fields are not selected
                         if (!batchName) {
-                            MySwal.showValidationMessage('Enter semester name');
+                            MySwal.showValidationMessage('Enter batch name');
                             return false; // Prevent closing the modal
                         } else if (batchName !== 'Batch ' + batchData.name) {
                             MySwal.showValidationMessage(

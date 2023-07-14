@@ -124,9 +124,10 @@ export const AppContextProvider = (props) => {
                 baseURL: process.env.REACT_APP_API,
                 captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
                 error: error,
-                btnClasses: 'btn btn-neutral w-fit rounded-lg btn-sm font-medium',
-                inputClasses: 'input w-full input-bordered border-neutral rounded-full',
-                selectClasses: 'select w-full select-bordered border-neutral rounded-full',
+
+                btnClasses: 'btn btn-primary btn-block',
+                inputClasses: 'input w-full input-block input-lg',
+                selectClasses: 'select select-block select-lg',
                 showSwal: showSwalHandler,
                 Swal: MySwal,
                 navigate: navigate,

@@ -37,15 +37,12 @@ const Welcome = () => {
                 )}
                 {ctx.isLoggedIn === true && (
                     <>
-                        <Link
-                            className='btn btn-primary rounded-full btn-outline m-2 w-52 btn-sm md:btn-md'
-                            to={'/' + ctx.loggedInAs}
-                        >
+                        <Link className='btn btn-primary rounded-full m-2 w-52' to={'/' + ctx.loggedInAs}>
                             Go to Dashboard
                         </Link>
                         <br />
                         <Link
-                            className='btn btn-error rounded-full btn-outline m-2 w-44 btn-sm md:btn-md'
+                            className='btn btn-error rounded-full m-2 '
                             onClick={() => {
                                 ctx.logout();
                             }}

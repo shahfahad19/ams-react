@@ -5,6 +5,8 @@ import AppContext from '../../Context/AppContext';
 import Menu, { MenuItem, MenuItems } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
 import BackButton from '../../Utils/BackButton';
+import DepartmentName from '../Components/DepartmentName';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewSemester = (props) => {
     const params = useParams();
@@ -32,23 +34,27 @@ const ViewSemester = (props) => {
 
     return (
         <>
-            <div className='batch flex flex-col md:flex-row'>
-                <div className='batch-info w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
-                    {semester.name === '' && <SideBarTitle title='Loading...' />}
-                    {semester.name !== '' && (
-                        <SideBarTitle title={'Batch ' + semester.batch.name + ' - Semester ' + semester.name} />
-                    )}
-                    {ctx.userData.role === 'admin' && (
-                        <Menu>
-                            <MenuItems>
-                                <MenuItem text='Subjects' tab='subjects' />
-                                <MenuItem text='Edit Semester' tab='edit' />
-                            </MenuItems>
-                        </Menu>
-                    )}
-                </div>
-                <Outlet context={[semester, setSemester]} />
-            </div>
+            <DepartmentName name={ctx.userData.department} />
+
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../Batches'>Batches</BreadCrumb>
+                {semester.name && (
+                    <>
+                        <BreadCrumb to={'/admin/batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>
+                        <BreadCrumb>Semester {semester.name}</BreadCrumb>
+                    </>
+                )}
+                {!semester.name && <BreadCrumb>Loading...</BreadCrumb>}
+            </BreadCrumbs>
+
+            <Menu>
+                <MenuItems>
+                    <MenuItem text='Subjects' tab='subjects' />
+                    <MenuItem text='Edit Semester' tab='edit' />
+                </MenuItems>
+            </Menu>
+            <Outlet context={[semester, setSemester]} />
         </>
     );
 };

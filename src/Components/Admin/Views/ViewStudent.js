@@ -13,6 +13,7 @@ const ViewStudent = () => {
     const [data, setData] = useState([]);
     const [alert, setAlert] = useState(false);
     const [loading, isLoading] = useState(true);
+    const [student, setStudent] = useState(null);
     const semesterRef = useRef('');
     const subjectRef = useRef('');
     const [subjects, setSubjects] = useState([]);
@@ -21,27 +22,51 @@ const ViewStudent = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        axios
-            .get(`${ctx.baseURL}/attendances/student/${params.studentId}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                setData(response.data.attendances);
-                if (response.data.attendances.length === 0) {
-                    setErrorMessage('No attendances found');
-                }
-            })
-            .catch((error) => {
-                if (error.response) setErrorMessage(error.response.data.message);
-                else setErrorMessage(error.message);
-                setAlert(true);
-            })
-            .finally(() => {
-                isLoading(false);
-            });
+        const getData = async () => {
+            await axios
+                .get(`${ctx.baseURL}/users/students/${params.studentId}`, {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
+                    },
+                })
+                .then((response) => {
+                    setStudent(response.data.data.student);
+                })
+                .catch((error) => {
+                    if (error.response) setErrorMessage(error.response.data.message);
+                    else setErrorMessage(error.message);
+                    setAlert(true);
+                })
+                .finally(() => {
+                    isLoading(false);
+                });
+
+            await axios
+                .get(`${ctx.baseURL}/attendances/student/${params.studentId}`, {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
+                    },
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    setData(response.data.attendances);
+                    if (response.data.attendances.length === 0) {
+                        setErrorMessage('No attendances found');
+                    }
+                })
+                .catch((error) => {
+                    if (error.response) setErrorMessage(error.response.data.message);
+                    else setErrorMessage(error.message);
+                    setAlert(true);
+                })
+                .finally(() => {
+                    isLoading(false);
+                });
+        };
+
+        getData();
     }, []);
 
     const semesterHandler = () => {
@@ -95,29 +120,33 @@ const ViewStudent = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className='border'>
-                                    <th>Name</th>
-                                    <td>{data[0].studentData.name}</td>
-                                </tr>
-                                <tr className='border'>
-                                    <th>Roll No</th>
-                                    <td>{data[0].studentData.rollNo}</td>
-                                </tr>
-                                <tr className='border'>
-                                    <th>Email</th>
-                                    <td>{data[0].studentData.email}</td>
-                                </tr>
-                                <tr className='border'>
-                                    <th>Registration No</th>
-                                    <td>{data[0].studentData.registrationNo}</td>
-                                </tr>
+                                {student !== null && (
+                                    <>
+                                        <tr className='border'>
+                                            <th>Name</th>
+                                            <td>{student.name}</td>
+                                        </tr>
+                                        <tr className='border'>
+                                            <th>Roll No</th>
+                                            <td>{student.rollNo}</td>
+                                        </tr>
+                                        <tr className='border'>
+                                            <th>Email</th>
+                                            <td>{student.email}</td>
+                                        </tr>
+                                        <tr className='border'>
+                                            <th>Registration No</th>
+                                            <td>{student.registrationNo}</td>
+                                        </tr>
+                                    </>
+                                )}
                             </tbody>
                         </table>
                     </div>
                     <div className='m-3 w-full lg:w-2/3'>
                         <p className='text-lg font-medium text-center'>
-                            Select Semester and Subject to see{' '}
-                            <span className='text-primary'>{data[0].studentData.name}'s</span> attendance
+                            Select Semester and Subject to see <span className='text-primary'>{student.name}'s</span>{' '}
+                            attendance
                         </p>
                         <div className='form-control'>
                             <label className='label'>
