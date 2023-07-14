@@ -6,7 +6,7 @@ import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
 import Alert from '../../Utils/Alert';
 import Form, { FormControl, FormField, FormLabel, FormSubmitBtn, FormTitle, FormWrapper } from '../../Utils/Form';
-import DepartmentName from '../Components/DepartmentName';
+import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const AddSemester = () => {

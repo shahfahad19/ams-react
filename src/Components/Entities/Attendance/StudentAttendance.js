@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import AppContext from '../Context/AppContext';
-import Message from '../Main/Message';
-import AttendanceInfoTable from './Components/AttendanceInfoTable';
-import SubjectInfoTable from './Components/SubjectInfoTable';
-import AttendanceTable from './Components/AttendanceTable';
+import AppContext from '../../Context/AppContext';
+import Message from '../../Main/Message';
+import AttendanceInfoTable from './AttendanceInfoTable';
+import SubjectInfoTable from './SubjectInfoTable';
+import AttendanceTable from './AttendanceTable';
 
 const StudentAttendance = () => {
     const ctx = useContext(AppContext);

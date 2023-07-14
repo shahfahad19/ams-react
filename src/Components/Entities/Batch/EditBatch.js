@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import BatchDeleteBtn from '../Components/BatchDeleteBtn';
+import AppContext from '../../Context/AppContext';
+import SubSectionHeader from '../../Utils/SubSectionHeader';
+import DeleteBatchBtn from './DeleteBatchBtn';
 
 const EditBatch = (props) => {
     const [batchData, setBatchData] = useOutletContext();
@@ -128,7 +128,7 @@ const EditBatch = (props) => {
                             </div>
                         </form>
                         <div className='form-control flex items-center flex-row justify-center mt-3'>
-                            <BatchDeleteBtn
+                            <DeleteBatchBtn
                                 ctx={ctx}
                                 params={params}
                                 navigate={navigate}

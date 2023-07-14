@@ -5,7 +5,7 @@ import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
-import DepartmentName from '../Components/DepartmentName';
+import DepartmentName from '../Department/DepartmentName';
 import { FormControl, FormField, FormLabel, FormTitle, FormWrapper } from '../../Utils/Form';
 import Alert from '../../Utils/Alert';
 

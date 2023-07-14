@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import BackButton from '../../Utils/BackButton';
-import DepartmentName from '../Components/DepartmentName';
+import DepartmentName from '../Department/DepartmentName';
 import {
     FormControl,
     FormField,

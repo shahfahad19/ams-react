@@ -6,7 +6,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import Message from '../../Main/Message';
-import DepartmentDeleteBtn from '../Components/DepartmentDeleteBtn';
+import DepartmentDeleteBtn from './DepartmentDeleteBtn';
 
 const DepartmentInfo = () => {
     const ctx = useContext(AppContext);

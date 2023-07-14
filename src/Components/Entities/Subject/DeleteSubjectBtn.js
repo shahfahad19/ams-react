@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React from 'react';
 
-const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
-    const deleteSemester = () => {
+const DeleteSubjectBtn = ({ ctx, MySwal, navigate, subject, params }) => {
+    const deleteSubject = () => {
         MySwal.fire({
             html: `
                 <div className="swal2-title">Are you sure?</div>
-                <div className="swal2-content">This semester and all its data will be deleted permanently from the database.
+                <div className="swal2-content">This subject and all its data will be deleted permanently from the database.
                 <br/>
-                <span className="text-info">If you want to keep this semester, archive it instead!</span></div>
+                <span className="text-info">If you want to keep this subject, archive it instead!</span></div>
             `,
             icon: 'warning',
             showCancelButton: true,
@@ -21,40 +21,40 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
                 MySwal.fire({
                     title: 'Add Subject',
                     html: `
-                    <div className="swal2-content">Confirm Semester Name</div>
-                <input id="semester-name" className="swal2-input" placeholder="Semester Name">
+                    <div className="swal2-content">Confirm Subject Name</div>
+                <input id="subject-name" className="swal2-input" placeholder="Subject Name">
             `,
                     showCancelButton: true,
                     confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true,
+                    showLoaderOnConfirm: true, // Show loading spinner
 
                     preConfirm: () => {
-                        const semesterName = document.getElementById('semester-name').value;
+                        const subjectName = document.getElementById('subject-name').value;
 
                         // Check if fields are not selected
-                        if (!semesterName) {
-                            MySwal.showValidationMessage('Enter semester name');
+                        if (!subjectName) {
+                            MySwal.showValidationMessage('Enter subject name');
                             return false; // Prevent closing the modal
-                        } else if (semesterName !== 'Semester ' + semester.name) {
+                        } else if (subjectName !== subject.name) {
                             MySwal.showValidationMessage(
-                                'Semester name does not match, make sure you are deleting the intended semester!'
+                                'Subject name does not match, make sure you are deleting the intended subject!'
                             );
                             return false; // Prevent closing the modal
                         }
 
-                        return { semesterName };
+                        return { subjectName };
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         MySwal.fire({
-                            title: 'Deleting Semester',
+                            title: 'Deleting Subject',
                             allowOutsideClick: false,
                             didOpen: () => {
                                 MySwal.showLoading();
 
                                 // axios req
                                 axios
-                                    .delete(`${ctx.baseURL}/semesters/${params.semesterId}`, {
+                                    .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
                                         credentials: 'include',
                                         headers: {
                                             Authorization: 'Bearer ' + ctx.token,
@@ -66,7 +66,7 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
                                         MySwal.fire({
                                             icon: 'success',
                                             title: 'Deleted!',
-                                            text: 'Semester Deleted successfully',
+                                            text: 'Subject Deleted successfully',
                                             showConfirmButton: true,
                                         }).then(() => {
                                             navigate(-1, { replace: true });
@@ -74,6 +74,7 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
                                     })
                                     .catch((error) => {
                                         MySwal.close();
+
                                         if (error.response) ctx.showSwal(0, error.response.data.message);
                                         else ctx.showSwal(0, error.message);
                                     });
@@ -85,10 +86,10 @@ const SemesterDeleteBtn = ({ ctx, MySwal, navigate, semester, params }) => {
         });
     };
     return (
-        <button className={`${ctx.btnClasses} btn-error`} onClick={deleteSemester}>
-            Delete Semester
+        <button className={`${ctx.btnClasses} btn-error`} onClick={deleteSubject}>
+            Delete Subject
         </button>
     );
 };
 
-export default SemesterDeleteBtn;
+export default DeleteSubjectBtn;

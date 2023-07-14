@@ -5,7 +5,7 @@ import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
 import BackButton from '../../Utils/BackButton';
-import DepartmentName from '../Components/DepartmentName';
+import DepartmentName from '../../Entities/Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewBatch = () => {

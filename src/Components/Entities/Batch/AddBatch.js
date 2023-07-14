@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
-import AppContext from '../Context/AppContext';
-import DepartmentName from '../Admin/Components/DepartmentName';
-import { BreadCrumb, BreadCrumbs } from '../Utils/BreadCrumbs';
+import AppContext from '../../Context/AppContext';
+import DepartmentName from '../Department/DepartmentName';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 import {
     FormControl,
     FormField,
@@ -12,9 +12,9 @@ import {
     FormSubmitBtn,
     FormTitle,
     FormWrapper,
-} from '../Utils/Form';
-import Alert from '../Utils/Alert';
-import BackButton from '../Utils/BackButton';
+} from '../../Utils/Form';
+import Alert from '../../Utils/Alert';
+import BackButton from '../../Utils/BackButton';
 const AddBatch = () => {
     const [btnState, setBtnState] = useState('');
     const batch = useRef();

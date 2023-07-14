@@ -5,7 +5,7 @@ import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import SemesterDeleteBtn from '../Components/SemesterDeleteBtn';
+import SemesterDeleteBtn from './DeleteSemesterBtn';
 
 const EditSemester = () => {
     const navigate = useNavigate();

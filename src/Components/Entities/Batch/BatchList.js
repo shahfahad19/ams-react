@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import AppContext from '../Context/AppContext';
-import SubSectionHeader from '../Utils/SubSectionHeader';
-import Table from '../Utils/Table';
-import CrossMark from '../Utils/CrossMark';
-import TickMark from '../Utils/TickMark';
+import AppContext from '../../Context/AppContext';
+import SubSectionHeader from '../../Utils/SubSectionHeader';
+import Table from '../../Utils/Table';
+import CrossMark from '../../Utils/CrossMark';
+import TickMark from '../../Utils/TickMark';
 
 const BatchList = (props) => {
     const params = useParams();

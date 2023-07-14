@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
-const InviteLink = () => {
+const BatchInviteLink = () => {
     const [batch, setBatch] = useOutletContext();
     const batchCode = batch.batchCode || undefined;
     const ctx = useContext(AppContext);
@@ -84,4 +84,4 @@ const InviteLink = () => {
     );
 };
 
-export default InviteLink;
+export default BatchInviteLink;

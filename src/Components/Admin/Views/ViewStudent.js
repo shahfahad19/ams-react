@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import Message from '../../Main/Message';
-import SubjectInfoTable from '../../Student/Components/SubjectInfoTable';
-import AttendanceInfoTable from '../../Student/Components/AttendanceInfoTable';
-import AttendanceTable from '../../Student/Components/AttendanceTable';
+import SubjectInfoTable from '../../Entities/Attendance/SubjectInfoTable';
+import AttendanceInfoTable from '../../Entities/Attendance/AttendanceInfoTable';
+import AttendanceTable from '../../Entities/Attendance/AttendanceTable';
 import { useParams } from 'react-router-dom';
 
 const ViewStudent = () => {

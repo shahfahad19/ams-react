@@ -6,8 +6,8 @@ import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import SubjectDeleteBtn from '../Components/SubjectDeleteBtn';
-import SubjectEditBtn from '../Components/SubjectEditBtn';
+import SubjectDeleteBtn from './SubjectDeleteBtn';
+import SubjectEditBtn from './SubjectEditBtn';
 
 const DefaultSubjectList = () => {
     const [subjects, setSubjects] = useState([]);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 
-const BatchDeleteBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
+const DeleteBatchBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
     const deleteBatch = () => {
         MySwal.fire({
             html: `
@@ -89,4 +89,4 @@ const BatchDeleteBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
     );
 };
 
-export default BatchDeleteBtn;
+export default DeleteBatchBtn;

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import Table from '../../Utils/Table';
 
 const TeacherSubjectAttendanceList = () => {
     const [attendances, setAttendances] = useState([]);
@@ -44,42 +45,38 @@ const TeacherSubjectAttendanceList = () => {
                 </div>
             )}
             {attendances.length > 0 && (
-                <table className='table w-full table-compact'>
+                <Table>
                     <thead>
                         <tr>
-                            <th className='normal-case font-semibold border border-neutral'>R.no</th>
-                            <th className='normal-case font-semibold border border-neutral'>Name</th>
+                            <th>R.no</th>
+                            <th>Name</th>
                             {attendances.length > 0 &&
                                 attendances[0].dates.map((date) => (
-                                    <th
-                                        key={date}
-                                        className='text-center text-xs normal-case font-semibold border border-neutral'
-                                    >
-                                        <div>
+                                    <th key={date}>
+                                        <p className='text-xs text-center border-none'>
                                             {new Date(date).toLocaleDateString('en-UK', {
                                                 day: '2-digit',
                                                 month: 'short',
                                                 year: '2-digit',
                                             })}
-                                        </div>
-                                        <div className='border border-neutral border-b-0'></div>
-                                        <div>
+                                        </p>
+                                        <p className='text-center text-xs border-none'>
                                             {new Date(date).toLocaleTimeString('en-UK', {
                                                 hour: 'numeric',
                                                 minute: '2-digit',
                                                 hour12: true,
                                             })}
-                                        </div>
+                                        </p>
                                     </th>
                                 ))}
-                            <th className='text-center normal-case font-semibold border border-neutral'>Percentage</th>
+                            <th>Percentage</th>
                         </tr>
                     </thead>
                     <tbody>
                         {attendances.map((attendance, index) => (
                             <tr key={attendance._id}>
-                                <td className='border border-neutral'>{attendance.rollNo}</td>
-                                <td className='border border-neutral text-bold'>{attendance.name}</td>
+                                <td>{attendance.rollNo}</td>
+                                <td className='text-bold'>{attendance.name}</td>
 
                                 {dates.map((date, index) => (
                                     <React.Fragment key={index}>
@@ -89,39 +86,42 @@ const TeacherSubjectAttendanceList = () => {
                                             </td>
                                         )}
                                         {attendance.dates.indexOf(date) > -1 && (
-                                            <td
-                                                key={index}
-                                                className={`${
-                                                    attendance.attendance[attendance.dates.indexOf(date)].status[0] ===
-                                                    'p'
-                                                        ? 'text-success'
-                                                        : attendance.attendance[attendance.dates.indexOf(date)]
-                                                              .status[0] === 'a'
-                                                        ? 'text-error'
-                                                        : 'text-warning'
-                                                } text-center font-medium border border-neutral`}
-                                            >
-                                                {attendance.attendance[
-                                                    attendance.dates.indexOf(date)
-                                                ].status[0].toUpperCase()}
+                                            <td key={index}>
+                                                <p
+                                                    className={`${
+                                                        attendance.attendance[attendance.dates.indexOf(date)]
+                                                            .status[0] === 'p'
+                                                            ? 'text-success'
+                                                            : attendance.attendance[attendance.dates.indexOf(date)]
+                                                                  .status[0] === 'a'
+                                                            ? 'text-error'
+                                                            : 'text-warning'
+                                                    } text-center font-medium `}
+                                                >
+                                                    {attendance.attendance[
+                                                        attendance.dates.indexOf(date)
+                                                    ].status[0].toUpperCase()}
+                                                </p>
                                             </td>
                                         )}
                                     </React.Fragment>
                                 ))}
 
-                                <td
-                                    className={`${
-                                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
-                                    } text-center border border-neutral font-semibold`}
-                                >
-                                    {attendance.percentage === '100%'
-                                        ? attendance.percentage
-                                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                                <td>
+                                    <p
+                                        className={`${
+                                            parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                                        } text-center font-semibold`}
+                                    >
+                                        {attendance.percentage === '100%'
+                                            ? attendance.percentage
+                                            : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                                    </p>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </Table>
             )}
             {errorMessage && (
                 <div className='text-center mt-16 text-error text-xl'>No attendances found for this subject</div>
