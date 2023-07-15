@@ -6,6 +6,17 @@ import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import SemesterDeleteBtn from './DeleteSemesterBtn';
+import Form, {
+    FormControl,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormTitle,
+    FormWrapper,
+} from '../../Utils/Form';
+import DeleteSemesterBtn from './DeleteSemesterBtn';
+import Alert from '../../Utils/Alert';
 
 const EditSemester = () => {
     const navigate = useNavigate();
@@ -15,15 +26,33 @@ const EditSemester = () => {
     const semesterName = useRef();
     const archived = useRef();
     const ctx = useContext(AppContext);
-    const MySwal = withReactContent(Swal);
+    const [semesterError, setSemesterError] = useState('');
+    const [alert, setAlert] = useState({ show: false });
+
+    const semesterNameHandler = (event) => {
+        if (semesterName.current.value === '') setSemesterError('Semester name required');
+        else setSemesterError('');
+    };
 
     const submitForm = async (event) => {
         event.preventDefault();
-        setBtnState('loading');
+        if (semesterName.current.value === '') {
+            setSemesterError('Semester name required');
+            return;
+        } else setSemesterError('');
+
+        console.log(semester.name, parseInt(semesterName.current.value));
+        console.log(archived.current.value.toString(), semester.archived);
+        if (semesterName.current.value === parseInt(semester.name) && archived.current.value === semester.archived) {
+            setAlert({ show: true, type: 'error', text: 'No change detected' });
+        }
+        setBtnState('btn-loading');
         const semesterData = {
             name: semesterName.current.value,
             archived: archived.current.value === 'True',
         };
+        setAlert({ show: false });
+
         await axios
             .patch(`${ctx.baseURL}/semesters/${params.semesterId}`, semesterData, {
                 credentials: 'include',
@@ -33,32 +62,42 @@ const EditSemester = () => {
             })
             .then((response) => {
                 setSemester(response.data.data.semester);
-                ctx.baseURL(1, 'Semester updated!');
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Semester updated successfully',
+                });
             })
             .catch((error) => {
+                let errorMessage = error.message;
                 if (error.response) {
-                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Semester already exists!');
-                    else ctx.showSwal(0, error.response.data.message);
-                } else ctx.showSwal(0, error.message);
+                    if (error.response.data.error.code === 11000) errorMessage = 'Semester already exists';
+                    else errorMessage = error.response.data.message;
+                }
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
         setBtnState('');
     };
 
     return (
-        <div className='flex-grow'>
-            <SubSectionHeader text='Edit semester' />
+        <>
             {semester.name && (
-                <div className='flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
-                                <p className='pl-4'>Semester</p>
-                                <div className='form-control'>
+                <FormWrapper>
+                    <Form onSubmit={submitForm}>
+                        <FormTitle>Edit Semester</FormTitle>
+                        <FormGroup>
+                            <FormField>
+                                <FormLabel>Semester</FormLabel>
+                                <FormControl>
                                     <select
-                                        className='select select-bordered select-sm md:select-md rounded-full'
+                                        className={`${ctx.selectClasses} ${semesterError === '' ? '' : 'select-error'}`}
                                         ref={semesterName}
                                         defaultValue={semester.name}
-                                        required
+                                        onChange={semesterNameHandler}
                                     >
                                         <option value=''>Select</option>
                                         <option value='1'>1</option>
@@ -70,46 +109,48 @@ const EditSemester = () => {
                                         <option value='7'>7</option>
                                         <option value='8'>8</option>
                                     </select>
-                                </div>
-                            </div>
-                            <br />
-                            <div className='flex justify-between items-center border border-solid rounded-full border-neutral'>
-                                <p className='pl-4'>Archived</p>
-                                <div className='form-control'>
+                                </FormControl>
+                                {semesterError !== '' && <FormLabelAlt>{semesterError}</FormLabelAlt>}
+                            </FormField>
+                            <FormField>
+                                <FormLabel>Archived</FormLabel>
+                                <FormControl>
                                     <select
-                                        className='select select-bordered select-sm md:select-md rounded-full'
-                                        defaultValue={semester.archived ? 'True' : 'False'}
+                                        className={ctx.selectClasses}
+                                        defaultValue={semester.archived ? true : false}
                                         ref={archived}
                                         required
                                     >
-                                        <option>True</option>
-                                        <option>False</option>
+                                        <option value={true}>True</option>
+                                        <option value={false}>False</option>
                                     </select>
-                                </div>
-                            </div>
-                            <label className='label'>
-                                <span className='label-text-alt'></span>
-                                <span className='label-text-alt'>If a semester is finished, set it to True</span>
-                            </label>
-                            <div className='form-control flex items-center'>
-                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
+                                </FormControl>
+                            </FormField>
+
+                            <div className='flex space-x-2'>
+                                <button className={`${ctx.btnClasses} ${btnState} flex-grow`} type='submit'>
                                     Update
                                 </button>
+
+                                <DeleteSemesterBtn
+                                    className={'w-full sm:w-60'}
+                                    ctx={ctx}
+                                    params={params}
+                                    navigate={navigate}
+                                    semester={semester}
+                                />
                             </div>
-                        </form>
-                        <div className='form-control flex items-center flex-row justify-center mt-3'>
-                            <SemesterDeleteBtn
-                                ctx={ctx}
-                                params={params}
-                                MySwal={MySwal}
-                                semester={semester}
-                                navigate={navigate}
-                            />
-                        </div>
-                    </div>
-                </div>
+                        </FormGroup>
+                    </Form>
+                    <Alert
+                        alert={alert}
+                        closeAlert={() => {
+                            setAlert({ show: false });
+                        }}
+                    />
+                </FormWrapper>
             )}
-        </div>
+        </>
     );
 };
 

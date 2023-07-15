@@ -5,7 +5,6 @@ import App from './App';
 import AddSemester from './Components/Entities/Semester/AddSemester';
 import AddSubject from './Components/Entities/Subject/AddSubject';
 import EditSemester from './Components/Entities/Semester/EditSemester';
-import EditSubject from './Components/Entities/Subject/EditSubject';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import SemesterList from './Components/Entities/Semester/SemesterList';
 import StudentList from './Components/Entities/Student/StudentList';
@@ -290,10 +289,6 @@ const router = createBrowserRouter([
                             {
                                 path: 'attendance',
                                 element: <TeacherSubjectAttendanceList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditSubject />,
                             },
                             {
                                 path: 'teacher',

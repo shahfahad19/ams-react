@@ -1,10 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
-import Message from '../Main/Message';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import Form, {
+    FormControl,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormSubmitBtn,
+    FormTitle,
+    FormWrapper,
+} from '../Utils/Form';
+import Alert from '../Utils/Alert';
 
 const SignUp = () => {
     const ctx = useContext(AppContext);
@@ -23,8 +33,7 @@ const SignUp = () => {
     }
 
     const [btnState, setBtnState] = useState('');
-    const [alert, setAlert] = useState(false);
-    const [err, setError] = useState('');
+    const [alert, setAlert] = useState({ sjow: false });
     const captcha = useRef();
     const {
         register,
@@ -35,7 +44,8 @@ const SignUp = () => {
 
     const submitForm = (data) => {
         data.role = 'student';
-        setBtnState('loading');
+        setBtnState('btn-loading');
+        setAlert({ show: false });
         axios
             .post(`${ctx.baseURL}/user/signup?token=${captcha.current.getValue()}`, data)
             .then((response) => {
@@ -45,16 +55,12 @@ const SignUp = () => {
                 const signedup = saveToken(`${data.token}`);
                 if (signedup) {
                     window.location.assign('/');
-                } else {
-                    setError(`Account created but couldn't login`);
-                    setAlert(true);
                 }
             })
             .catch((error) => {
                 setBtnState('');
-                console.log(error.response.data);
-                setError(error.response.data.message);
-                setAlert(true);
+                let errorMessage = ctx.computeError(error);
+                setAlert(ctx.errorAlert(errorMessage));
                 window.grecaptcha.reset();
             });
     };
@@ -74,22 +80,15 @@ const SignUp = () => {
     };
 
     return (
-        <>
-            <div className='flex items-center flex-col m-3'>
-                <div className='shadow-xl p-3 w-11/12 md:w-4/12 rounded-xl'>
-                    <div className='font-medium text-2xl text-center mb-3 text-primary'>Sign Up</div>
-
-                    <form className='flex flex-col space-y-2' onSubmit={handleSubmit(submitForm)}>
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Name</span>
-                                {errors.name && <span className='label-text text-error'>{errors.name.message}</span>}
-                            </label>
-
+        <FormWrapper>
+            <Form onSubmit={handleSubmit(submitForm)}>
+                <FormTitle>Sign Up</FormTitle>
+                <FormGroup>
+                    <FormField>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.name && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.name && 'input-error'}`}
                                 type='text'
                                 placeholder='Full Name'
                                 {...register('name', {
@@ -107,17 +106,15 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
+                        </FormControl>
+                        {errors.name && <FormLabelAlt>{errors.name.message}</FormLabelAlt>}
+                    </FormField>
 
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Email</span>
-                                {errors.email && <span className='label-text text-error'>{errors.email.message}</span>}
-                            </label>
+                    <FormField>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.email && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.email && 'input-error'}`}
                                 type='email'
                                 placeholder='name@example.com'
                                 {...register('email', {
@@ -131,19 +128,15 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
+                        </FormControl>
+                        {errors.email && <FormLabelAlt>{errors.email.message}</FormLabelAlt>}
+                    </FormField>
 
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Registration No.</span>
-                                {errors.registrationNo && (
-                                    <span className='label-text text-error'>{errors.registrationNo.message}</span>
-                                )}
-                            </label>
+                    <FormField>
+                        <FormLabel>Registration No.</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.registrationNo && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.registrationNo && 'input-error'}`}
                                 type='text'
                                 placeholder='University Registration No.'
                                 {...register('registrationNo', {
@@ -157,19 +150,14 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
-
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Roll No.</span>
-                                {errors.rollNo && (
-                                    <span className='label-text text-error'>{errors.rollNo.message}</span>
-                                )}
-                            </label>
+                        </FormControl>
+                        {errors.registrationNo && <FormLabelAlt>{errors.registrationNo.message}</FormLabelAlt>}
+                    </FormField>
+                    <FormField>
+                        <FormLabel>Roll No</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.rollNo && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.rollNo && 'input-error'}`}
                                 type='number'
                                 placeholder='Class Roll No.'
                                 {...register('rollNo', {
@@ -183,19 +171,14 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
-
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Batch Code</span>
-                                {errors.batchCode && (
-                                    <span className='label-text text-error'>{errors.batchCode.message}</span>
-                                )}
-                            </label>
+                        </FormControl>
+                        {errors.rollNo && <FormLabelAlt>{errors.rollNo.message}</FormLabelAlt>}
+                    </FormField>
+                    <FormField>
+                        <FormLabel>Batch Code</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.batchCode && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.batchCode && 'input-error'}`}
                                 type='text'
                                 placeholder='Enter Batch Code provided by department'
                                 defaultValue={code}
@@ -218,19 +201,15 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
+                        </FormControl>
+                        {errors.batchCode && <FormLabelAlt>{errors.batchCode.message}</FormLabelAlt>}
+                    </FormField>
 
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Password</span>
-                                {errors.password && (
-                                    <span className='label-text text-error'>{errors.password.message}</span>
-                                )}
-                            </label>
+                    <FormField>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.password && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.password && 'input-error'}`}
                                 type='password'
                                 placeholder='********'
                                 {...register('password', {
@@ -248,19 +227,15 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
+                        </FormControl>
+                        {errors.password && <FormLabelAlt>{errors.password.message}</FormLabelAlt>}
+                    </FormField>
 
-                        <div>
-                            <label className='label'>
-                                <span className='label-text'>Confirm Password</span>
-                                {errors.passwordConfirm && (
-                                    <span className='label-text text-error'>{errors.passwordConfirm.message}</span>
-                                )}
-                            </label>
+                    <FormField>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
                             <input
-                                className={`input input-bordered w-full border-neutral rounded-full ${
-                                    errors.passwordConfirm && 'input-error'
-                                }`}
+                                className={`${ctx.inputClasses} ${errors.passwordConfirm && 'input-error'}`}
                                 type='password'
                                 placeholder='********'
                                 {...register('passwordConfirm', {
@@ -275,48 +250,36 @@ const SignUp = () => {
                                     },
                                 })}
                             />
-                        </div>
+                        </FormControl>
+                        {errors.passwordConfirm && <FormLabelAlt>{errors.passwordConfirm.message}</FormLabelAlt>}
+                    </FormField>
 
-                        <div className='flex justify-center'>
+                    <FormField>
+                        <FormLabel>Captcha</FormLabel>
+                        <FormControl>
                             <ReCAPTCHA
                                 theme={ctx.theme === 'dark' ? 'dark' : 'light'}
                                 sitekey={ctx.captchaKey}
                                 required
                                 ref={captcha}
                             />
-                        </div>
+                        </FormControl>
+                        <FormLabelAlt></FormLabelAlt>
+                    </FormField>
 
-                        <div className='form-control flex items-center'>
-                            <button
-                                className={` btn btn-sm btn-neutral w-fit font-medium rounded-lg ${btnState}`}
-                                type='submit'
-                            >
-                                Create Account
-                            </button>
-                        </div>
-                    </form>
-                    {alert === true && (
-                        <>
-                            <Message
-                                type='error'
-                                text={err}
-                                hideAlert={() => {
-                                    setAlert(false);
-                                }}
-                                showBtn={true}
-                            />
-                        </>
-                    )}
+                    <FormSubmitBtn className={btnState}>Create Account</FormSubmitBtn>
+                </FormGroup>
 
-                    <div className='text-sm m-2 text-center font-regular'>
-                        Already have an account?&nbsp;
-                        <Link className='link link-info font-medium' to='/login'>
-                            Login!
-                        </Link>
-                    </div>
-                </div>
+                <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
+            </Form>
+
+            <div className='p-3 text-center font-regular'>
+                Already have an account?&nbsp;
+                <Link className='link link-primary' to='/login'>
+                    Login!
+                </Link>
             </div>
-        </>
+        </FormWrapper>
     );
 };
 

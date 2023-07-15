@@ -54,7 +54,7 @@ export const FormTitle = (props) => {
     );
 };
 
-const Form = (props) => {
+export const Form = (props) => {
     return (
         <form className='font-medium w-full' onSubmit={props.onSubmit}>
             {props.children}

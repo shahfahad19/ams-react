@@ -1,25 +1,59 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
 import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
 import DeleteBatchBtn from './DeleteBatchBtn';
+import {
+    FormControl,
+    Form,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormTitle,
+    FormWrapper,
+} from '../../Utils/Form';
+import Alert from '../../Utils/Alert';
 
 const EditBatch = (props) => {
     const [batchData, setBatchData] = useOutletContext();
-    const [btnState, setBtnState] = useState();
+    const [submitBtnState, setSubmitBtnState] = useState();
+    const [regenerateBtnState, setRegenerateBtnState] = useState();
+    const [batchErrorMsg, setBatchErrorMsg] = useState('');
+
     const params = useParams();
     const batchName = useRef();
     const archived = useRef();
-    const MySwal = withReactContent(Swal);
+    const [alert, setAlert] = useState({ show: false });
 
     const navigate = useNavigate();
     const ctx = useContext(AppContext);
+
+    const batchNameHandler = (event) => {
+        let batch = batchName.current.value;
+        if (batch === '') {
+            setBatchErrorMsg('Batch no. required');
+        } else if (batch < 0 || batch > 999) {
+            setBatchErrorMsg('Batch name is invalid');
+        } else {
+            setBatchErrorMsg('');
+        }
+    };
+
     const submitForm = async (event) => {
         event.preventDefault();
-        setBtnState('loading');
+        let batch = batchName.current.value;
+        if (batch === '') {
+            setBatchErrorMsg('Batch no. required');
+            return;
+        } else if (batch < 0 || batch > 999) {
+            setBatchErrorMsg('Batch name is invalid');
+            return;
+        } else {
+            setBatchErrorMsg('');
+        }
+        setAlert({ show: false });
+        setSubmitBtnState('btn-loading');
         const batchData = {
             name: batchName.current.value,
             archived: archived.current.value === 'True',
@@ -33,18 +67,27 @@ const EditBatch = (props) => {
             })
             .then((response) => {
                 setBatchData(response.data.data.batch);
-                ctx.showSwal(1, 'Batch updated!');
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Batch updated successfully',
+                });
             })
             .catch((error) => {
-                if (error.response) {
-                    if (error.response.data.error.code === 11000) ctx.showSwal(0, 'Batch with name already exists!');
-                    else ctx.showSwal(0, error.response.data.message);
-                } else ctx.showSwal(0, error.message);
+                let errorMessage = error.message;
+                if (error.response) errorMessage = error.response.data.message;
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
-        setBtnState('');
+        setSubmitBtnState('');
     };
 
     const generateCode = async () => {
+        setRegenerateBtnState('btn-loading');
+        setAlert({ show: false });
         await axios
             .get(`${ctx.baseURL}/batches/${params.batchId}/updatecode`, {
                 credentials: 'include',
@@ -53,56 +96,66 @@ const EditBatch = (props) => {
                 },
             })
             .then((response) => {
-                ctx.showSwal(1, 'Batch code updated');
+                setAlert({
+                    show: true,
+                    type: 'success',
+                    text: 'Batch code updated',
+                });
                 setBatchData({ ...batchData, batchCode: response.data.data.batch.batchCode });
             })
             .catch((error) => {
-                if (error.response) ctx.showSwal(0, error.response.data.message);
-                else ctx.showSwal(0, error.message);
+                let errorMessage = error.message;
+                if (error.response) errorMessage = error.response.data.message;
+
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
             });
-        setBtnState('');
+        setRegenerateBtnState('');
     };
 
     return (
-        <div className='flex-grow'>
-            <SubSectionHeader text='Edit Batch' />
-            {batchData.name && (
-                <div className='flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
-                                <label className='label'>Batch Name</label>
-                                <input
-                                    className={ctx.inputClasses}
-                                    defaultValue={batchData.name}
-                                    ref={batchName}
-                                    type='number'
-                                    required
-                                    placeholder='Enter batch no.'
-                                    min='1'
-                                />
-                            </div>
-                            <br />
-                            <div>
-                                <label className='label'>Batch Code</label>
+        <>
+            {batchData && (
+                <FormWrapper>
+                    <Form onSubmit={submitForm}>
+                        <FormTitle>Edit Batch</FormTitle>
+                        <FormGroup>
+                            <FormField>
+                                <FormLabel>Batch Name</FormLabel>
+                                <FormGroup>
+                                    <input
+                                        className={`${ctx.inputClasses} ${batchErrorMsg === '' ? '' : 'input-error'}`}
+                                        defaultValue={batchData.name}
+                                        ref={batchName}
+                                        type='number'
+                                        onChange={batchNameHandler}
+                                        placeholder='Enter batch no.'
+                                        min='1'
+                                    />
+                                </FormGroup>
+                                {batchErrorMsg !== '' && <FormLabelAlt>{batchErrorMsg}</FormLabelAlt>}
+                            </FormField>
 
-                                <div className='flex justify-between items-center border border-solid rounded-full border-base-300'>
-                                    <p className='text-primary pl-4'>{batchData.batchCode || '...'}</p>
-                                    <p onClick={generateCode} className='btn btn-neutral rounded-full btn-sm md:btn-md'>
-                                        Regenerate
-                                    </p>
-                                </div>
-                            </div>
-                            <label className='label'>
-                                <span className='label-text-alt'></span>
-                                <span className='label-text-alt'>Regenerate if all students have signed up</span>
-                            </label>
-                            <br />
-                            <div className='flex justify-between items-center border border-solid rounded-full border-base-300'>
-                                <p className='pl-4'>Archived</p>
-                                <div className='form-control'>
+                            <FormField>
+                                <FormLabel>Batch Code</FormLabel>
+                                <FormControl>
+                                    <div className='bg-backgroundPrimary border-2 w-full rounded-xl flex justify-between items-center'>
+                                        <p className='text-primary pl-4'>{batchData.batchCode || '...'}</p>
+                                        <p onClick={generateCode} className={`btn btn-secondary ${regenerateBtnState}`}>
+                                            Regenerate
+                                        </p>
+                                    </div>
+                                </FormControl>
+                            </FormField>
+
+                            <FormField>
+                                <FormLabel>Archived</FormLabel>
+                                <FormControl>
                                     <select
-                                        className='select select-bordered rounded-full select-sm md:select-md'
+                                        className={ctx.selectClasses}
                                         defaultValue={batchData.archived ? 'True' : 'False'}
                                         ref={archived}
                                         required
@@ -110,36 +163,29 @@ const EditBatch = (props) => {
                                         <option>True</option>
                                         <option>False</option>
                                     </select>
-                                </div>
-                            </div>
-                            <label className='label'>
-                                <span className='label-text-alt'></span>
-                                <span className='label-text-alt'>
-                                    If a batch is graduated, set it to True (All its semesters and subjects will also be
-                                    archived)
-                                </span>
-                            </label>
-                            <br />
+                                </FormControl>
+                            </FormField>
 
-                            <div className='form-control flex items-center'>
-                                <button className={`${ctx.btnClasses} ${btnState}`} type='submit'>
+                            <div className='flex space-x-2'>
+                                <button className={`${ctx.btnClasses} ${submitBtnState} flex-grow`} type='submit'>
                                     Update
                                 </button>
+
+                                <DeleteBatchBtn
+                                    className={'w-full sm:w-40'}
+                                    ctx={ctx}
+                                    params={params}
+                                    navigate={navigate}
+                                    batchData={batchData}
+                                />
                             </div>
-                        </form>
-                        <div className='form-control flex items-center flex-row justify-center mt-3'>
-                            <DeleteBatchBtn
-                                ctx={ctx}
-                                params={params}
-                                navigate={navigate}
-                                MySwal={MySwal}
-                                batchData={batchData}
-                            />
-                        </div>
-                    </div>
-                </div>
+                        </FormGroup>
+                    </Form>
+                    <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
+                </FormWrapper>
             )}
-        </div>
+            <div className='h-14'></div>
+        </>
     );
 };
 

@@ -12,10 +12,10 @@ const Header = () => {
 
     return (
         <>
-            <div className='navbar rounded-lg shadow-md mb-2.5'>
+            <div className='navbar shadow-md mb-2.5'>
                 <div className='navbar-start'>
-                    <Link to='/' className='navbar-item'>
-                        AMS
+                    <Link to='/' className='navbar-item font-medium'>
+                        Attendance Management System
                     </Link>
                 </div>
                 {ctx.isLoggedIn && (

@@ -20,17 +20,19 @@ const Welcome = () => {
             </div>
             <div className='p-3 flex flex-col justify-center items-center md:flex-row'>
                 {ctx.isLoggedIn === 'wait' && (
-                    <div>
+                    <div className='flex items-center flex-col'>
                         <p className='text-lg font-medium text-neutral text-center p-3'>Please wait</p>
-                        <progress className='progress progress-neutral w-56'></progress>
+                        <svg className='spinner-ring' viewBox='25 25 50 50' strokeWidth='5'>
+                            <circle cx='50' cy='50' r='20' />
+                        </svg>
                     </div>
                 )}
                 {!ctx.isLoggedIn && (
                     <>
-                        <Link className='btn btn-neutral rounded-full m-2 w-32 btn-sm md:btn-md md:w-48' to='/login'>
+                        <Link className='btn btn-primary rounded-full m-2 w-32 md:w-48' to='/login'>
                             Login
                         </Link>
-                        <Link className='btn btn-neutral rounded-full m-2 w-32 btn-sm md:btn-md md:w-48' to='/signup'>
+                        <Link className='btn btn-primary rounded-full m-2 w-32 md:w-48' to='/signup'>
                             Sign Up
                         </Link>
                     </>

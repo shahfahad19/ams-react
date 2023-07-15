@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 
-const DeleteBatchBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
+const DeleteBatchBtn = ({ ctx, MySwal, navigate, batchData, params, className }) => {
     const deleteBatch = () => {
         MySwal.fire({
             html: `
@@ -83,7 +83,7 @@ const DeleteBatchBtn = ({ ctx, MySwal, navigate, batchData, params }) => {
         });
     };
     return (
-        <button className={`${ctx.btnClasses} btn-error`} onClick={deleteBatch}>
+        <button className={`${ctx.btnClasses} btn-error ${className}`} onClick={deleteBatch}>
             Delete Batch
         </button>
     );

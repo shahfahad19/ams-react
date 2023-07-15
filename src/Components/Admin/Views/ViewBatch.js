@@ -12,7 +12,7 @@ const ViewBatch = () => {
     const params = useParams();
     const ctx = useContext(AppContext);
 
-    const [batch, setBatch] = useState([]);
+    const [batch, setBatch] = useState();
 
     useEffect(() => {
         axios
@@ -36,8 +36,8 @@ const ViewBatch = () => {
 
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='/admin'>Dashboard</BreadCrumb>
-                <BreadCrumb>{batch.name ? 'Batch ' + batch.name : 'Loading...'}</BreadCrumb>
+                <BreadCrumb to='/admin/batches'>Batches</BreadCrumb>
+                <BreadCrumb>{batch ? 'Batch ' + batch.name : 'Loading...'}</BreadCrumb>
             </BreadCrumbs>
             <Menu>
                 <MenuItems>

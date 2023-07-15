@@ -53,7 +53,6 @@ const ViewSubject = () => {
                 <MenuItems>
                     <>
                         <MenuItem text='Attendance' tab='attendance' />
-                        <MenuItem text='Edit Subject' tab='edit' />
                         <MenuItem text='Teacher' tab='teacher' />
                     </>
                 </MenuItems>

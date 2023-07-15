@@ -24,19 +24,13 @@ const BatchInviteLink = () => {
     };
 
     return (
-        <div className='flex-grow'>
+        <div className='pb-20'>
             <SubSectionHeader text='Invite Link' />
             {batchCode !== undefined && (
-                <div className='flex flex-col md:flex-row md:space-x-10 mt-4 space-y-4 md:space-y-10 items-center justify-center'>
-                    <div className='qr hidden md:block'>
+                <div className='flex flex-col md:flex-row md:space-x-10 my-4 space-y-5 md:space-y-0 items-center justify-center'>
+                    <div className='md:block'>
                         <img
-                            src={` https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${batchCode}`}
-                            alt='QR'
-                        />
-                    </div>
-                    <div className='qr md:hidden'>
-                        <img
-                            src={` https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${batchCode}`}
+                            src={` https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://amsapp.vercel.app/signup?code=${batchCode}`}
                             alt='QR'
                         />
                     </div>
@@ -45,32 +39,28 @@ const BatchInviteLink = () => {
                             Share the code <span className='code font-bold text-primary'>{batchCode}</span> with
                             students
                         </div>
-                        <div className='flex items-center space-x-2'>
-                            <div className='h-0.5 bg-base-300 w-full rounded'></div>
-
-                            <p>OR</p>
-                            <div className='h-0.5 bg-base-300 w-full rounded'></div>
-                        </div>
+                        <div className='divider divider-horizontal sm:w-72 md:w-80'>OR</div>
 
                         <div>Share the link below</div>
-                        <div className='input-group flex flex-col sm:flex-row items-center mt-5'>
+                        <div className='input-group flex flex-col items-center mt-2'>
                             <div className='w-full'>
                                 <input
                                     id='link'
                                     onChange={formChanged}
-                                    value={batchCode ? `${ctx.baseURL}/signup?code=${batchCode}` : '...'}
-                                    className='input input-disabled input-sm md:input-md w-full rounded-none'
+                                    value={batchCode ? `https://amsapp.vercel.app/signup?code=${batchCode}` : '...'}
+                                    className='input input-sm md:input-md w-full rounded-none'
+                                    disabled
                                 />
                             </div>
                             <div className='w-full'>
                                 <button
-                                    className='btn btn-neutral btn-sm md:btn-md w-1/2 rounded-none'
+                                    className='btn btn-primary btn-sm md:btn-md w-1/2 rounded-none'
                                     onClick={copyLink}
                                 >
                                     Copy
                                 </button>
                                 <button
-                                    className='btn btn-accent btn-sm md:btn-md w-1/2 rounded-none'
+                                    className='btn btn-success btn-sm md:btn-md w-1/2 rounded-none'
                                     onClick={shareLink}
                                 >
                                     Share

@@ -23,6 +23,9 @@ const AppContext = React.createContext({
     showSwal: () => {},
     Swal: () => {},
     navigate: () => {},
+    computeError: (error) => {},
+    successAlert: (text) => {},
+    errorAlert: (text) => {},
 });
 
 export const AppContextProvider = (props) => {
@@ -111,6 +114,28 @@ export const AppContextProvider = (props) => {
         });
     };
 
+    const computeError = (error) => {
+        let errorMessage = error.message;
+        if (error.response) errorMessage = error.response.data.message;
+        return errorMessage;
+    };
+
+    const successAlert = (text) => {
+        return {
+            show: true,
+            type: 'success',
+            text: text,
+        };
+    };
+
+    const errorAlert = (text) => {
+        return {
+            show: true,
+            type: 'error',
+            text: text,
+        };
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -131,6 +156,9 @@ export const AppContextProvider = (props) => {
                 showSwal: showSwalHandler,
                 Swal: MySwal,
                 navigate: navigate,
+                computeError: computeError,
+                successAlert: successAlert,
+                errorAlert: errorAlert,
             }}
         >
             {props.children}

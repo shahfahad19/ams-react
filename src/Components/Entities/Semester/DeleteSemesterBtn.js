@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 
-const DeleteSemesterBtn = ({ ctx, MySwal, navigate, semester, params }) => {
+const DeleteSemesterBtn = ({ ctx, MySwal, navigate, semester, params, className }) => {
     const deleteSemester = () => {
         MySwal.fire({
             html: `
@@ -85,7 +85,7 @@ const DeleteSemesterBtn = ({ ctx, MySwal, navigate, semester, params }) => {
         });
     };
     return (
-        <button className={`${ctx.btnClasses} btn-error`} onClick={deleteSemester}>
+        <button className={`${ctx.btnClasses} btn-error ${className}`} onClick={deleteSemester}>
             Delete Semester
         </button>
     );

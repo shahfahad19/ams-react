@@ -3,7 +3,7 @@ import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
-import {
+import Form, {
     FormControl,
     FormField,
     FormGroup,
@@ -92,7 +92,7 @@ const AddBatch = () => {
                 <BreadCrumb>Add Batch</BreadCrumb>
             </BreadCrumbs>
             <FormWrapper>
-                <form className='font-medium w-full' onSubmit={submitForm}>
+                <Form onSubmit={submitForm}>
                     <FormTitle>Add Batch</FormTitle>
                     <FormGroup>
                         <FormField>
@@ -111,7 +111,7 @@ const AddBatch = () => {
                         </FormField>
                         <FormSubmitBtn className={btnState}>Add Batch</FormSubmitBtn>
                     </FormGroup>
-                </form>
+                </Form>
                 <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
 
                 <BackButton to='/admin/batches' text='Batch List' />

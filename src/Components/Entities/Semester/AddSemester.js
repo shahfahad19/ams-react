@@ -1,24 +1,33 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
 import Alert from '../../Utils/Alert';
-import Form, { FormControl, FormField, FormLabel, FormSubmitBtn, FormTitle, FormWrapper } from '../../Utils/Form';
+import Form, {
+    FormControl,
+    FormField,
+    FormLabel,
+    FormLabelAlt,
+    FormSubmitBtn,
+    FormTitle,
+    FormWrapper,
+} from '../../Utils/Form';
 import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const AddSemester = () => {
     const [btnState, setBtnState] = useState('');
-    const [semester, setSemester] = useState('');
+    const semester = useRef();
     const params = useParams();
     const ctx = useContext(AppContext);
     const [alert, setAlert] = useState({ show: false });
     const [batch, setBatch] = useState();
+    const [semesterError, setSemesterError] = useState('');
 
     const semesterNameHandler = (event) => {
-        setSemester(event.target.value);
+        if (semester.current.value === '') setSemesterError('Semester name required');
+        else setSemesterError('');
     };
 
     useEffect(() => {
@@ -40,13 +49,17 @@ const AddSemester = () => {
     const submitForm = async (event) => {
         event.preventDefault();
 
+        if (semester.current.value === '') {
+            setSemesterError('Semester name required');
+            return;
+        } else setSemesterError('');
         setBtnState('btn-loading');
         setAlert({ show: false });
 
         await axios
             .post(
                 `${ctx.baseURL}/semesters?batch=${params.batchId}`,
-                { name: semester },
+                { name: semester.current.value },
                 {
                     headers: {
                         Authorization: 'Bearer ' + ctx.token,
@@ -54,7 +67,7 @@ const AddSemester = () => {
                 }
             )
             .then((response) => {
-                setSemester('');
+                semester.current.value = '';
 
                 setAlert({
                     show: true,
@@ -99,10 +112,9 @@ const AddSemester = () => {
                         <FormLabel>Semester</FormLabel>
                         <FormControl>
                             <select
-                                className={ctx.selectClasses}
-                                value={semester}
-                                onChange={(event) => semesterNameHandler(event)}
-                                required
+                                className={`${ctx.selectClasses} ${semesterError === '' ? '' : 'select-error'}`}
+                                ref={semester}
+                                onChange={semesterNameHandler}
                             >
                                 <option value=''>Select Semester</option>
                                 <option value='1'>1</option>
@@ -115,6 +127,7 @@ const AddSemester = () => {
                                 <option value='8'>8</option>
                             </select>
                         </FormControl>
+                        {semesterError !== '' && <FormLabelAlt>{semesterError}</FormLabelAlt>}
                     </FormField>
 
                     <FormSubmitBtn className={btnState}>Add Semester</FormSubmitBtn>
