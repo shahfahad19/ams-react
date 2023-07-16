@@ -49,3 +49,9 @@ code {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.no-border { 
+    border: none!important;
+    border-color: transparent!important;
+    border-width: 0!important;
+}

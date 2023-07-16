@@ -3,6 +3,16 @@ import React, { useContext, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Link } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
+import Form, {
+    FormControl,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormSubmitBtn,
+    FormTitle,
+    FormWrapper,
+} from '../Utils/Form';
 
 const ForgotPassword = () => {
     const [btnState, setBtnState] = useState('');
@@ -11,7 +21,6 @@ const ForgotPassword = () => {
 
     const email = useRef();
     const password = useRef();
-    const role = useRef();
     const captcha = useRef();
 
     const submitForm = async (event) => {
@@ -37,43 +46,43 @@ const ForgotPassword = () => {
 
     return (
         <>
-            <div className='flex items-center flex-col'>
-                <div className='rounded-xl shadow-xl p-3 w-11/12 md:w-4/12'>
-                    <div className='font-medium text-2xl text-center mb-3 text-primary'>Reset Password</div>
+            <FormWrapper>
+                <Form onSubmit={submitForm}>
+                    <FormTitle>Reset Password</FormTitle>
+                    <FormGroup>
+                        <FormField>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <input
+                                    className={`${ctx.inputClasses}`}
+                                    type='email'
+                                    placeholder='Email'
+                                    required
+                                    ref={email}
+                                ></input>
+                            </FormControl>
+                            <FormLabelAlt></FormLabelAlt>
+                        </FormField>
+                        <FormField>
+                            <FormLabel>Captcha</FormLabel>
 
-                    <form className='font-medium w-full' onSubmit={submitForm}>
-                        <div className='form-control'>
-                            <input
-                                className='input w-full input-bordered rounded-full border-neutral'
-                                type='email'
-                                placeholder='Email'
-                                required
-                                ref={email}
-                            ></input>
-                        </div>
-                        <br />
-                        <div className='flex justify-center'>
-                            <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
-                        </div>
-                        <br />
-
-                        <div className='form-control flex items-center'>
-                            <button
-                                className={` btn btn-neutral btn-sm rounded-lg w-fit font-bold ${btnState}`}
-                                type='submit'
-                            >
-                                Reset
-                            </button>
-                        </div>
-
-                        <div className='text-sm m-2 text-center font-bold'>
-                            <Link className='link link-primary ' to='/signup'>
-                                Login
-                            </Link>
-                        </div>
-                    </form>
+                            <FormControl>
+                                <ReCAPTCHA sitekey={ctx.captchaKey} required ref={captcha} />
+                            </FormControl>
+                        </FormField>
+                        <FormSubmitBtn className={btnState}>Reset</FormSubmitBtn>
+                    </FormGroup>
+                </Form>
+                <div className='p-3 text-center font-regular flex justify-center items-center'>
+                    <Link className='link link-ghost-primary text-sm' to='/login'>
+                        Login
+                    </Link>
+                    <div className='divided divider-horizontal w-10'></div>
+                    <Link className='link link-ghost-primary text-sm' to='/signup'>
+                        Signup
+                    </Link>
                 </div>
-            </div>
+            </FormWrapper>
         </>
     );
 };

@@ -15,7 +15,8 @@ const Header = () => {
             <div className='navbar shadow-md mb-2.5'>
                 <div className='navbar-start'>
                     <Link to='/' className='navbar-item font-medium'>
-                        Attendance Management System
+                        <span className='sm:hidden'>AMS</span>
+                        <span className='hidden sm:block'>Attendance Management System</span>
                     </Link>
                 </div>
                 {ctx.isLoggedIn && (
@@ -39,7 +40,7 @@ const Header = () => {
                                         >
                                             Profile
                                         </Link>
-                                        <Link className='dropdown-item text-sm' tabIndex='-1' onClick={logout}>
+                                        <Link to={'/'} className='dropdown-item text-sm' tabIndex='-1' onClick={logout}>
                                             Logout
                                         </Link>
                                     </div>

@@ -8,16 +8,16 @@ const SubjectInfoTable = (props) => {
         <table className='table table-compact border'>
             <tbody>
                 <tr className='border'>
-                    <th colSpan={2} className='text-center'>
-                        Subject Info
+                    <th colSpan={2}>
+                        <p className='text-center'>Subject</p>
                     </th>
                 </tr>
                 <tr className='border'>
-                    <th>Subject Name</th>
+                    <th>Name</th>
                     <td>{subject.subjectName}</td>
                 </tr>
                 <tr className='border'>
-                    <th>Teacher Name</th>
+                    <th>Teacher</th>
                     <td>{subject.teacherName}</td>
                 </tr>
                 <tr>

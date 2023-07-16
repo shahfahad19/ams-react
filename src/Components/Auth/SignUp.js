@@ -58,6 +58,7 @@ const SignUp = () => {
                 }
             })
             .catch((error) => {
+                console.log(error);
                 setBtnState('');
                 let errorMessage = ctx.computeError(error);
                 setAlert(ctx.errorAlert(errorMessage));

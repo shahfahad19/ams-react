@@ -6,26 +6,28 @@ const AttendanceInfoTable = (props) => {
         <table className='table table-compact border'>
             <tbody>
                 <tr>
-                    <th colSpan={4} className='text-center'>
-                        Attendance Info
+                    <th colSpan={4}>
+                        <p className='text-center'>Attendance Info</p>
                     </th>
                 </tr>
                 <tr className='border'>
                     <th>Total Classes</th>
                     <td className='border-r'>{subject.totalClass}</td>
-                    <th className='text-success'>Present</th>
-                    <td className='text-success'>{subject.present}</td>
+                    <th>Present</th>
+                    <td>{subject.present}</td>
                 </tr>
                 <tr className='border'>
-                    <th className='text-error'>Absent</th>
-                    <td className='border-r text-error'>{subject.absent}</td>
-                    <th className='text-warning'>Leave</th>
-                    <td className='text-warning'>{subject.leave}</td>
+                    <th>Absent</th>
+                    <td className='border-r'>{subject.absent}</td>
+                    <th>Leave</th>
+                    <td>{subject.leave}</td>
                 </tr>
                 <tr className='border'>
                     <th colSpan={2}>Percentage</th>
-                    <th colSpan={2} className={subject.percentage <= 75.0 ? 'text-error' : 'text-success'}>
-                        {parseFloat(subject.percentage).toFixed(2)} %
+                    <th colSpan={2}>
+                        <span className={subject.percentage <= 75.0 ? 'text-error' : 'text-success'}>
+                            {parseFloat(subject.percentage).toFixed(2)} %
+                        </span>
                     </th>
                 </tr>
             </tbody>

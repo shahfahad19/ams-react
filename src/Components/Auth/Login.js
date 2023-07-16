@@ -11,6 +11,7 @@ import Form, {
     FormLabel,
     FormLabelAlt,
     FormSubmitBtn,
+    FormTitle,
     FormWrapper,
 } from '../Utils/Form';
 import Alert from '../Utils/Alert';
@@ -77,6 +78,8 @@ const Login = () => {
     return (
         <FormWrapper>
             <Form onSubmit={handleSubmit(submitForm)}>
+                <FormTitle>Login</FormTitle>
+
                 <FormGroup>
                     <FormField>
                         <FormLabel>Email</FormLabel>

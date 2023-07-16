@@ -5,6 +5,7 @@ import Message from '../../Main/Message';
 import AttendanceInfoTable from './AttendanceInfoTable';
 import SubjectInfoTable from './SubjectInfoTable';
 import AttendanceTable from './AttendanceTable';
+import Form, { FormControl, FormField, FormGroup, FormLabel, FormWrapper } from '../../Utils/Form';
 
 const StudentAttendance = () => {
     const ctx = useContext(AppContext);
@@ -78,54 +79,67 @@ const StudentAttendance = () => {
             )}
             {loading && (
                 <div className='flex justify-center items-center mt-20'>
-                    <div className='loader'></div>
+                    <svg className='spinner-ring' viewBox='25 25 50 50' strokeWidth='5'>
+                        <circle cx='50' cy='50' r='20' />
+                    </svg>
                 </div>
             )}
             {!loading && (
-                <div className='flex flex-col justify-center p-2 items-center'>
-                    <div className='m-3 w-full lg:w-2/3'>
-                        <p className='text-xl font-semibold text-center'>Select Semester and Subject</p>
-                        <div className='form-control'>
-                            <label className='label'>
-                                <span className='label-text'>Semester</span>
-                            </label>
-                            <select className={ctx.selectClasses} ref={semesterRef} onChange={semesterHandler}>
-                                <option value=''>Select Semester</option>
+                <div className=''>
+                    <FormWrapper>
+                        <Form>
+                            <FormGroup>
+                                <FormField>
+                                    <FormLabel>Semester</FormLabel>
+                                    <FormControl>
+                                        <select
+                                            className={ctx.selectClasses}
+                                            ref={semesterRef}
+                                            onChange={semesterHandler}
+                                        >
+                                            <option value=''>Select Semester</option>
 
-                                {data.map((semester, index) => {
-                                    return (
-                                        <option key={semester.semester._id} value={index}>
-                                            Semester {semester.semester.name}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </div>
-                        <div className='form-control'>
-                            <label className='label'>
-                                <span className='label-text'>Subject</span>
-                            </label>
-                            <select className={ctx.selectClasses} ref={subjectRef} onChange={subjectHandler}>
-                                {subjects.length === 0 && <option value=''>- - - - - - - - - -</option>}
-                                {subjects.length > 0 && (
-                                    <>
-                                        <option value=''>Select Subject</option>
-                                        {subjects.length > 0 && (
-                                            <>
-                                                {subjects.map((subject, index) => {
-                                                    return (
-                                                        <option key={subject.subject} value={index}>
-                                                            {subject.subjectName}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </select>
-                        </div>
-                    </div>
+                                            {data.map((semester, index) => {
+                                                return (
+                                                    <option key={semester.semester._id} value={index}>
+                                                        Semester {semester.semester.name}
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
+                                    </FormControl>
+                                </FormField>
+                                <FormField>
+                                    <FormLabel>Subject</FormLabel>
+                                    <FormControl>
+                                        <select
+                                            className={ctx.selectClasses}
+                                            ref={subjectRef}
+                                            onChange={subjectHandler}
+                                        >
+                                            {subjects.length === 0 && <option value=''>- - - - - - - - - -</option>}
+                                            {subjects.length > 0 && (
+                                                <>
+                                                    <option value=''>Select Subject</option>
+                                                    {subjects.length > 0 && (
+                                                        <>
+                                                            {subjects.map((subject, index) => {
+                                                                return (
+                                                                    <option key={subject.subject} value={index}>
+                                                                        {subject.subjectName}
+                                                                    </option>
+                                                                );
+                                                            })}
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                        </select>
+                                    </FormControl>
+                                </FormField>
+                            </FormGroup>
+                        </Form>
+                    </FormWrapper>
 
                     <div className='m-3 w-full lg:w-2/3'>
                         {subject !== null && (

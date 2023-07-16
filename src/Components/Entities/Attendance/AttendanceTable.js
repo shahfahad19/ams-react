@@ -2,26 +2,29 @@ import React from 'react';
 
 const AttendanceTable = (props) => {
     const subject = props.subject;
+    console.log(subject);
 
     return (
         <>
             <table className='table table-compact w-full'>
                 <thead>
                     <tr>
-                        <th colSpan={3} className='text-center normal-case'>
-                            Attendance
+                        <th colSpan={4}>
+                            <p className='text-center font-medium bg-none no-border'>Attendance</p>
                         </th>
                     </tr>
                     <tr>
-                        <th className='normal-case font-medium'>Date</th>
-                        <th className='normal-case font-medium'>Time</th>
-                        <th className='normal-case font-medium'>Status</th>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {subject.attendances.map((attendance, index) => {
                         return (
                             <tr key={index}>
+                                <td>{index + 1}</td>
                                 <td>
                                     {new Date(subject.dates[index]).toLocaleDateString('en-UK', {
                                         day: '2-digit',
@@ -36,22 +39,24 @@ const AttendanceTable = (props) => {
                                         hour12: true,
                                     })}
                                 </td>
-                                <td
-                                    className={`font-medium ${
-                                        attendance.status === 'present'
-                                            ? 'text-success'
-                                            : attendance.status === 'absent'
-                                            ? 'text-error'
-                                            : 'text-warning'
-                                    }`}
-                                >
-                                    {attendance.status.toUpperCase()}
+                                <td>
+                                    <span
+                                        className={`font-medium ${
+                                            attendance.status === 'present'
+                                                ? 'text-success'
+                                                : attendance.status === 'absent'
+                                                ? 'text-error'
+                                                : 'text-warning'
+                                        }`}
+                                    >
+                                        {attendance.status[0].toUpperCase() + attendance.status.slice(1)}
+                                    </span>
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
-                {subject.totalClasses !== subject.attendances.length && (
+                {subject.totalClasses < subject.attendances.length && (
                     <caption className='p-2 text-error table-caption text-sm'>
                         Note: Some attendances were not recorded due to late sign up
                     </caption>
