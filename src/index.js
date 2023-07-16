@@ -48,6 +48,7 @@ import DefaultSubjectList from './Components/Entities/DepartmentSubject/DefaultS
 import BatchList from './Components/Entities/Batch/BatchList';
 import AddBatch from './Components/Entities/Batch/AddBatch';
 import EditBatch from './Components/Entities/Batch/EditBatch';
+import Error404 from './Components/Utils/Error404';
 
 const router = createBrowserRouter([
     {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: <Welcome />,
+            },
+            {
+                path: '404',
+                element: <Error404 />,
             },
             {
                 path: 'login',

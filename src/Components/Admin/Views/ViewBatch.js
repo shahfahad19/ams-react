@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
@@ -27,6 +27,11 @@ const ViewBatch = () => {
             })
             .catch((error) => {
                 console.log(error);
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        ctx.navigate('/404', { replace: true });
+                    }
+                }
             });
     }, []);
 

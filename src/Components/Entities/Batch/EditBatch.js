@@ -12,6 +12,7 @@ import {
     FormLabelAlt,
     FormTitle,
     FormWrapper,
+    FormSubmitBtn,
 } from '../../Utils/Form';
 import Alert from '../../Utils/Alert';
 
@@ -166,21 +167,10 @@ const EditBatch = (props) => {
                                 </FormControl>
                             </FormField>
 
-                            <div className='flex space-x-2'>
-                                <button className={`${ctx.btnClasses} ${submitBtnState} flex-grow`} type='submit'>
-                                    Update
-                                </button>
-
-                                <DeleteBatchBtn
-                                    className={'w-full sm:w-40'}
-                                    ctx={ctx}
-                                    params={params}
-                                    navigate={navigate}
-                                    batchData={batchData}
-                                />
-                            </div>
+                            <FormSubmitBtn>Update</FormSubmitBtn>
                         </FormGroup>
                     </Form>
+                    <DeleteBatchBtn ctx={ctx} params={params} navigate={navigate} batchData={batchData} />
                     <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
                 </FormWrapper>
             )}
