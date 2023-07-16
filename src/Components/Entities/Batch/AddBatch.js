@@ -70,7 +70,9 @@ const AddBatch = () => {
             })
             .catch((error) => {
                 let errorMessage = error.message;
+                console.log(error);
                 if (error.response) {
+                    console.log('error res');
                     if (error.response.data.error.code === 11000) errorMessage = 'Batch already exists';
                     else errorMessage = error.response.data.message;
                 }
