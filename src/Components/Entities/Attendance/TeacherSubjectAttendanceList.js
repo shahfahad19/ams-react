@@ -69,7 +69,9 @@ const TeacherSubjectAttendanceList = () => {
                                         </p>
                                     </th>
                                 ))}
-                            <th>Percentage</th>
+                            <th>
+                                <p className='no-border text-center'>Percentage</p>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

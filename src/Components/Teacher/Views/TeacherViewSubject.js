@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const TeacherViewSubject = () => {
     const params = useParams();
@@ -29,19 +30,24 @@ const TeacherViewSubject = () => {
 
     return (
         <>
-            <div className='batch flex flex-col md:flex-row'>
-                <div className='batch-info w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
-                    <SideBarTitle title={subject.name || 'Subject'} />
-                    <Menu>
-                        <MenuItems>
-                            <MenuItem text='Attendances' tab='attendance' />
-                            <MenuItem text='Take Attendance' tab='take-attendance' />
-                            <MenuItem text='Remove Subject' tab='remove' />
-                        </MenuItems>
-                    </Menu>
-                </div>
-                <Outlet context={[subject, setSubject]} />
-            </div>
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='/teacher'>Subjects</BreadCrumb>
+                {subject.name && (
+                    <>
+                        <BreadCrumb>{subject.name}</BreadCrumb>
+                    </>
+                )}
+                {!subject.name && <BreadCrumb>Loading...</BreadCrumb>}
+            </BreadCrumbs>
+            <Menu>
+                <MenuItems>
+                    <MenuItem text='Attendances' tab='attendance' />
+                    <MenuItem text='Take Attendance' tab='take-attendance' />
+                    <MenuItem text='Remove Subject' tab='remove' />
+                </MenuItems>
+            </Menu>
+            <Outlet context={[subject, setSubject]} />
         </>
     );
 };

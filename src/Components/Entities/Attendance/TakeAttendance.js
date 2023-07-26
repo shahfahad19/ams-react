@@ -6,6 +6,8 @@ import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import Spinner from '../../Utils/Spinner';
+import BackButton from '../../Utils/BackButton';
 
 const TakeAttendance = () => {
     const params = useParams();
@@ -141,19 +143,19 @@ const TakeAttendance = () => {
                     </div>
                     <div className='flex items-center align-middle justify-center'>
                         <button
-                            className='btn-sm md:btn-md px-4 py-2 mx-2 bg-green-500 text-white rounded hover:bg-green-600'
+                            className='btn btn-success mx-2'
                             onClick={() => handleAttendance(students[currentStudentIndex]._id, 'present')}
                         >
                             Present
                         </button>
                         <button
-                            className='btn-sm md:btn-md px-4 py-2 mx-2 bg-red-500 text-white rounded hover:bg-red-600'
+                            className='btn btn-error mx-2'
                             onClick={() => handleAttendance(students[currentStudentIndex]._id, 'absent')}
                         >
                             Absent
                         </button>
                         <button
-                            className='btn-sm md:btn-md px-4 py-2 mx-2 bg-yellow-500 text-white rounded hover:bg-yellow-600'
+                            className='btn btn-warning mx-2'
                             onClick={() => handleAttendance(students[currentStudentIndex]._id, 'leave')}
                         >
                             Leave
@@ -179,11 +181,11 @@ const TakeAttendance = () => {
                                 <tr key={index}>
                                     <td>{students[index].rollNo}</td>
                                     <td>{students[index].name}</td>
-                                    <td>{attendance.status}</td>
+                                    <td>{attendance.status[0].toUpperCase() + attendance.status.slice(1)}</td>
                                     {editingEnabled && (
                                         <td>
                                             <select
-                                                className='form-control select-sm'
+                                                className='select w-32 select-sm'
                                                 defaultValue={attendance.status}
                                                 onChange={(event) => changeAttendance(event, index)}
                                             >
@@ -197,42 +199,47 @@ const TakeAttendance = () => {
                             ))}
                         </tbody>
                     </Table>
-                    <div className='text-center'>
+                    <div className='text-center m-5'>
                         {!editingEnabled && (
                             <>
-                                <button
-                                    className='btn-sm md:btn-md px-4 py-2 mx-4 bg-yellow-500 text-white rounded hover:bg-yellow-600'
-                                    onClick={() => enableEditing(true)}
-                                >
+                                <button className='btn mx-4 btn-warning' onClick={() => enableEditing(true)}>
                                     Edit Attendance
                                 </button>
-                                <button
-                                    className='btn-sm md:btn-md mt-4 px-4 mx-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-                                    onClick={submitAttendance}
-                                >
+                                <button className='btn mx-4 btn-primary' onClick={submitAttendance}>
                                     Submit Attendance
                                 </button>
                             </>
                         )}
                         {editingEnabled && (
-                            <>
-                                <button
-                                    className='btn-sm md:btn-md px-4 py-2 mx-4 bg-yellow-500 text-white rounded hover:bg-yellow-600'
-                                    onClick={() => enableEditing(false)}
-                                >
-                                    Save Attendance
-                                </button>
-                            </>
+                            <button className='btn mx-4 btn-primary' onClick={() => enableEditing(false)}>
+                                Save Attendance
+                            </button>
                         )}
                     </div>
+                    <br />
                 </>
             )}
             {!errorMessage && students.length === 0 && (
-                <div className='flex items-center justify-center text-xl h-44'>Loading students...</div>
+                <div className='flex items-center justify-center text-lg h-44'>
+                    <Spinner className='mr-5' />
+                    Loading students...
+                </div>
             )}
             {attendanceSaved && (
-                <div className='flex items-center justify-center text-xl h-44'>
-                    <p className='text-green-500'>Attendance Saved</p>
+                <div className='flex items-center justify-center text-xl flex-col mt-5 space-y-5'>
+                    <div className='flex justify-center'>
+                        <svg width='64' height='64' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                            <path
+                                fillRule='evenodd'
+                                clipRule='evenodd'
+                                d='M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM18.58 32.58L11.4 25.4C10.62 24.62 10.62 23.36 11.4 22.58C12.18 21.8 13.44 21.8 14.22 22.58L20 28.34L33.76 14.58C34.54 13.8 35.8 13.8 36.58 14.58C37.36 15.36 37.36 16.62 36.58 17.4L21.4 32.58C20.64 33.36 19.36 33.36 18.58 32.58Z'
+                                fill='#00BA34'
+                            />
+                        </svg>
+                    </div>
+                    <p className='text-success'>Attendance Saved</p>
+
+                    <BackButton to={'../attendance'} text='attendances' className='justify-self-start' />
                 </div>
             )}
             {errorMessage && <div className='text-center mt-16 text-error text-xl'>{errorMessage}</div>}

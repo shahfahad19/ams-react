@@ -217,7 +217,7 @@ const EditTeacher = (props) => {
                                                     onClick={() => {
                                                         assignTeacher(teacher._id);
                                                     }}
-                                                    className={`btn btn-sm rounded-full`}
+                                                    className={`btn btn-sm btn-secondary rounded-full`}
                                                 >
                                                     Assign
                                                 </button>

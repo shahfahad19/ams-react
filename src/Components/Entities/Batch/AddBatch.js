@@ -103,7 +103,7 @@ const AddBatch = () => {
                                     type='number'
                                     ref={batch}
                                     onChange={batchNameHandler}
-                                    placeholder='Enter batch no.'
+                                    placeholder='eg. 1'
                                     min='1'
                                 />
                             </FormControl>

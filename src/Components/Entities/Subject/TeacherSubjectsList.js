@@ -65,10 +65,10 @@ const TeacherSubjectsList = () => {
                                         </Link>
                                     </td>
                                     <td>{subject.department}</td>
-                                    <td>{subject.creditHours}</td>
+                                    <td>{subject.creditHours} Hrs</td>
 
-                                    <td>{subject.batchName}</td>
-                                    <td>{subject.semesterName}</td>
+                                    <td>Batch {subject.batchName}</td>
+                                    <td>Semester {subject.semesterName}</td>
                                 </tr>
                             );
                         })}
