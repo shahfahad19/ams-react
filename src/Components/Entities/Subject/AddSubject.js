@@ -99,8 +99,13 @@ const AddSubject = () => {
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
                 <BreadCrumb to='../batches'>Batches</BreadCrumb>
-                {semester && <BreadCrumb to={'../batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>}
-                <BreadCrumb>Add Semester</BreadCrumb>
+                {semester && (
+                    <>
+                        <BreadCrumb to={'../batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>
+                        <BreadCrumb>Add Semester</BreadCrumb>
+                    </>
+                )}
+                {!semester && <BreadCrumb>Loading...</BreadCrumb>}
             </BreadCrumbs>
             <FormWrapper>
                 <form className='font-medium w-full' onSubmit={submitForm}>
@@ -108,7 +113,7 @@ const AddSubject = () => {
                     <FormField>
                         <FormLabel>Subject</FormLabel>
                         <FormControl>
-                            <select className={ctx.selectClasses} ref={subject} required>
+                            <select className={ctx.selectClasses} ref={subject} required disabled={!subjectList.loaded}>
                                 {!subjectList.loaded && <option value=''>Loading Subjects...</option>}
                                 {subjectList.loaded && <option value=''>Select Subject</option>}
                                 {subjectList.loaded &&

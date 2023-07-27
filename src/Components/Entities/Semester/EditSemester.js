@@ -17,6 +17,7 @@ import Form, {
 } from '../../Utils/Form';
 import DeleteSemesterBtn from './DeleteSemesterBtn';
 import Alert from '../../Utils/Alert';
+import Spinner from '../../Utils/Spinner';
 
 const EditSemester = () => {
     const navigate = useNavigate();
@@ -131,17 +132,10 @@ const EditSemester = () => {
                                 <button className={`${ctx.btnClasses} ${btnState} flex-grow`} type='submit'>
                                     Update
                                 </button>
-
-                                <DeleteSemesterBtn
-                                    className={'w-full sm:w-60'}
-                                    ctx={ctx}
-                                    params={params}
-                                    navigate={navigate}
-                                    semester={semester}
-                                />
                             </div>
                         </FormGroup>
                     </Form>
+                    <DeleteSemesterBtn ctx={ctx} params={params} navigate={navigate} semester={semester} />
                     <Alert
                         alert={alert}
                         closeAlert={() => {
@@ -149,6 +143,12 @@ const EditSemester = () => {
                         }}
                     />
                 </FormWrapper>
+            )}
+
+            {!semester.name && (
+                <div className='flex justify-center items-center h-52'>
+                    <Spinner className='spinner-sm' /> <span className='ml-2'>Fetching semester info</span>
+                </div>
             )}
         </>
     );

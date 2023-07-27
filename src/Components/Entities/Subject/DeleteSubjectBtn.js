@@ -1,94 +1,137 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 
-const DeleteSubjectBtn = ({ ctx, MySwal, navigate, subject, params }) => {
-    const deleteSubject = () => {
-        MySwal.fire({
-            html: `
-                <div className="swal2-title">Are you sure?</div>
-                <div className="swal2-content">This subject and all its data will be deleted permanently from the database.
-                <br/>
-                <span className="text-info">If you want to keep this subject, archive it instead!</span></div>
-            `,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: 'Add Subject',
-                    html: `
-                    <div className="swal2-content">Confirm Subject Name</div>
-                <input id="subject-name" className="swal2-input" placeholder="Subject Name">
-            `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true, // Show loading spinner
+const DeleteSubjectBtn = ({ ctx, navigate, subject, params, className }) => {
+    const subjectName = useRef();
+    const [subjectNameError, setSubjectNameError] = useState('');
+    const [btnState, setBtnState] = useState('');
 
-                    preConfirm: () => {
-                        const subjectName = document.getElementById('subject-name').value;
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [showPostConfimationModal, setShowPostConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-                        // Check if fields are not selected
-                        if (!subjectName) {
-                            MySwal.showValidationMessage('Enter subject name');
-                            return false; // Prevent closing the modal
-                        } else if (subjectName !== subject.name) {
-                            MySwal.showValidationMessage(
-                                'Subject name does not match, make sure you are deleting the intended subject!'
-                            );
-                            return false; // Prevent closing the modal
-                        }
-
-                        return { subjectName };
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        MySwal.fire({
-                            title: 'Deleting Subject',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                MySwal.showLoading();
-
-                                // axios req
-                                axios
-                                    .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-                                        credentials: 'include',
-                                        headers: {
-                                            Authorization: 'Bearer ' + ctx.token,
-                                        },
-                                    })
-                                    .then((response) => {
-                                        MySwal.close();
-
-                                        MySwal.fire({
-                                            icon: 'success',
-                                            title: 'Deleted!',
-                                            text: 'Subject Deleted successfully',
-                                            showConfirmButton: true,
-                                        }).then(() => {
-                                            navigate(-1, { replace: true });
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        MySwal.close();
-
-                                        if (error.response) ctx.showSwal(0, error.response.data.message);
-                                        else ctx.showSwal(0, error.message);
-                                    });
-                            },
-                        });
-                    }
-                });
-            }
-        });
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(showConfimationModal !== true);
     };
+
+    const postConfirmationModalHandler = () => {
+        setShowConfirmationModal(false);
+        setShowPostConfirmationModal(showPostConfimationModal !== true);
+    };
+
+    const successModalHandler = () => {
+        navigate(-1, { replace: true });
+    };
+
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
+
+    const deleteSubject = async (event) => {
+        event.preventDefault();
+        if (subjectName.current.value === '') {
+            setSubjectNameError('Enter subject name');
+            return;
+        } else if (subjectName.current.value !== subject.name) {
+            setSubjectNameError('Subject name does not match');
+            return;
+        } else setSubjectNameError('');
+
+        setBtnState('btn-loading');
+        await axios
+            .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setShowPostConfirmationModal(false);
+                setAlertModal({
+                    type: 'success',
+                    show: true,
+                    text: 'Subject deleted successfully',
+                });
+            })
+            .catch((error) => {
+                setShowPostConfirmationModal(false);
+
+                const errorMessage = ctx.computeError(error);
+                setAlertModal({
+                    type: 'error',
+                    show: true,
+                    text: errorMessage,
+                });
+            });
+        setBtnState('');
+    };
+
     return (
-        <button className={`${ctx.btnClasses} btn-error`} onClick={deleteSubject}>
-            Delete Subject
-        </button>
+        <>
+            <button className={`${ctx.btnClasses} btn-error ${className} mt-2`} onClick={confirmationModalHandler}>
+                Delete Subject
+            </button>
+
+            {showConfimationModal && (
+                <>
+                    <ModalWrapper>
+                        <ModalCloseBtn handler={confirmationModalHandler} />
+                        <ModalTitle>Are you sure?</ModalTitle>
+                        <span>This subject will be deleted permanently from database!</span>
+                        <div className='flex gap-3'>
+                            <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
+                                Delete
+                            </ModalButton>
+
+                            <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+                        </div>
+                    </ModalWrapper>
+                </>
+            )}
+
+            {showPostConfimationModal && (
+                <ModalWrapper>
+                    {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
+                    <ModalTitle>Confirm Subject Name</ModalTitle>
+                    <Form onSubmit={deleteSubject}>
+                        <FormGroup>
+                            <FormField>
+                                <FormField>Enter complete name of the subject to confirm</FormField>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses}
+                                        type='text'
+                                        placeholder='Subject Name'
+                                        ref={subjectName}
+                                    />
+                                </FormControl>
+                                {subjectNameError !== '' && <FormLabelAlt>{subjectNameError}</FormLabelAlt>}
+                            </FormField>
+                        </FormGroup>
+                        <div className='flex gap-3 mt-3'>
+                            <ModalFormButton className={btnState}>Delete</ModalFormButton>
+
+                            {btnState === '' && (
+                                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
+                            )}
+                        </div>
+                    </Form>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

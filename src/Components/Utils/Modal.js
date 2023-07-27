@@ -6,7 +6,7 @@ export const ModalWrapper = (props) => {
             <input className='modal-state' type='checkbox' defaultChecked={true} />
             <div className='modal'>
                 <label className='modal-overlay'></label>
-                {props.children}
+                <div className='modal-content flex flex-col gap-5'>{props.children}</div>
             </div>
         </>
     );
@@ -28,9 +28,9 @@ export const ModalButtons = (props) => {
     return <div className='flex gap-3'>{props.children}</div>;
 };
 
-export const ModalContent = ({ children }) => {
-    return <div className='modal-content flex flex-col gap-5'>{children}</div>;
-};
+// export const ModalContent = ({ children }) => {
+//     return {children}</div>;
+// };
 
 export const ModalButton = ({ handler, className, children }) => {
     return (

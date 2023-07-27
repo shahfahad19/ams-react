@@ -1,93 +1,137 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 
-const DeleteSemesterBtn = ({ ctx, MySwal, navigate, semester, params, className }) => {
-    const deleteSemester = () => {
-        MySwal.fire({
-            html: `
-                <div className="swal2-title">Are you sure?</div>
-                <div className="swal2-content">This semester and all its data will be deleted permanently from the database.
-                <br/>
-                <span className="text-info">If you want to keep this semester, archive it instead!</span></div>
-            `,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: 'Add Subject',
-                    html: `
-                    <div className="swal2-content">Confirm Semester Name</div>
-                <input id="semester-name" className="swal2-input" placeholder="Semester Name">
-            `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true,
+const DeleteSemesterBtn = ({ ctx, navigate, semester, params, className }) => {
+    const semesterName = useRef();
+    const [semesterNameError, setSemesterNameError] = useState('');
+    const [btnState, setBtnState] = useState('');
 
-                    preConfirm: () => {
-                        const semesterName = document.getElementById('semester-name').value;
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [showPostConfimationModal, setShowPostConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-                        // Check if fields are not selected
-                        if (!semesterName) {
-                            MySwal.showValidationMessage('Enter semester name');
-                            return false; // Prevent closing the modal
-                        } else if (semesterName !== 'Semester ' + semester.name) {
-                            MySwal.showValidationMessage(
-                                'Semester name does not match, make sure you are deleting the intended semester!'
-                            );
-                            return false; // Prevent closing the modal
-                        }
-
-                        return { semesterName };
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        MySwal.fire({
-                            title: 'Deleting Semester',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                MySwal.showLoading();
-
-                                // axios req
-                                axios
-                                    .delete(`${ctx.baseURL}/semesters/${params.semesterId}`, {
-                                        credentials: 'include',
-                                        headers: {
-                                            Authorization: 'Bearer ' + ctx.token,
-                                        },
-                                    })
-                                    .then((response) => {
-                                        MySwal.close();
-
-                                        MySwal.fire({
-                                            icon: 'success',
-                                            title: 'Deleted!',
-                                            text: 'Semester Deleted successfully',
-                                            showConfirmButton: true,
-                                        }).then(() => {
-                                            navigate(-1, { replace: true });
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        MySwal.close();
-                                        if (error.response) ctx.showSwal(0, error.response.data.message);
-                                        else ctx.showSwal(0, error.message);
-                                    });
-                            },
-                        });
-                    }
-                });
-            }
-        });
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(showConfimationModal !== true);
     };
+
+    const postConfirmationModalHandler = () => {
+        setShowConfirmationModal(false);
+        setShowPostConfirmationModal(showPostConfimationModal !== true);
+    };
+
+    const successModalHandler = () => {
+        navigate(-1, { replace: true });
+    };
+
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
+
+    const deleteSemester = async (event) => {
+        event.preventDefault();
+        if (semesterName.current.value === '') {
+            setSemesterNameError('Enter semester name');
+            return;
+        } else if (semesterName.current.value !== 'Semester ' + semester.name) {
+            setSemesterNameError('Semester name does not match');
+            return;
+        } else setSemesterNameError('');
+
+        setBtnState('btn-loading');
+        await axios
+            .delete(`${ctx.baseURL}/semesters/${params.semesterId}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setShowPostConfirmationModal(false);
+                setAlertModal({
+                    type: 'success',
+                    show: true,
+                    text: 'Semester deleted successfully',
+                });
+            })
+            .catch((error) => {
+                setShowPostConfirmationModal(false);
+
+                const errorMessage = ctx.computeError(error);
+                setAlertModal({
+                    type: 'error',
+                    show: true,
+                    text: errorMessage,
+                });
+            });
+        setBtnState('');
+    };
+
     return (
-        <button className={`${ctx.btnClasses} btn-error ${className}`} onClick={deleteSemester}>
-            Delete Semester
-        </button>
+        <>
+            <button className={`${ctx.btnClasses} btn-error ${className} mt-2`} onClick={confirmationModalHandler}>
+                Delete Semester
+            </button>
+
+            {showConfimationModal && (
+                <>
+                    <ModalWrapper>
+                        <ModalCloseBtn handler={confirmationModalHandler} />
+                        <ModalTitle>Are you sure?</ModalTitle>
+                        <span>This semester will be deleted permanently from database!</span>
+                        <div className='flex gap-3'>
+                            <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
+                                Delete
+                            </ModalButton>
+
+                            <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+                        </div>
+                    </ModalWrapper>
+                </>
+            )}
+
+            {showPostConfimationModal && (
+                <ModalWrapper>
+                    {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
+                    <ModalTitle>Confirm Semester Name</ModalTitle>
+                    <Form onSubmit={deleteSemester}>
+                        <FormGroup>
+                            <FormField>
+                                <FormField>Enter complete name of the semester to confirm</FormField>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses}
+                                        type='text'
+                                        placeholder='Semester Name'
+                                        ref={semesterName}
+                                    />
+                                </FormControl>
+                                {semesterNameError !== '' && <FormLabelAlt>{semesterNameError}</FormLabelAlt>}
+                            </FormField>
+                        </FormGroup>
+                        <div className='flex gap-3 mt-3'>
+                            <ModalFormButton className={btnState}>Delete</ModalFormButton>
+
+                            {btnState === '' && (
+                                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
+                            )}
+                        </div>
+                    </Form>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

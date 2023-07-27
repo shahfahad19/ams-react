@@ -3,6 +3,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import DeleteBatchBtn from './DeleteBatchBtn';
+import Spinner from '../../Utils/Spinner';
 import {
     FormControl,
     Form,
@@ -173,6 +174,11 @@ const EditBatch = (props) => {
                     <DeleteBatchBtn ctx={ctx} params={params} navigate={navigate} batchData={batchData} />
                     <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
                 </FormWrapper>
+            )}
+            {!batchData && (
+                <div className='flex justify-center items-center h-52'>
+                    <Spinner className='spinner-sm' /> <span className='ml-2'>Fetching batch info</span>
+                </div>
             )}
             <div className='h-14'></div>
         </>

@@ -49,6 +49,7 @@ import BatchList from './Components/Entities/Batch/BatchList';
 import AddBatch from './Components/Entities/Batch/AddBatch';
 import EditBatch from './Components/Entities/Batch/EditBatch';
 import Error404 from './Components/Utils/Error404';
+import EditSubject from './Components/Entities/Subject/EditSubject';
 
 const router = createBrowserRouter([
     {
@@ -298,6 +299,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'teacher',
                                 element: <EditTeacher />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditSubject />,
                             },
                         ],
                     },

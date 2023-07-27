@@ -1,15 +1,7 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
-import {
-    AlertModal,
-    ModalButton,
-    ModalCloseBtn,
-    ModalContent,
-    ModalFormButton,
-    ModalTitle,
-    ModalWrapper,
-} from '../../Utils/Modal';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 
 const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
     const batchName = useRef();
@@ -88,51 +80,47 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
             {showConfimationModal && (
                 <>
                     <ModalWrapper>
-                        <ModalContent>
-                            <ModalCloseBtn handler={confirmationModalHandler} />
-                            <ModalTitle>Are you sure?</ModalTitle>
-                            <span>This batch will be deleted permanently from database!</span>
-                            <div className='flex gap-3'>
-                                <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
-                                    Delete
-                                </ModalButton>
+                        <ModalCloseBtn handler={confirmationModalHandler} />
+                        <ModalTitle>Are you sure?</ModalTitle>
+                        <span>This batch will be deleted permanently from database!</span>
+                        <div className='flex gap-3'>
+                            <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
+                                Delete
+                            </ModalButton>
 
-                                <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
-                            </div>
-                        </ModalContent>
+                            <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+                        </div>
                     </ModalWrapper>
                 </>
             )}
 
             {showPostConfimationModal && (
                 <ModalWrapper>
-                    <ModalContent>
-                        {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
-                        <ModalTitle>Confirm Batch Name</ModalTitle>
-                        <Form onSubmit={deleteBatch}>
-                            <FormGroup>
-                                <FormField>
-                                    <FormField>Enter complete name of the batch to confirm</FormField>
-                                    <FormControl>
-                                        <input
-                                            className={ctx.inputClasses}
-                                            type='text'
-                                            placeholder='Batch Name'
-                                            ref={batchName}
-                                        />
-                                    </FormControl>
-                                    {batchNameError !== '' && <FormLabelAlt>{batchNameError}</FormLabelAlt>}
-                                </FormField>
-                            </FormGroup>
-                            <div className='flex gap-3 mt-3'>
-                                <ModalFormButton className={btnState}>Delete</ModalFormButton>
+                    {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
+                    <ModalTitle>Confirm Batch Name</ModalTitle>
+                    <Form onSubmit={deleteBatch}>
+                        <FormGroup>
+                            <FormField>
+                                <FormField>Enter complete name of the batch to confirm</FormField>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses}
+                                        type='text'
+                                        placeholder='Batch Name'
+                                        ref={batchName}
+                                    />
+                                </FormControl>
+                                {batchNameError !== '' && <FormLabelAlt>{batchNameError}</FormLabelAlt>}
+                            </FormField>
+                        </FormGroup>
+                        <div className='flex gap-3 mt-3'>
+                            <ModalFormButton className={btnState}>Delete</ModalFormButton>
 
-                                {btnState === '' && (
-                                    <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
-                                )}
-                            </div>
-                        </Form>
-                    </ModalContent>
+                            {btnState === '' && (
+                                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
+                            )}
+                        </div>
+                    </Form>
                 </ModalWrapper>
             )}
 
