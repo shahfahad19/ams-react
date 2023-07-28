@@ -4,7 +4,7 @@ import './Table.css';
 const Table = (props) => {
     return (
         <div className='flex w-full flex-col overflow-x-auto'>
-            <table className={`table table-zebra ${props.className}`}>{props.children}</table>
+            <table className={`table table-hover font-medium ${props.className}`}>{props.children}</table>
             {props.loading && props.loading === true && (
                 <div className='relative h-80'>
                     <div className='loader-wrapper'>

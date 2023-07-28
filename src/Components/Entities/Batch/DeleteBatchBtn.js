@@ -16,12 +16,12 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
     });
 
     const confirmationModalHandler = () => {
-        setShowConfirmationModal(showConfimationModal !== true);
+        setShowConfirmationModal(!showConfimationModal);
     };
 
     const postConfirmationModalHandler = () => {
         setShowConfirmationModal(false);
-        setShowPostConfirmationModal(showPostConfimationModal !== true);
+        setShowPostConfirmationModal(!showPostConfimationModal);
     };
 
     const successModalHandler = () => {
@@ -61,11 +61,10 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
             .catch((error) => {
                 setShowPostConfirmationModal(false);
 
-                const errorMessage = ctx.computeError(error);
                 setAlertModal({
                     type: 'error',
                     show: true,
-                    text: errorMessage,
+                    text: ctx.computeError(error),
                 });
             });
         setBtnState('');
@@ -78,20 +77,18 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
             </button>
 
             {showConfimationModal && (
-                <>
-                    <ModalWrapper>
-                        <ModalCloseBtn handler={confirmationModalHandler} />
-                        <ModalTitle>Are you sure?</ModalTitle>
-                        <span>This batch will be deleted permanently from database!</span>
-                        <div className='flex gap-3'>
-                            <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
-                                Delete
-                            </ModalButton>
+                <ModalWrapper>
+                    <ModalCloseBtn handler={confirmationModalHandler} />
+                    <ModalTitle>Are you sure?</ModalTitle>
+                    <span>This batch will be deleted permanently from database!</span>
+                    <div className='flex gap-3'>
+                        <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
+                            Delete
+                        </ModalButton>
 
-                            <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
-                        </div>
-                    </ModalWrapper>
-                </>
+                        <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+                    </div>
+                </ModalWrapper>
             )}
 
             {showPostConfimationModal && (

@@ -26,7 +26,7 @@ import EditProfile from './Components/Admin/Profile/EditProfile';
 import Profile from './Components/Admin/Profile/Profile';
 import EditPic from './Components/Admin/Profile/EditPic';
 import UpdatePassword from './Components/Admin/Profile/UpdatePassword';
-import EditTeacher from './Components/Entities/Teacher/EditTeacher';
+import EditSubjectTeacher from './Components/Entities/Subject/EditSubjectTeacher';
 import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 import TeacherSubjectsList from './Components/Entities/Subject/TeacherSubjectsList';
 import TeacherViewSubject from './Components/Teacher/Views/TeacherViewSubject';
@@ -298,7 +298,7 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: 'teacher',
-                                element: <EditTeacher />,
+                                element: <EditSubjectTeacher />,
                             },
                             {
                                 path: 'edit',

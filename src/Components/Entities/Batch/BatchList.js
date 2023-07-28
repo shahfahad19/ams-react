@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
@@ -9,6 +9,7 @@ import TickMark from '../../Utils/TickMark';
 
 const BatchList = (props) => {
     const params = useParams();
+    const navigate = useNavigate();
     const [batches, setBatches] = useState([]);
     const [loading, isLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
@@ -41,6 +42,10 @@ const BatchList = (props) => {
             });
     }, []);
 
+    const viewBatch = (batchId) => {
+        ctx.navigate(`/${ctx.userData.role}/batch/${batchId}/semesters`);
+    };
+
     return (
         <div>
             <SubSectionHeader text='Batch List' showBtn={true} btnText='Add Batch' btnLink='../add-batch' />
@@ -57,13 +62,9 @@ const BatchList = (props) => {
                     {batches.length > 0 &&
                         batches.map((batch, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} onClick={() => viewBatch(batch._id)} className='cursor-pointer'>
                                     <th>{index + 1}</th>
-                                    <td>
-                                        <Link to={`/${ctx.userData.role}/batch/${batch._id}/semesters`} key={batch._id}>
-                                            Batch {batch.name}
-                                        </Link>
-                                    </td>
+                                    <td>Batch {batch.name}</td>
                                     <td>
                                         {!batch.archived && <TickMark />}
                                         {batch.archived && <CrossMark />}

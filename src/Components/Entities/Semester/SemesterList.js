@@ -36,6 +36,9 @@ const BatchList = () => {
             });
     }, []);
 
+    const viewSemester = (semesterId) => {
+        ctx.navigate(`/${ctx.userData.role}/semester/${semesterId}/subjects`);
+    };
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Semester List' showBtn={true} btnText='Add Semester' btnLink='../add-semester' />
@@ -52,13 +55,9 @@ const BatchList = () => {
                     {semesters.length > 0 &&
                         semesters.map((semester, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} className='cursor-pointer' onClick={() => viewSemester(semester._id)}>
                                     <th>{index + 1}</th>
-                                    <td>
-                                        <Link to={`/${ctx.userData.role}/semester/${semester._id}/subjects`}>
-                                            Semester {semester.name}
-                                        </Link>
-                                    </td>
+                                    <td>Semester {semester.name}</td>
                                     <td>
                                         {!semester.archived && <TickMark />}
                                         {semester.archived && <CrossMark />}

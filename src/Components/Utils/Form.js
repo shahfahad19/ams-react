@@ -26,7 +26,7 @@ export const FormControl = (props) => {
 
 export const FormSubmitBtn = (props) => {
     return (
-        <div className='form-field pt-4'>
+        <div className='form-field pt-2'>
             <div className='form-control'>
                 <button type='submit' className={'btn btn-primary btn-block ' + props.className}>
                     {props.children}

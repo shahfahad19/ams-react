@@ -2,7 +2,6 @@ import React from 'react';
 
 const AttendanceTable = (props) => {
     const subject = props.subject;
-    console.log(subject);
 
     return (
         <>

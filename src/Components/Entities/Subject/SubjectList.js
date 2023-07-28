@@ -35,6 +35,10 @@ const SubjectList = () => {
                 console.log(error);
             });
     }, []);
+
+    const viewSubject = (subjectId) => {
+        ctx.navigate(`/${ctx.userData.role}/subject/${subjectId}/attendance`);
+    };
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Subject List' showBtn={true} btnLink='../add-subject' btnText='Add Subject' />
@@ -53,16 +57,9 @@ const SubjectList = () => {
                     {subjects.length > 0 &&
                         subjects.map((subject, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} className='cursor-pointer' onClick={() => viewSubject(subject._id)}>
                                     <th>{index + 1}</th>
-                                    <td>
-                                        <Link
-                                            className='underline underline-offset-2'
-                                            to={`/${ctx.userData.role}/subject/${subject._id}/attendance`}
-                                        >
-                                            {subject.name}
-                                        </Link>
-                                    </td>
+                                    <td>{subject.name}</td>
                                     <td>{subject.creditHours}</td>
                                     <td>{subject.teacher ? subject.teacher.name : 'Not Assigned'}</td>
                                     <td>

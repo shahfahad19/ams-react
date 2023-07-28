@@ -280,6 +280,7 @@ const SignUp = () => {
                     Login!
                 </Link>
             </div>
+            <div className='h-14'></div>
         </FormWrapper>
     );
 };
