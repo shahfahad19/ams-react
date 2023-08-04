@@ -21,11 +21,6 @@ import Redirect from './Components/Utils/Redirect';
 import Welcome from './Components/Welcome';
 import './index.css';
 import Error from './Router/Error';
-import ViewProfile from './Components/Admin/Views/ViewProfile';
-import EditProfile from './Components/Admin/Profile/EditProfile';
-import Profile from './Components/Admin/Profile/Profile';
-import EditPic from './Components/Admin/Profile/EditPic';
-import UpdatePassword from './Components/Admin/Profile/UpdatePassword';
 import EditSubjectTeacher from './Components/Entities/Subject/EditSubjectTeacher';
 import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 import TeacherSubjectsList from './Components/Entities/Subject/TeacherSubjectsList';
@@ -50,6 +45,12 @@ import AddBatch from './Components/Entities/Batch/AddBatch';
 import EditBatch from './Components/Entities/Batch/EditBatch';
 import Error404 from './Components/Utils/Error404';
 import EditSubject from './Components/Entities/Subject/EditSubject';
+import ViewTeacher from './Components/Admin/Views/ViewTeacher';
+import Profile from './Components/Profiles/Profile';
+import ViewProfile from './Components/Profiles/ViewProfile';
+import EditProfile from './Components/Profiles/EditProfile';
+import EditPic from './Components/Profiles/EditPic';
+import UpdatePassword from './Components/Profiles/UpdatePassword';
 
 const router = createBrowserRouter([
     {
@@ -77,7 +78,30 @@ const router = createBrowserRouter([
                 path: 'forgot-password',
                 element: <ForgotPassword />,
             },
+            {
+                path: 'profile',
+                element: <ViewProfile />,
+                children: [
+                    {
+                        path: 'view',
+                        element: <Profile />,
+                    },
+                    {
+                        path: 'edit-profile',
+                        element: <EditProfile />,
+                    },
+                    {
+                        path: 'edit-photo',
+                        element: <EditPic />,
+                    },
+                    {
+                        path: 'update-password',
+                        element: <UpdatePassword />,
+                    },
+                ],
+            },
 
+            // Paths for super admin
             {
                 path: 'super-admin',
                 element: <SuperAdminDashboard />,
@@ -197,28 +221,7 @@ const router = createBrowserRouter([
                             },
                         ],
                     },
-                    {
-                        path: 'profile',
-                        element: <ViewProfile />,
-                        children: [
-                            {
-                                path: 'view',
-                                element: <Profile />,
-                            },
-                            {
-                                path: 'edit-profile',
-                                element: <EditProfile />,
-                            },
-                            {
-                                path: 'edit-photo',
-                                element: <EditPic />,
-                            },
-                            {
-                                path: 'update-password',
-                                element: <UpdatePassword />,
-                            },
-                        ],
-                    },
+
                     {
                         path: 'batch/:batchId/add-semester',
                         element: <AddSemester />,
@@ -256,6 +259,10 @@ const router = createBrowserRouter([
                                 element: <StudentList />,
                             },
                         ],
+                    },
+                    {
+                        path: 'teacher/:teacherId',
+                        element: <ViewTeacher />,
                     },
                     {
                         path: 'add-batch',
@@ -308,6 +315,8 @@ const router = createBrowserRouter([
                     },
                 ],
             },
+
+            // Paths for Teacher
             {
                 path: 'teacher',
                 element: <TeacherDashboard />,
@@ -340,6 +349,8 @@ const router = createBrowserRouter([
                     },
                 ],
             },
+
+            // Paths for student
             {
                 path: 'student',
                 element: <StudentDashboard />,

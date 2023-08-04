@@ -35,12 +35,9 @@ const Header = () => {
                                                 alt='profile_pic'
                                             />
                                         </label>
-                                        
+
                                         <div className='dropdown-menu dropdown-menu-bottom-left'>
-                                            <Link
-                                                className='dropdown-item text-sm'
-                                                to={`/${ctx.userData.role}/profile/view`}
-                                            >
+                                            <Link className='dropdown-item text-sm' to={`/profile`}>
                                                 Profile
                                             </Link>
                                             <Link

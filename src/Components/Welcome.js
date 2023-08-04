@@ -7,10 +7,10 @@ const Welcome = () => {
     return (
         <div className='w-full mt-32 flex flex-col items-center justify-center'>
             <div className='text-3xl font-medium text-primary align-middle text-center px-2 sm:text-4xl md:text-5xl'>
-                Attendance Managment System
+                Attendance Management System
             </div>
             <div className='text-md font-regular text-center my-3 px-2 md:text-2xl'>
-                Welcome to the Attendance Managment System
+                Welcome to the Attendance Management System
                 {!ctx.isLoggedIn && (
                     <>
                         <br />

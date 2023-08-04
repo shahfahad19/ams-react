@@ -43,6 +43,9 @@ const TeacherList = (props) => {
             });
     }, []);
 
+    const viewTeacher = (teacherId) => {
+        ctx.navigate('/admin/teacher/' + teacherId);
+    };
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Teachers' showBtn={true} btnLink='../add-teacher' btnText='Add Teacher' />
@@ -63,7 +66,13 @@ const TeacherList = (props) => {
                     {teachers.length > 0 &&
                         teachers.map((teacher, index) => {
                             return (
-                                <tr key={index} className=''>
+                                <tr
+                                    className='cursor-pointer'
+                                    key={index}
+                                    onClick={() => {
+                                        viewTeacher(teacher._id);
+                                    }}
+                                >
                                     <th>{index + 1}</th>
                                     <td>
                                         <label className='avatar'>

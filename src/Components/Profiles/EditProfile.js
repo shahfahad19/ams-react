@@ -1,11 +1,10 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import Message from '../../Main/Message';
 import { useForm } from 'react-hook-form';
-import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
+import AppContext from '../Context/AppContext';
+import SubSectionHeader from '../Utils/SubSectionHeader';
+import Message from '../Main/Message';
 
 const EditProfile = () => {
     const ctx = useContext(AppContext);

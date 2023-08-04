@@ -141,23 +141,25 @@ const StudentAttendance = () => {
                         </Form>
                     </FormWrapper>
 
-                    <div className='m-3 w-full lg:w-2/3'>
-                        {subject !== null && (
-                            <>
-                                <div className='flex flex-col items-center sm:items-start space-y-3 sm:space-y-0 sm:flex-row justify-between'>
-                                    <div>
-                                        <SubjectInfoTable subject={subject} />
+                    <div className='flex justify-center'>
+                        <div className='m-3 w-full lg:w-2/3'>
+                            {subject !== null && (
+                                <>
+                                    <div className='flex flex-col items-center sm:items-start space-y-3 sm:space-y-0 sm:flex-row justify-between'>
+                                        <div>
+                                            <SubjectInfoTable subject={subject} />
+                                        </div>
+                                        <div>
+                                            <AttendanceInfoTable subject={subject} />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <AttendanceInfoTable subject={subject} />
-                                    </div>
-                                </div>
 
-                                <div className='flex justify-center m-2'>
-                                    <AttendanceTable subject={subject} />
-                                </div>
-                            </>
-                        )}
+                                    <div className='flex justify-center m-2'>
+                                        <AttendanceTable subject={subject} />
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
