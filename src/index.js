@@ -52,6 +52,7 @@ import EditProfile from './Components/Profiles/EditProfile';
 import EditPic from './Components/Profiles/EditPic';
 import UpdatePassword from './Components/Profiles/UpdatePassword';
 import AddDefaultSubject from './Components/Entities/DepartmentSubject/AddDefaultSubject';
+import TeacherInfo from './Components/Entities/Teacher/TeacherInfo';
 
 const router = createBrowserRouter([
     {
@@ -272,6 +273,20 @@ const router = createBrowserRouter([
                     {
                         path: 'teacher/:teacherId',
                         element: <ViewTeacher />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='info' />,
+                            },
+                            {
+                                path: 'info',
+                                element: <TeacherInfo />,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <TeacherSubjectsList />,
+                            },
+                        ],
                     },
                     {
                         path: 'add-batch',

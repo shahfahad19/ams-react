@@ -41,10 +41,6 @@ const AddSubject = () => {
                     subjects: response.data.data.subjects,
                 });
                 setSemester(response.data.data.semester);
-
-                if (response.data.data.subjects.length === 0) {
-                    ctx.showSwal(0, 'No Subjects Available!');
-                }
             })
 
             .catch((error) => {

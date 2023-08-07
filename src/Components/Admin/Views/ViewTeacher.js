@@ -11,7 +11,7 @@ const ViewTeacher = () => {
     const params = useParams();
     const ctx = useContext(AppContext);
 
-    const [teacher, setTeacher] = useState([]);
+    const [teacher, setTeacher] = useState();
 
     useEffect(() => {
         console.log('sendigb');
@@ -23,8 +23,7 @@ const ViewTeacher = () => {
                 },
             })
             .then((response) => {
-                setTeacher(response.data.data);
-                console.log(response.data.data);
+                setTeacher(response.data.data.teacher);
             })
             .catch((error) => {
                 console.log(error);
@@ -37,18 +36,20 @@ const ViewTeacher = () => {
 
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='../batches'>Batches</BreadCrumb>
+                <BreadCrumb to='../teachers'>Teachers</BreadCrumb>
+                {!teacher && <BreadCrumb>Loading...</BreadCrumb>}
+                {teacher && <BreadCrumb>{teacher.name}</BreadCrumb>}
             </BreadCrumbs>
             <Menu>
                 <MenuItems>
                     <>
-                        <MenuItem text='Attendance' tab='attendance' />
-                        <MenuItem text='Teacher' tab='teacher' />
-                        <MenuItem text='Edit Subject' tab='edit' />
+                        <MenuItem text='Info' tab='info' />
+                        <MenuItem text='Subjects' tab='subjects' />
+                        <MenuItem text='Edit' tab='edit' />
                     </>
                 </MenuItems>
             </Menu>
-            <Outlet />
+            <Outlet context={[teacher, setTeacher]} />
         </>
     );
 };

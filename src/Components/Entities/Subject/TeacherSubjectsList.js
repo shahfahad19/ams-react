@@ -14,8 +14,14 @@ const TeacherSubjectsList = () => {
 
     const params = useParams();
     useEffect(() => {
+        let url = '';
+        if (ctx.userData.role === 'teacher') {
+            url = `${ctx.baseURL}/subjects/get/teacher-subjects?sort=archived,name`;
+        } else if (ctx.userData.role === 'admin') {
+            url = `${ctx.baseURL}/subjects/get/teacher-subjects/${params.teacherId}?sort=archived,name`;
+        }
         axios
-            .get(`${ctx.baseURL}/subjects/get/teacher-subjects?sort=archived,name`, {
+            .get(url, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -26,7 +32,11 @@ const TeacherSubjectsList = () => {
                 isLoading(false);
                 setSubjects(response.data.data.subjects);
                 if (response.data.data.subjects.length === 0)
-                    setErrorMessage('No subjects are assigned to you so far!');
+                    setErrorMessage(
+                        ctx.userData.role === 'teacher'
+                            ? 'No subjects are assigned to you so far!'
+                            : 'No subjects assigned to this teacher'
+                    );
             })
             .catch((error) => {
                 setErrorMessage(error.response.data.message || error.message);
@@ -34,6 +44,10 @@ const TeacherSubjectsList = () => {
                 console.log(error);
             });
     }, []);
+
+    const openSubject = (id) => {
+        if (ctx.userData.role === 'teacher') ctx.navigate(`/teacher/subject/${id}/attendance`);
+    };
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Subject List' />
@@ -53,17 +67,10 @@ const TeacherSubjectsList = () => {
                     {subjects.length > 0 &&
                         subjects.map((subject, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} onClick={() => openSubject(subject._id)} className='cursor-pointer'>
                                     <th>{index + 1}</th>
 
-                                    <td>
-                                        <Link
-                                            to={`/teacher/subject/${subject._id}/attendance`}
-                                            className='underline underline-offset-2'
-                                        >
-                                            {subject.name}
-                                        </Link>
-                                    </td>
+                                    <td>{subject.name}</td>
                                     <td>{subject.department}</td>
                                     <td>{subject.creditHours} Hrs</td>
 
