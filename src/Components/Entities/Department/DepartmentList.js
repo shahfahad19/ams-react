@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
-import ListTitleBar, { ListTitle, ListTitleButton } from '../../Utils/ListTitleBar';
 import Table from '../../Utils/Table';
+import SubSectionHeader from '../../Utils/SubSectionHeader';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const DepartmentList = (props) => {
     const [departments, setDepartments] = useState([]);
@@ -36,12 +36,17 @@ const DepartmentList = (props) => {
             });
     }, []);
 
+    const openDepartment = (departmentId) => {
+        ctx.navigate(`/super-admin/department/${departmentId}`);
+    };
+
     return (
         <div className='departments'>
-            <ListTitleBar>
-                <ListTitle text='Departments List' />
-                <ListTitleButton to='add-department' />
-            </ListTitleBar>
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb>Departments</BreadCrumb>
+            </BreadCrumbs>
+            <SubSectionHeader text='Department List' showBtn={true} btnText='Add Department' btnLink='add-department' />
 
             <Table loading={loading} error={errorMessage}>
                 <thead>
@@ -55,17 +60,13 @@ const DepartmentList = (props) => {
                     {departments.length > 0 &&
                         departments.map((department, index) => {
                             return (
-                                <tr key={index}>
+                                <tr
+                                    key={department._id}
+                                    className='cursor-pointer'
+                                    onClick={() => openDepartment(department._id)}
+                                >
                                     <th>{index + 1}</th>
-                                    <td>
-                                        <Link
-                                            className='underline underline-offset-2'
-                                            to={`/super-admin/department/${department._id}`}
-                                            key={department._id}
-                                        >
-                                            {department.department}
-                                        </Link>
-                                    </td>
+                                    <td>{department.department}</td>
                                     <td>{department.email}</td>
                                 </tr>
                             );

@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewDepartment = () => {
     const params = useParams();
@@ -31,25 +32,21 @@ const ViewDepartment = () => {
 
     return (
         <>
-            <div className='flex flex-col md:flex-row'>
-                <div className='w-auto flex flex-col space-y-1 shadow-md rounded-xl p-2 md:p-0 md:shadow-none border border-solid md:border-none mb-5 md:mb-0'>
-                    {department.department === '' ? (
-                        <SideBarTitle title='Loading...' />
-                    ) : (
-                        <SideBarTitle title={department.department || 'Department'} />
-                    )}
-
-                    <Menu>
-                        <MenuItems>
-                            <MenuItem text='Info' tab='info' />
-                            <MenuItem text='Batches' tab='batches' />
-                            <MenuItem text='Teachers' tab='teachers' />
-                            <MenuItem text='Subjects' tab='subjects' />
-                        </MenuItems>
-                    </Menu>
-                </div>
-                <Outlet context={[department, setDepartment]} />
-            </div>
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../'>Departments</BreadCrumb>
+                {department.department !== '' && <BreadCrumb>{department.department}</BreadCrumb>}
+                {department.department === '' && <BreadCrumb>Loading...</BreadCrumb>}
+            </BreadCrumbs>
+            <Menu>
+                <MenuItems>
+                    <MenuItem text='Info' tab='info' />
+                    <MenuItem text='Batches' tab='batches' />
+                    <MenuItem text='Teachers' tab='teachers' />
+                    <MenuItem text='Subjects' tab='subjects' />
+                </MenuItems>
+            </Menu>
+            <Outlet context={[department, setDepartment]} />
         </>
     );
 };

@@ -1,14 +1,25 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
+import Form, {
+    FormControl,
+    FormField,
+    FormGroup,
+    FormLabel,
+    FormLabelAlt,
+    FormSubmitBtn,
+    FormTitle,
+    FormWrapper,
+} from '../../Utils/Form';
+import Alert from '../../Utils/Alert';
+import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const AddDepartment = () => {
     const [btnState, setBtnState] = useState('');
-    const [department, setDepartment] = useState('');
     const [alert, setAlert] = useState({
         show: false,
     });
+    const [error, setError] = useState({});
     const ctx = useContext(AppContext);
 
     const emailRef = useRef();
@@ -16,7 +27,19 @@ const AddDepartment = () => {
 
     const submitForm = async (event) => {
         event.preventDefault();
-        setBtnState('loading');
+        if (emailRef.current.value === '') {
+            setError({
+                email: 'Email required',
+            });
+            return;
+        } else if (departmentRef.current.value === '') {
+            setError({
+                department: 'Department required',
+            });
+            return;
+        } else setError({});
+
+        setBtnState('btn-loading');
         setAlert({ show: false });
         let token = ctx.token;
 
@@ -31,11 +54,12 @@ const AddDepartment = () => {
                 },
             })
             .then((response) => {
-                setDepartment('');
+                departmentRef.current.value = '';
+                emailRef.current.value = '';
                 setAlert({
                     show: true,
                     type: 'success',
-                    message: 'Added Successfully',
+                    text: 'Department created successfully',
                     showBtn: true,
                 });
                 setTimeout(() => {
@@ -49,28 +73,28 @@ const AddDepartment = () => {
                         setAlert({
                             show: true,
                             type: 'error',
-                            message: reqBody.department + ' department already exists',
+                            text: reqBody.department + ' department already exists',
                             showBtn: true,
                         });
                     else if (error.response.data.message.includes('email'))
                         setAlert({
                             show: true,
                             type: 'error',
-                            message: reqBody.email + ' already has an account',
+                            text: reqBody.email + ' already has an account',
                             showBtn: true,
                         });
                     else
                         setAlert({
                             show: true,
                             type: 'error',
-                            message: error.response.data.message,
+                            text: error.response.data.message,
                             showBtn: true,
                         });
                 } else
                     setAlert({
                         show: true,
                         type: 'error',
-                        message: error.message,
+                        text: error.message,
                         showBtn: true,
                     });
             });
@@ -79,32 +103,31 @@ const AddDepartment = () => {
 
     return (
         <>
-            <div className='add-department'>
-                <div className='md:p-2 text-xl text-neutral font-medium text-center md:flex-grow border-b-2'>
-                    Add Department
-                </div>
-                <div className='semesters mt-2 flex justify-center'>
-                    <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                        <form className='font-medium w-full' onSubmit={submitForm}>
-                            <div className='form-control'>
+            <BreadCrumbs>
+                <BreadCrumb to='/'>Home</BreadCrumb>
+                <BreadCrumb to='../'>Departments</BreadCrumb>
+                <BreadCrumb>Add Department</BreadCrumb>
+            </BreadCrumbs>
+            <FormWrapper>
+                <Form onSubmit={submitForm}>
+                    <FormTitle>Add Department</FormTitle>
+                    <FormGroup>
+                        <FormField>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
                                 <input
                                     className={ctx.inputClasses}
                                     type='email'
-                                    required
                                     ref={emailRef}
                                     placeholder='Department Admin Email'
                                 />
-                            </div>
-                            <br />
-                            <div className='form-control'>
-                                <select
-                                    className='select select-bordered select-sm md:select-md rounded-full'
-                                    type='number'
-                                    ref={departmentRef}
-                                    required
-                                    placeholder='Enter department no.'
-                                    min='1'
-                                >
+                            </FormControl>
+                            {error.email && <FormLabelAlt>{error.email}</FormLabelAlt>}
+                        </FormField>
+                        <FormField>
+                            <FormLabel>Department</FormLabel>
+                            <FormControl>
+                                <select className={ctx.selectClasses} type='number' ref={departmentRef}>
                                     <option value=''>Select Department</option>
                                     <option value='Agriculture'>Agriculture</option>
                                     <option value='Computer Science'>Computer Science</option>
@@ -139,33 +162,19 @@ const AddDepartment = () => {
                                     <option value='Urdu'>Urdu</option>
                                     <option value='Islamic & Arabic Studies'>Islamic & Arabic Studies</option>
                                 </select>
-                            </div>
-
-                            <br />
-                            <div className='form-control flex items-center'>
-                                <button
-                                    className={`btn btn-neutral w-fit rounded-lg btn-sm font-medium ${btnState}`}
-                                    type='submit'
-                                >
-                                    Add Department
-                                </button>
-                            </div>
-                        </form>
-                        {alert.show === true && (
-                            <div className='my-2'>
-                                <Message
-                                    type={alert.type}
-                                    text={alert.message}
-                                    showBtn={alert.showBtn}
-                                    hideAlert={() => {
-                                        setAlert({ show: false });
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
+                            </FormControl>
+                            {error.department && <FormLabelAlt>{error.department}</FormLabelAlt>}
+                        </FormField>
+                    </FormGroup>
+                    <FormSubmitBtn className={btnState}>Add Department</FormSubmitBtn>
+                </Form>
+                <Alert
+                    alert={alert}
+                    closeAlert={() => {
+                        setAlert({ show: false });
+                    }}
+                />
+            </FormWrapper>
         </>
     );
 };

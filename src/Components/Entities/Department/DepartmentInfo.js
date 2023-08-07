@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import Message from '../../Main/Message';
 import DepartmentDeleteBtn from './DepartmentDeleteBtn';
+import { SpinnerWithText } from '../../Utils/Spinner';
+import { FormWrapper } from '../../Utils/Form';
 
 const DepartmentInfo = () => {
     const ctx = useContext(AppContext);
@@ -69,72 +71,63 @@ const DepartmentInfo = () => {
     };
 
     return (
-        <div className='flex-grow'>
-            <SubSectionHeader text='Department Info' />
-            <div className='semesters mt-2 flex justify-center'>
-                <div className='rounded shadow-xl p-3 w-11/12 md:w-8/12 lg:w-3/5'>
-                    {department.name === undefined && (
-                        <div className='flex items-center h-44 justify-center'>
-                            <div className='loader'></div>
-                        </div>
-                    )}
+        <>
+            {department.name && (
+                <FormWrapper>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th colSpan={2} className='font-medium text-center'>
+                                    Department
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th className='font-medium'>Department</th>
+                                <td>{department.department}</td>
+                            </tr>
+                            <tr>
+                                <th className='font-medium'>Admin</th>
+                                <td>
+                                    <div className='flex space-x-4 items-center'>
+                                        <div className='h-full'>{department.name}</div>
 
-                    {department.name && (
-                        <div className='flex justify-center flex-col space-y-2'>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th colSpan={2} className='font-medium text-center'>
-                                            Department
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th className='font-medium'>Department</th>
-                                        <td>{department.department}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className='font-medium'>Admin</th>
-                                        <td>
-                                            <div className='flex space-x-4 items-center'>
-                                                <div className='h-full'>{department.name}</div>
-
-                                                <div>
-                                                    <label tabIndex={0} className='avatar select-none'>
-                                                        <div className='w-10 rounded-full'>
-                                                            <img src={department.photo} alt='profile_pic' />
-                                                        </div>
-                                                    </label>
+                                        <div>
+                                            <label tabIndex={0} className='avatar select-none'>
+                                                <div className='w-10 rounded-full'>
+                                                    <img src={department.photo} alt='profile_pic' />
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th className='font-medium'>Email</th>
-                                        <td>{department.email}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className='font-medium'>Approved</th>
-                                        <td>{department.approved.toString()}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button className='btn btn-accent' onClick={changeAdmin}>
-                                Change Admin
-                            </button>
-                            <DepartmentDeleteBtn
-                                department={department}
-                                navigate={navigate}
-                                params={params}
-                                ctx={ctx}
-                                MySwal={MySwal}
-                            />
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th className='font-medium'>Email</th>
+                                <td>{department.email}</td>
+                            </tr>
+                            <tr>
+                                <th className='font-medium'>Approved</th>
+                                <td>{department.approved.toString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button className='btn btn-block btn-secondary mt-1' onClick={changeAdmin}>
+                        Change Admin
+                    </button>
+                    <DepartmentDeleteBtn
+                        department={department}
+                        navigate={navigate}
+                        params={params}
+                        ctx={ctx}
+                        MySwal={MySwal}
+                    />
+                </FormWrapper>
+            )}
+
+            {!department.name && <SpinnerWithText>Fetching department info...</SpinnerWithText>}
+        </>
     );
 };
 

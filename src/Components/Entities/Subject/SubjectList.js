@@ -40,7 +40,7 @@ const SubjectList = () => {
         ctx.navigate(`/${ctx.userData.role}/subject/${subjectId}/attendance`);
     };
     return (
-        <div className='flex-grow'>
+        <div>
             <SubSectionHeader text='Subject List' showBtn={true} btnLink='../add-subject' btnText='Add Subject' />
 
             <Table loading={loading} error={errorMessage}>

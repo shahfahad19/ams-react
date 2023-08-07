@@ -1,109 +1,139 @@
 import axios from 'axios';
-import React from 'react';
-const DepartmentDeleteBtn = ({ department, navigate, params, ctx, MySwal }) => {
-    const deleteDepartment = () => {
-        MySwal.fire({
-            html: `
-                <div className="swal2-title">Are you sure?</div>
-                <div className="swal2-content">This department and all its data will be deleted permanently from the database.
-                <br/>
-                <span className="text-info">This action cannot be undone later</span></div>
-            `,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    html: `
-                    <div className="swal2-content">Confirm Department Name</div>
-                <input id="department-name" className="swal2-input" placeholder="Department Name">
-            `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Submit',
-                    showLoaderOnConfirm: true, // Show loading spinner
+import React, { useRef, useState } from 'react';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
+import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
 
-                    preConfirm: () => {
-                        const departmentName = document.getElementById('department-name').value;
+const DepartmentDeleteBtn = ({ department, navigate, params, ctx, className }) => {
+    const departmentName = useRef();
+    const [departmentNameError, setDepartmentNameError] = useState('');
+    const [btnState, setBtnState] = useState('');
 
-                        // Check if fields are not selected
-                        if (!departmentName) {
-                            MySwal.showValidationMessage('Enter department name');
-                            return false; // Prevent closing the modal
-                        } else if (departmentName !== department.department) {
-                            MySwal.showValidationMessage(
-                                'Department name does not match, make sure you are deleting the intended department!'
-                            );
-                            return false; // Prevent closing the modal
-                        }
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [showPostConfimationModal, setShowPostConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-                        return { departmentName };
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        MySwal.fire({
-                            title: 'Deleting Department',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                MySwal.showLoading();
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(!showConfimationModal);
+    };
 
-                                // axios req
-                                axios
-                                    .delete(`${ctx.baseURL}/users/department/${params.departmentId}`, {
-                                        credentials: 'include',
-                                        headers: {
-                                            Authorization: 'Bearer ' + ctx.token,
-                                        },
-                                    })
-                                    .then((response) => {
-                                        MySwal.close();
+    const postConfirmationModalHandler = () => {
+        setShowConfirmationModal(false);
 
-                                        MySwal.fire({
-                                            icon: 'success',
-                                            title: 'Deleted!',
-                                            text: 'Department Deleted successfully',
-                                            showConfirmButton: true,
-                                        }).then(() => {
-                                            navigate(-1, { replace: true });
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                        MySwal.close();
+        setShowPostConfirmationModal(!showPostConfimationModal);
+    };
 
-                                        if (error.response) {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Something went wrong!',
-                                                text: error.response.data.message,
-                                                showConfirmButton: true,
-                                                confirmButtonText: 'Ok',
-                                            });
-                                        } else {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Something went wrong!',
-                                                text: error.message,
-                                                showConfirmButton: true,
-                                                confirmButtonText: 'Ok',
-                                            });
-                                        }
-                                    });
-                            },
-                        });
-                    }
+    const successModalHandler = () => {
+        navigate(-1, { replace: true });
+    };
+
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
+
+    const deleteDepartment = async (event) => {
+        event.preventDefault();
+        if (departmentName.current.value === '') {
+            setDepartmentNameError('Enter department name');
+            return;
+        } else if (departmentName.current.value !== department.department) {
+            setDepartmentNameError('Department name does not match');
+            return;
+        } else {
+            setDepartmentNameError('');
+        }
+        setBtnState('btn-loading');
+
+        axios
+            .delete(`${ctx.baseURL}/users/department/${params.departmentId}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setBtnState('');
+
+                setShowPostConfirmationModal(false);
+                setAlertModal({
+                    type: 'success',
+                    show: true,
+                    text: 'Department deleted successfully',
                 });
-            }
-        });
+            })
+            .catch((error) => {
+                setShowPostConfirmationModal(false);
+                setBtnState('');
+
+                setAlertModal({
+                    type: 'error',
+                    show: true,
+                    text: ctx.computeError(error),
+                });
+            });
     };
 
     return (
-        <button className='btn btn-error' onClick={deleteDepartment}>
-            Delete Department
-        </button>
+        <>
+            <button className={`${ctx.btnClasses} btn-error ${className} mt-2`} onClick={confirmationModalHandler}>
+                Delete Department
+            </button>
+
+            {showConfimationModal && (
+                <ModalWrapper>
+                    <ModalCloseBtn handler={confirmationModalHandler} />
+                    <ModalTitle>Are you sure?</ModalTitle>
+                    <span>This department will be deleted permanently from database!</span>
+                    <div className='flex gap-3'>
+                        <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
+                            Delete
+                        </ModalButton>
+
+                        <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+                    </div>
+                </ModalWrapper>
+            )}
+
+            {showPostConfimationModal && (
+                <ModalWrapper>
+                    {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
+                    <ModalTitle>Confirm Department Name</ModalTitle>
+                    <Form onSubmit={deleteDepartment}>
+                        <FormGroup>
+                            <FormField>
+                                <FormField>Enter complete name of the department to confirm</FormField>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses}
+                                        type='text'
+                                        placeholder='Department Name'
+                                        ref={departmentName}
+                                    />
+                                </FormControl>
+                                {departmentNameError !== '' && <FormLabelAlt>{departmentNameError}</FormLabelAlt>}
+                            </FormField>
+                        </FormGroup>
+                        <div className='flex gap-3 mt-3'>
+                            <ModalFormButton className={btnState}>Delete</ModalFormButton>
+
+                            {btnState === '' && (
+                                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
+                            )}
+                        </div>
+                    </Form>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

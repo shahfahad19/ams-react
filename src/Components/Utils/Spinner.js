@@ -8,4 +8,12 @@ const Spinner = (props) => {
     );
 };
 
+export const SpinnerWithText = (props) => {
+    return (
+        <div className='flex justify-center items-center h-52'>
+            <Spinner className='spinner-sm' /> <span className='ml-2'>{props.children}</span>
+        </div>
+    );
+};
+
 export default Spinner;

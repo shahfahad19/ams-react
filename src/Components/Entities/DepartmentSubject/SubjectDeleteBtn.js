@@ -1,83 +1,93 @@
 import axios from 'axios';
-import React, { useContext } from 'react';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, { useContext, useState } from 'react';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 import AppContext from '../../Context/AppContext';
 
-const SubjectDeleteBtn = (props) => {
+const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
     const ctx = useContext(AppContext);
-    const MySwal = withReactContent(Swal);
-    const subject = props.subject;
+    const [btnState, setBtnState] = useState('');
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-    const deleteSubject = () => {
-        MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel!',
-            reverseButtons: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: 'Removing subject',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        MySwal.showLoading();
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(!showConfimationModal);
+    };
 
-                        // axios req
-                        axios
-                            .delete(`${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`, {
-                                credentials: 'include',
-                                headers: {
-                                    Authorization: 'Bearer ' + ctx.token,
-                                },
-                            })
-                            .then((response) => {
-                                MySwal.close();
+    const successModalHandler = () => {
+        subjectDeleted(Math.random());
+        setAlertModal({ show: false });
+    };
 
-                                MySwal.fire({
-                                    icon: 'success',
-                                    title: 'Removed!',
-                                    text: 'Subject deleted successfully',
-                                    showConfirmButton: true,
-                                });
-                                props.subjectDeleted(Math.random());
-                            })
-                            .catch((error) => {
-                                MySwal.close();
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
 
-                                if (error.response) {
-                                    MySwal.fire({
-                                        icon: 'error',
-                                        title: 'Something went wrong!',
-                                        message: error.response.data.message,
-                                        showConfirmButton: true,
-                                        confirmButtonText: 'Ok',
-                                    });
-                                } else {
-                                    MySwal.fire({
-                                        icon: 'error',
-                                        title: 'Something went wrong!',
-                                        text: error.message,
-                                        showConfirmButton: true,
-                                        confirmButtonText: 'Ok',
-                                    });
-                                }
-                            });
-                    },
+    const deleteSubject = async (event) => {
+        event.preventDefault();
+
+        setBtnState('btn-loading');
+
+        await axios
+            .delete(`${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`, {
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + ctx.token,
+                },
+            })
+            .then((response) => {
+                setShowConfirmationModal(false);
+
+                // To reload the subjects list
+                setAlertModal({
+                    type: 'success',
+                    show: true,
+                    text: 'Subject deleted successfully',
                 });
-            }
-        });
+            })
+            .catch((error) => {
+                showConfimationModal(false);
+
+                setAlertModal({
+                    type: 'error',
+                    show: true,
+                    text: ctx.computeError(error),
+                });
+            });
+        setBtnState('');
     };
 
     return (
-        <button className='btn btn-error btn-sm mr-2' onClick={deleteSubject}>
-            Delete
-        </button>
+        <>
+            <button className={`btn btn-solid-error btn-sm ${className} mr-2`} onClick={confirmationModalHandler}>
+                Delete
+            </button>
+
+            {showConfimationModal && (
+                <ModalWrapper>
+                    <ModalCloseBtn handler={confirmationModalHandler} />
+                    <ModalTitle>Are you sure?</ModalTitle>
+                    <span>This subject will be deleted!</span>
+                    <div className='flex gap-3'>
+                        <ModalButton className={`btn-error ${btnState}`} handler={deleteSubject}>
+                            Delete
+                        </ModalButton>
+
+                        {btnState === '' && <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>}
+                    </div>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

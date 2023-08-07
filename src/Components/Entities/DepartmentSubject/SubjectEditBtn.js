@@ -1,114 +1,158 @@
 import axios from 'axios';
-import React, { useContext } from 'react';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, { useContext, useRef, useState } from 'react';
+import Form, { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt, FormTitle } from '../../Utils/Form';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 import AppContext from '../../Context/AppContext';
-import { useParams } from 'react-router-dom';
 
-const SubjectEditBtn = (props) => {
-    const params = useParams();
-    const MySwal = withReactContent(Swal);
+const SubjectEditBtn = ({ subject, className, subjectEdited }) => {
+    const [btnState, setBtnState] = useState('');
     const ctx = useContext(AppContext);
-    const subject = props.subject;
 
-    const editSubject = () => {
-        MySwal.fire({
-            title: 'Edit Subject',
-            html: `
-                <input id="subject-name" className="swal2-input" placeholder="Enter Subject Name" value="${
-                    subject.name
-                }">
-                <select id="credit-hours" className="swal2-select">
-                    <option value="">Select Credit Hours</option>
-                    <option value="3" ${subject.creditHours === 3 && 'selected'}>3 Hours</option>
-                    <option value="4" ${subject.creditHours === 4 && 'selected'}>4 Hours</option>
-                </select>
-            `,
-            showCancelButton: true,
-            confirmButtonText: 'Submit',
-            showLoaderOnConfirm: true, // Show loading spinner
+    const subjectNameRef = useRef();
+    const subjectHoursRef = useRef();
+    const [errors, showErrors] = useState(false);
 
-            preConfirm: () => {
-                const subjectName = document.getElementById('subject-name').value;
-                const creditHours = document.getElementById('credit-hours').value;
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-                // Check if fields are not selected
-                if (!subjectName || !creditHours) {
-                    let errMsg = '';
-                    if (!subjectName && !creditHours) errMsg = 'Enter subject name and select credit hours';
-                    else if (!subjectName) errMsg = 'Enter subject name';
-                    else if (!creditHours) errMsg = 'Select credit hours';
-                    Swal.showValidationMessage(errMsg);
-                    return false; // Prevent closing the modal
-                }
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(!showConfimationModal);
+    };
 
-                return { subjectName, creditHours };
-            },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const { subjectName, creditHours } = result.value;
+    const successModalHandler = () => {
+        subjectEdited(Math.random());
+        setAlertModal({ show: false });
+    };
 
-                MySwal.fire({
-                    title: 'Updating Subject',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        MySwal.showLoading();
-                        axios
-                            .patch(
-                                `${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`,
-                                {
-                                    name: subjectName,
-                                    creditHours: creditHours,
-                                    department: params.departmentId,
-                                },
-                                {
-                                    credentials: 'include',
-                                    headers: {
-                                        Authorization: 'Bearer ' + ctx.token,
-                                    },
-                                }
-                            )
-                            .then((response) => {
-                                // Request succeeded, show success message
-                                MySwal.close();
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: 'Subject added successfully',
-                                });
-                                props.subjectEdited(response.data.data.subject);
-                            })
-                            .catch((error) => {
-                                // Request failed, show error message
-                                MySwal.close();
+    const updateSubject = async (event) => {
+        event.preventDefault();
+        showErrors(false);
 
-                                let errorMessage = '';
-                                if (!error.response) {
-                                    errorMessage = error.message;
-                                } else {
-                                    if (error.response.data.error.code === 11000) {
-                                        errorMessage = 'This subject already exists in this department';
-                                    } else {
-                                        errorMessage = error.response.data.message;
-                                    }
-                                }
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: errorMessage,
-                                });
-                            });
+        const subjectName = subjectNameRef.current.value;
+        const subjectHours = subjectHoursRef.current.value;
+
+        if (subjectName === '' || subjectHours === '') {
+            showErrors(true);
+            return;
+        }
+
+        setBtnState('btn-loading');
+        await axios
+            .patch(
+                `${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`,
+                {
+                    name: subjectName,
+                    creditHours: subjectHours,
+                },
+                {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
                     },
+                }
+            )
+            .then((response) => {
+                subjectNameRef.current.value = '';
+                subjectHoursRef.current.value = '';
+                setShowConfirmationModal(false);
+                setAlertModal({
+                    show: true,
+                    type: 'success',
+                    text: 'Subject edited successfully!',
                 });
-            }
-        });
+            })
+            .catch((error) => {
+                setShowConfirmationModal(false);
+                let errorMessage = '';
+                if (!error.response) {
+                    errorMessage = error.message;
+                } else {
+                    if (error.response.data.error.code === 11000) {
+                        errorMessage = 'This subject already exists in this department';
+                    } else {
+                        errorMessage = error.response.data.message;
+                    }
+                }
+                setAlertModal({
+                    show: true,
+                    type: 'error',
+                    text: errorMessage,
+                });
+            });
+        setBtnState('');
     };
 
     return (
-        <button className='btn btn-primary btn-sm mr-2' onClick={editSubject}>
-            Edit
-        </button>
+        <>
+            <button className={`btn btn-sm btn-solid-primary ${className} mr-2`} onClick={confirmationModalHandler}>
+                Edit
+            </button>
+
+            {showConfimationModal && (
+                <ModalWrapper>
+                    {btnState === '' && <ModalCloseBtn handler={confirmationModalHandler} />}
+                    <ModalTitle>Edit Subject</ModalTitle>
+                    <Form onSubmit={updateSubject}>
+                        <FormGroup>
+                            <FormField>
+                                <FormLabel>Subject Name</FormLabel>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses + ' input-sm'}
+                                        type='text'
+                                        placeholder='Subject Name'
+                                        ref={subjectNameRef}
+                                        defaultValue={subject.name}
+                                    />
+                                </FormControl>
+                                {errors && subjectNameRef && subjectNameRef.current.value === '' && (
+                                    <FormLabelAlt>Subject name required</FormLabelAlt>
+                                )}
+                            </FormField>
+
+                            <FormField>
+                                <FormLabel>Credit Hours</FormLabel>
+                                <FormControl>
+                                    <select
+                                        className={ctx.selectClasses + ' select-sm'}
+                                        ref={subjectHoursRef}
+                                        defaultValue={subject.creditHours}
+                                    >
+                                        <option value=''>Select credit hours</option>
+                                        <option value='3'>3 Hours</option>
+                                        <option value='4'>4 Hours</option>
+                                    </select>
+                                </FormControl>
+                                {errors && subjectHoursRef && subjectHoursRef.current.value === '' && (
+                                    <FormLabelAlt>Subject credit hours required</FormLabelAlt>
+                                )}
+                            </FormField>
+                        </FormGroup>
+
+                        <div className='flex gap-3 mt-3'>
+                            <ModalFormButton className={btnState + ' btn-solid-primary'}>Update</ModalFormButton>
+
+                            {btnState === '' && <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>}
+                        </div>
+                    </Form>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

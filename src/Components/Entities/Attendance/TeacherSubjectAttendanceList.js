@@ -83,8 +83,8 @@ const TeacherSubjectAttendanceList = () => {
                                 {dates.map((date, index) => (
                                     <React.Fragment key={index}>
                                         {attendance.dates.indexOf(date) === -1 && (
-                                            <td className='border border-neutral bg-stone-200 text-center font-medium'>
-                                                X
+                                            <td>
+                                                <p className='text-center font-medium text-neutral'>X</p>
                                             </td>
                                         )}
                                         {attendance.dates.indexOf(date) > -1 && (

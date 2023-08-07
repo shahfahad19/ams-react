@@ -12,7 +12,7 @@ export const ListTitle = (props) => {
 export const ListTitleButton = (props) => {
     return (
         <div>
-            <Link className='btn btn-outline rounded-full font-normal normal-case btn-xs sm:btn-sm' to={props.to}>
+            <Link className='btn btn-solid-primary rounded-full font-normal normal-case btn-xs sm:btn-sm' to={props.to}>
                 Add
             </Link>
         </div>

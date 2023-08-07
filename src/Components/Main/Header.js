@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
+import ThemeSelector from './ThemeSelector';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -20,8 +21,11 @@ const Header = () => {
                         <span className='hidden sm:block'>Attendance Management System</span>
                     </Link>
                 </div>
-                {ctx.isLoggedIn && (
-                    <div className='navbar-end'>
+                <div className='navbar-end'>
+                    <div className='navbar-item'>
+                        <ThemeSelector />
+                    </div>
+                    {ctx.isLoggedIn && (
                         <div className='navbar-item'>
                             <div className='avatar avatar-ring avatar-md'>
                                 <div className='dropdown-container'>
@@ -53,8 +57,8 @@ const Header = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </>
     );

@@ -8,7 +8,7 @@ import Header from './Components/Main/Header';
 function App() {
     return (
         <AppContextProvider>
-            <div className='h-screen'>
+            <div className='h-screen overflow-y-scroll'>
                 <Header />
                 <Outlet></Outlet>
             </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
-import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
+import Form, { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt } from '../../Utils/Form';
 import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 
 const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
@@ -98,7 +98,7 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
                     <Form onSubmit={deleteBatch}>
                         <FormGroup>
                             <FormField>
-                                <FormField>Enter complete name of the batch to confirm</FormField>
+                                <FormLabel>Enter complete name of the batch to confirm</FormLabel>
                                 <FormControl>
                                     <input
                                         className={ctx.inputClasses}

@@ -51,6 +51,7 @@ import ViewProfile from './Components/Profiles/ViewProfile';
 import EditProfile from './Components/Profiles/EditProfile';
 import EditPic from './Components/Profiles/EditPic';
 import UpdatePassword from './Components/Profiles/UpdatePassword';
+import AddDefaultSubject from './Components/Entities/DepartmentSubject/AddDefaultSubject';
 
 const router = createBrowserRouter([
     {
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
                 path: 'profile',
                 element: <ViewProfile />,
                 children: [
+                    {
+                        path: '',
+                        element: <Redirect to='view' />,
+                    },
                     {
                         path: 'view',
                         element: <Profile />,
@@ -117,6 +122,10 @@ const router = createBrowserRouter([
                     {
                         path: 'add-department',
                         element: <AddDepartment />,
+                    },
+                    {
+                        path: 'department/:departmentId/add-subject',
+                        element: <AddDefaultSubject />,
                     },
                     {
                         path: 'department/:departmentId',

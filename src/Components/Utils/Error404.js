@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../Main/Header';
 
 export default function Error404() {
     return (

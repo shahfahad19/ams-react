@@ -9,7 +9,8 @@ const SubSectionHeader = (props) => {
         <>
             <div className='flex items-center justify-between bg-backgroundSecondary p-2'>
                 <div className='flex-grow text-center text-lg font-medium'>{props.text}</div>
-                {props.showBtn && ctx.userData.role === 'admin' && (
+                {/* //TODO : option to hide add btn for super admin */}
+                {props.showBtn && (
                     <Link to={props.btnLink} className='btn btn-primary btn-sm mr-1'>
                         {props.btnText}
                     </Link>

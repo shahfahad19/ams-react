@@ -10,7 +10,6 @@ const Welcome = () => {
                 Attendance Management System
             </div>
             <div className='text-md font-regular text-center my-3 px-2 md:text-2xl'>
-                Welcome to the Attendance Management System
                 {!ctx.isLoggedIn && (
                     <>
                         <br />

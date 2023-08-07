@@ -35,6 +35,8 @@ export const AppContextProvider = (props) => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal);
 
+    const [theme, setTheme] = useState('light');
+
     const [userData, setUserData] = useState({
         confirmed: true,
         photo: 'https://res.cloudinary.com/dbph73rvi/image/upload/v1675170781/mdqcinla4xkogsatvbr3.jpg',
@@ -43,10 +45,13 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         let token = '';
+        let savedTheme = '';
         try {
             token = localStorage.getItem('ams-token');
+            savedTheme = localStorage.getItem('theme');
         } catch (err) {}
         if (token === '') {
+            savedTheme = 'light';
             setLoggedIn(false);
             return;
         }
@@ -69,6 +74,9 @@ export const AppContextProvider = (props) => {
                     console.log(error);
                     setLoggedIn(false);
                 });
+
+        document.body.setAttribute('data-theme', savedTheme);
+        setTheme(savedTheme);
     }, []);
 
     const loginHandler = () => {
@@ -136,6 +144,15 @@ export const AppContextProvider = (props) => {
         };
     };
 
+    const changeTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        try {
+            localStorage.setItem('theme', newTheme);
+        } catch {}
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -145,7 +162,7 @@ export const AppContextProvider = (props) => {
                 userData: userData,
                 login: loginHandler,
                 logout: logoutHandler,
-                theme: 'light',
+                theme: theme,
                 baseURL: process.env.REACT_APP_API,
                 captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
                 error: error,
@@ -159,6 +176,7 @@ export const AppContextProvider = (props) => {
                 computeError: computeError,
                 successAlert: successAlert,
                 errorAlert: errorAlert,
+                changeTheme: changeTheme,
             }}
         >
             {props.children}
