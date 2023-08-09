@@ -6,9 +6,12 @@ import AttendanceInfoTable from './AttendanceInfoTable';
 import SubjectInfoTable from './SubjectInfoTable';
 import AttendanceTable from './AttendanceTable';
 import Form, { FormControl, FormField, FormGroup, FormLabel, FormWrapper } from '../../Utils/Form';
+import Spinner from '../../Utils/Spinner';
+import { useParams } from 'react-router-dom';
 
 const StudentAttendance = () => {
     const ctx = useContext(AppContext);
+    const params = useParams();
     const [data, setData] = useState([]);
     const [alert, setAlert] = useState(false);
     const [loading, isLoading] = useState(true);
@@ -20,8 +23,9 @@ const StudentAttendance = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
+        const url = ctx.userData.role === 'student' ? ctx.userData._id : params.studentId;
         axios
-            .get(`${ctx.baseURL}/attendances/student/${ctx.userData._id}`, {
+            .get(`${ctx.baseURL}/attendances/student/${url}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -29,9 +33,11 @@ const StudentAttendance = () => {
             })
             .then((response) => {
                 setData(response.data.attendances);
+
                 if (response.data.attendances.length === 0) {
                     setErrorMessage('No attendances found');
                 }
+                console.log(response);
             })
             .catch((error) => {
                 if (error.response) setErrorMessage(error.response.data.message);
@@ -61,7 +67,8 @@ const StudentAttendance = () => {
         if (subjectIndex === '') {
             setSubject(null);
         } else {
-            setSubject(data[semesterIndex].subjects[subjectIndex]);
+            let selectedSubject = data[semesterIndex].subjects[subjectIndex];
+            setSubject(selectedSubject);
         }
     };
 
@@ -79,9 +86,7 @@ const StudentAttendance = () => {
             )}
             {loading && (
                 <div className='flex justify-center items-center mt-20'>
-                    <svg className='spinner-ring' viewBox='25 25 50 50' strokeWidth='5'>
-                        <circle cx='50' cy='50' r='20' />
-                    </svg>
+                    <Spinner />
                 </div>
             )}
             {!loading && (
@@ -116,8 +121,8 @@ const StudentAttendance = () => {
                                             className={ctx.selectClasses}
                                             ref={subjectRef}
                                             onChange={subjectHandler}
+                                            disabled={subjects.length === 0}
                                         >
-                                            {subjects.length === 0 && <option value=''>- - - - - - - - - -</option>}
                                             {subjects.length > 0 && (
                                                 <>
                                                     <option value=''>Select Subject</option>

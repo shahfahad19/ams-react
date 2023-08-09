@@ -14,7 +14,6 @@ const ViewTeacher = () => {
     const [teacher, setTeacher] = useState();
 
     useEffect(() => {
-        console.log('sendigb');
         axios
             .get(`${ctx.baseURL}/users/teachers/${params.teacherId}`, {
                 credentials: 'include',

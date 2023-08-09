@@ -20,20 +20,15 @@ const ForgotPassword = () => {
     const ctx = useContext(AppContext);
 
     const email = useRef();
-    const password = useRef();
     const captcha = useRef();
 
     const submitForm = async (event) => {
         event.preventDefault();
         setBtnState('loading');
-
-        const loginData = {
-            email: email.current.value,
-            password: password.current.value,
-        };
-
         await axios
-            .post(`${ctx.baseURL}/user/forgotPassword?token=${captcha.current.getValue()}`, loginData)
+            .post(`${ctx.baseURL}/user/forgotPassword?token=${captcha.current.getValue()}`, {
+                email: email.current.value,
+            })
             .then((response) => {
                 console.log(response);
             })

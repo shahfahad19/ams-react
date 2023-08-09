@@ -33,6 +33,7 @@ const AddTeacher = () => {
 
     const submitForm = async (data) => {
         setBtnState('btn-loading');
+        data.department = ctx.userData.department;
 
         setAlert({ show: false });
 

@@ -26,12 +26,6 @@ const CustomError = (props) => {
                     </p>
 
                     {error.response && <p className='font-semibold mt-5'>{error.response.data.message}</p>}
-
-                    <br />
-
-                    <Link to={'/login'} className='link link-primary mt-5'>
-                        Got to login page
-                    </Link>
                 </div>
             </div>
         </>

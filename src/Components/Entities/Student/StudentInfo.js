@@ -4,22 +4,22 @@ import AppContext from '../../Context/AppContext';
 import { SpinnerWithText } from '../../Utils/Spinner';
 import { FormWrapper } from '../../Utils/Form';
 
-const TeacherInfo = () => {
-    const [teacher, setTeacher] = useOutletContext();
+const StudentInfo = () => {
+    const [student, setStudent] = useOutletContext();
     const ctx = useContext(AppContext);
     return (
         <>
-            {teacher && (
+            {student && (
                 <FormWrapper>
                     <table className='table font-medium'>
                         <tbody>
                             <tr>
                                 <td>Name</td>
-                                <td>{teacher.name}</td>
+                                <td>{student.name}</td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>{teacher.email}</td>
+                                <td>{student.email}</td>
                             </tr>
                             <tr>
                                 <td>Photo</td>
@@ -27,32 +27,32 @@ const TeacherInfo = () => {
                                     <div className='popover popover-hover'>
                                         <img
                                             className='w-10 popover-trigger rounded-full'
-                                            src={teacher.photo}
+                                            src={student.photo}
                                             alt='profile_pic'
                                         />
                                         <div className='popover-content sm:popover-right'>
                                             <div className='popover-arrow'></div>
-                                            <img src={teacher.photo} alt='profile_pic' />
+                                            <img src={student.photo} alt='profile_pic' />
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Department</td>
-                                <td> {teacher.departmentId.department}</td>
+                                <td>Roll No.</td>
+                                <td>{student.rollNo}</td>
                             </tr>
                             <tr>
-                                <td>Designation</td>
-                                <td>{teacher.designation}</td>
+                                <td>Registration No.</td>
+                                <td>{student.registrationNo}</td>
                             </tr>
                         </tbody>
                     </table>
                 </FormWrapper>
             )}
 
-            {!teacher && <SpinnerWithText>Fetching teacher info...</SpinnerWithText>}
+            {!student && <SpinnerWithText>Fetching student info...</SpinnerWithText>}
         </>
     );
 };
 
-export default TeacherInfo;
+export default StudentInfo;

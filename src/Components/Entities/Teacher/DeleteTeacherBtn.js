@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { AlertModal, ModalButton, ModalCloseBtn, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 import AppContext from '../../Context/AppContext';
 
-const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
+const DeleteTeacherBtn = ({ teacher, className }) => {
     const ctx = useContext(AppContext);
     const [btnState, setBtnState] = useState('');
     const [showConfimationModal, setShowConfirmationModal] = useState(false);
@@ -17,8 +17,7 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
     };
 
     const successModalHandler = () => {
-        subjectDeleted(Math.random());
-        setAlertModal({ show: false });
+        ctx.navigate(-1, { replace: true });
     };
 
     const errorModalHandler = () => {
@@ -31,7 +30,7 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
         setBtnState('btn-loading');
 
         await axios
-            .delete(`${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`, {
+            .delete(`${ctx.baseURL}/users/teachers/${teacher._id}`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -44,7 +43,7 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
                 setAlertModal({
                     type: 'success',
                     show: true,
-                    text: 'Subject deleted successfully',
+                    text: 'Teacher deleted successfully',
                 });
             })
             .catch((error) => {
@@ -61,7 +60,7 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
 
     return (
         <>
-            <button className={`btn btn-solid-error btn-sm ${className} mr-2`} onClick={confirmationModalHandler}>
+            <button className={`${ctx.btnClasses} btn-error ${className} mt-2`} onClick={confirmationModalHandler}>
                 Delete
             </button>
 
@@ -69,7 +68,7 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
                 <ModalWrapper>
                     {btnState === '' && <ModalCloseBtn handler={confirmationModalHandler} />}
                     <ModalTitle>Are you sure?</ModalTitle>
-                    <span>This subject will be deleted!</span>
+                    <span>This teacher's account will be deleted permanently from database!</span>
                     <div className='flex gap-3'>
                         <ModalButton className={`btn-error ${btnState}`} handler={deleteSubject}>
                             Delete
@@ -91,4 +90,4 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
     );
 };
 
-export default SubjectDeleteBtn;
+export default DeleteTeacherBtn;

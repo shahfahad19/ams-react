@@ -53,6 +53,9 @@ import EditPic from './Components/Profiles/EditPic';
 import UpdatePassword from './Components/Profiles/UpdatePassword';
 import AddDefaultSubject from './Components/Entities/DepartmentSubject/AddDefaultSubject';
 import TeacherInfo from './Components/Entities/Teacher/TeacherInfo';
+import EditTeacherInfo from './Components/Entities/Teacher/EditTeacherInfo';
+import ConfirmAccount from './Components/Auth/ConfirmAccount';
+import StudentInfo from './Components/Entities/Student/StudentInfo';
 
 const router = createBrowserRouter([
     {
@@ -79,6 +82,10 @@ const router = createBrowserRouter([
             {
                 path: 'forgot-password',
                 element: <ForgotPassword />,
+            },
+            {
+                path: 'confirm-account',
+                element: <ConfirmAccount />,
             },
             {
                 path: 'profile',
@@ -239,6 +246,20 @@ const router = createBrowserRouter([
                     {
                         path: 'student/:studentId',
                         element: <ViewStudent />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='info' />,
+                            },
+                            {
+                                path: 'info',
+                                element: <StudentInfo />,
+                            },
+                            {
+                                path: 'attendance',
+                                element: <StudentAttendance />,
+                            },
+                        ],
                     },
                     {
                         path: 'semester/:semesterId/add-subject',
@@ -285,6 +306,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'subjects',
                                 element: <TeacherSubjectsList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditTeacherInfo />,
                             },
                         ],
                     },

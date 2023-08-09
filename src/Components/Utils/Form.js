@@ -15,7 +15,9 @@ export const FormLabel = (props) => {
 export const FormLabelAlt = (props) => {
     return (
         <label className='form-label'>
-            <span className='form-label-alt text-error'>{props.children}</span>
+            <span className={`form-label-alt ${props.className ? props.className : 'text-error'}`}>
+                {props.children}
+            </span>
         </label>
     );
 };

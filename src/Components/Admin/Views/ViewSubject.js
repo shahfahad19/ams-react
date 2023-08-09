@@ -41,9 +41,13 @@ const ViewSubject = () => {
                         <BreadCrumb to={'/admin/batch/' + subject.semester.batch._id}>
                             Batch {subject.semester.batch.name}
                         </BreadCrumb>
+                        <BreadCrumb to={'/admin/batch/' + subject.semester.batch._id + '/semesters'}>
+                            Semesters
+                        </BreadCrumb>
                         <BreadCrumb to={'/admin/semester/' + subject.semester._id}>
                             Semester {subject.semester.name}
                         </BreadCrumb>
+                        <BreadCrumb to={'/admin/semester/' + subject.semester._id + '/subjects'}>Subjects</BreadCrumb>
                         <BreadCrumb>{subject.name}</BreadCrumb>
                     </>
                 )}

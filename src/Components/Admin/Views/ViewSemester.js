@@ -42,6 +42,8 @@ const ViewSemester = (props) => {
                 {semester.name && (
                     <>
                         <BreadCrumb to={'/admin/batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>
+                        <BreadCrumb to={'/admin/batch/' + semester.batch._id + '/semesters'}>Semesters</BreadCrumb>
+
                         <BreadCrumb>Semester {semester.name}</BreadCrumb>
                     </>
                 )}
