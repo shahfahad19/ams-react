@@ -56,6 +56,7 @@ import TeacherInfo from './Components/Entities/Teacher/TeacherInfo';
 import EditTeacherInfo from './Components/Entities/Teacher/EditTeacherInfo';
 import ConfirmAccount from './Components/Auth/ConfirmAccount';
 import StudentInfo from './Components/Entities/Student/StudentInfo';
+import EditStudentInfo from './Components/Entities/Student/EditStudentInfo';
 
 const router = createBrowserRouter([
     {
@@ -258,6 +259,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'attendance',
                                 element: <StudentAttendance />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditStudentInfo />,
                             },
                         ],
                     },

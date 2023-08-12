@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
+import { SpinnerWithText } from '../../Utils/Spinner';
 
 const AttendanceList = () => {
     const [attendances, setAttendances] = useState([]);
@@ -38,9 +39,7 @@ const AttendanceList = () => {
             <SubSectionHeader text='Attendance List' />
 
             {!errorMessage && attendances.length === 0 && (
-                <div className='flex justify-center items-center h-60'>
-                    <div className='loader'></div>
-                </div>
+                <SpinnerWithText>Getting subject attendance...</SpinnerWithText>
             )}
             {attendances.length > 0 && (
                 <Table className='md:table-compact'>

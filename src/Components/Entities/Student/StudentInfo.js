@@ -6,7 +6,7 @@ import { FormWrapper } from '../../Utils/Form';
 
 const StudentInfo = () => {
     const [student, setStudent] = useOutletContext();
-    const ctx = useContext(AppContext);
+
     return (
         <>
             {student && (

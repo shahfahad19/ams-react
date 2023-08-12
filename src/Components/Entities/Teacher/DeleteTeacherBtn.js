@@ -47,7 +47,7 @@ const DeleteTeacherBtn = ({ teacher, className }) => {
                 });
             })
             .catch((error) => {
-                showConfimationModal(false);
+                setShowConfirmationModal(false);
 
                 setAlertModal({
                     type: 'error',

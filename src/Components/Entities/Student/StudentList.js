@@ -14,6 +14,7 @@ const StudentList = () => {
     const ctx = useContext(AppContext);
 
     const params = useParams();
+
     useEffect(() => {
         axios
             .get(`${ctx.baseURL}/users/students?batch=${params.batchId}&sort=rollNo`, {
@@ -37,6 +38,10 @@ const StudentList = () => {
                 console.log(error);
             });
     }, []);
+
+    const openStudentInfo = (student_id) => {
+        ctx.navigate(`/${ctx.userData.role}/student/${student_id}`);
+    };
     return (
         <div className='flex-grow'>
             <SubSectionHeader text='Student List' />
@@ -55,7 +60,7 @@ const StudentList = () => {
                     {students.length > 0 &&
                         students.map((student, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} onClick={() => openStudentInfo(student._id)} className='cursor-pointer'>
                                     <th>{student.rollNo}</th>
 
                                     <td>
@@ -66,11 +71,7 @@ const StudentList = () => {
                                         </label>
                                     </td>
 
-                                    <td>
-                                        <Link to={`/${ctx.userData.role}/student/${student._id}`} className='underline'>
-                                            {student.name}
-                                        </Link>
-                                    </td>
+                                    <td>{student.name}</td>
                                     <td>
                                         {student.confirmed && <TickMark />}
                                         {!student.confirmed && <CrossMark />}
