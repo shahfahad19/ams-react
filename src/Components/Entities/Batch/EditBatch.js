@@ -144,7 +144,7 @@ const EditBatch = (props) => {
                             <FormField>
                                 <FormLabel>Batch Code</FormLabel>
                                 <FormControl>
-                                    <div className='bg-backgroundPrimary border-2 w-full rounded-xl flex justify-between items-center'>
+                                    <div className='bg-backgroundPrimary border-2 dark:border-gray-6 w-full rounded-xl flex justify-between items-center'>
                                         <p className='text-primary pl-4'>{batchData.batchCode || '...'}</p>
                                         <p onClick={generateCode} className={`btn btn-secondary ${regenerateBtnState}`}>
                                             Regenerate

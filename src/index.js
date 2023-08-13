@@ -5,15 +5,11 @@ import App from './App';
 import AddSemester from './Components/Entities/Semester/AddSemester';
 import AddSubject from './Components/Entities/Subject/AddSubject';
 import EditSemester from './Components/Entities/Semester/EditSemester';
-import AdminDashboard from './Components/Admin/AdminDashboard';
 import SemesterList from './Components/Entities/Semester/SemesterList';
 import StudentList from './Components/Entities/Student/StudentList';
 import SubjectList from './Components/Entities/Subject/SubjectList';
 import AttendanceList from './Components/Entities/Attendance/AttendanceList';
 import InviteLink from './Components/Entities/Batch/BatchInviteLink';
-import ViewBatch from './Components/Admin/Views/ViewBatch';
-import ViewSemester from './Components/Admin/Views/ViewSemester';
-import ViewSubject from './Components/Admin/Views/ViewSubject';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import Login from './Components/Auth/Login';
 import SignUp from './Components/Auth/SignUp';
@@ -22,22 +18,15 @@ import Welcome from './Components/Welcome';
 import './index.css';
 import Error from './Router/Error';
 import EditSubjectTeacher from './Components/Entities/Subject/EditSubjectTeacher';
-import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 import TeacherSubjectsList from './Components/Entities/Subject/TeacherSubjectsList';
-import TeacherViewSubject from './Components/Teacher/Views/TeacherViewSubject';
 import TakeAttendance from './Components/Entities/Attendance/TakeAttendance';
 import TeacherSubjectAttendanceList from './Components/Entities/Attendance/TeacherSubjectAttendanceList';
 import RemoveSubject from './Components/Entities/Subject/RemoveSubject';
-import SuperAdminDashboard from './Components/SuperAdmin/SuperAdminDashboard';
-import MainView from './Components/Admin/Views/MainView';
 import DepartmentList from './Components/Entities/Department/DepartmentList';
 import AddDepartment from './Components/Entities/Department/AddDepartment';
-import ViewDepartment from './Components/SuperAdmin/Views/ViewDepartment';
 import TeacherList from './Components/Entities/Teacher/TeacherList';
 import AddTeacher from './Components/Entities/Teacher/AddTeacher';
-import StudentDashboard from './Components/Student/StudentDashboard';
 import StudentAttendance from './Components/Entities/Attendance/StudentAttendance';
-import ViewStudent from './Components/Admin/Views/ViewStudent';
 import DepartmentInfo from './Components/Entities/Department/DepartmentInfo';
 import DefaultSubjectList from './Components/Entities/DepartmentSubject/DefaultSubjectList';
 import BatchList from './Components/Entities/Batch/BatchList';
@@ -45,9 +34,7 @@ import AddBatch from './Components/Entities/Batch/AddBatch';
 import EditBatch from './Components/Entities/Batch/EditBatch';
 import Error404 from './Components/Utils/Error404';
 import EditSubject from './Components/Entities/Subject/EditSubject';
-import ViewTeacher from './Components/Admin/Views/ViewTeacher';
 import Profile from './Components/Profiles/Profile';
-import ViewProfile from './Components/Profiles/ViewProfile';
 import EditProfile from './Components/Profiles/EditProfile';
 import EditPic from './Components/Profiles/EditPic';
 import UpdatePassword from './Components/Profiles/UpdatePassword';
@@ -57,6 +44,19 @@ import EditTeacherInfo from './Components/Entities/Teacher/EditTeacherInfo';
 import ConfirmAccount from './Components/Auth/ConfirmAccount';
 import StudentInfo from './Components/Entities/Student/StudentInfo';
 import EditStudentInfo from './Components/Entities/Student/EditStudentInfo';
+import AdminMainView from './Components/Views/AdminMainView';
+import SuperAdminDashboard from './Components/Dashboards/SuperAdminDashboard';
+import ViewDepartment from './Components/Entities/Department/ViewDepartment';
+import AdminDashboard from './Components/Dashboards/AdminDashboard';
+import ViewStudent from './Components/Entities/Student/ViewStudent';
+import ViewBatch from './Components/Entities/Batch/ViewBatch';
+import ViewTeacher from './Components/Entities/Teacher/ViewTeacher';
+import ViewSemester from './Components/Entities/Semester/ViewSemester';
+import ViewSubject from './Components/Entities/Subject/ViewSubject';
+import StudentDashboard from './Components/Dashboards/StudentDashboard';
+import ViewProfile from './Components/Profiles/ViewProfile';
+import TeacherDashboard from './Components/Dashboards/TeacherDashboard';
+import ViewTeacherSubject from './Components/Entities/Subject/ViewTeacherSubject';
 
 const router = createBrowserRouter([
     {
@@ -223,7 +223,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <MainView />,
+                        element: <AdminMainView />,
                         children: [
                             {
                                 path: '',
@@ -381,7 +381,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'subject/:subjectId',
-                        element: <TeacherViewSubject />,
+                        element: <ViewTeacherSubject />,
                         children: [
                             {
                                 path: '',

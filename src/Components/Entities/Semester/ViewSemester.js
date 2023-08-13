@@ -3,9 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Menu, { MenuItem, MenuItems } from '../../Utils/Menu';
-import SideBarTitle from '../../Utils/SideBarTitle';
-import BackButton from '../../Utils/BackButton';
-import DepartmentName from '../../Entities/Department/DepartmentName';
+import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewSemester = (props) => {

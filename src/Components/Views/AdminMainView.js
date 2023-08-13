@@ -1,13 +1,11 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import AppContext from '../../Context/AppContext';
-import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
-import SideBarTitle from '../../Utils/SideBarTitle';
-import DepartmentName from '../../Entities/Department/DepartmentName';
-import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
+import React, { useContext } from 'react';
+import { Outlet } from 'react-router-dom';
+import AppContext from '../Context/AppContext';
+import Menu, { MenuItems, MenuItem } from '../Utils/Menu';
+import DepartmentName from '../Entities/Department/DepartmentName';
+import { BreadCrumb, BreadCrumbs } from '../Utils/BreadCrumbs';
 
-const MainView = () => {
+const AdminMainView = () => {
     const ctx = useContext(AppContext);
 
     return (
@@ -29,4 +27,4 @@ const MainView = () => {
     );
 };
 
-export default MainView;
+export default AdminMainView;

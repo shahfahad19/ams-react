@@ -23,7 +23,6 @@ const TeacherSubjectAttendanceList = () => {
                 },
             })
             .then((response) => {
-                setErrorMessage('');
                 setAttendances(response.data.data.attendances);
                 setDates(response.data.data.dates);
 
@@ -40,41 +39,38 @@ const TeacherSubjectAttendanceList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Attendance List' />
 
-            {!errorMessage && attendances.length === 0 && (
-                <SpinnerWithText>Getting subject attendance...</SpinnerWithText>
-            )}
-            {attendances.length > 0 && (
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>R.no</th>
-                            <th>Name</th>
-                            {attendances.length > 0 &&
-                                attendances[0].dates.map((date) => (
-                                    <th key={date}>
-                                        <p className='text-xs text-center border-none'>
-                                            {new Date(date).toLocaleDateString('en-UK', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: '2-digit',
-                                            })}
-                                        </p>
-                                        <p className='text-center text-xs border-none'>
-                                            {new Date(date).toLocaleTimeString('en-UK', {
-                                                hour: 'numeric',
-                                                minute: '2-digit',
-                                                hour12: true,
-                                            })}
-                                        </p>
-                                    </th>
-                                ))}
-                            <th>
-                                <p className='no-border text-center'>Percentage</p>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {attendances.map((attendance, index) => (
+            <Table error={errorMessage} loading={loading}>
+                <thead>
+                    <tr>
+                        <th>R.no</th>
+                        <th>Name</th>
+                        {attendances.length > 0 &&
+                            attendances[0].dates.map((date) => (
+                                <th key={date}>
+                                    <p className='text-xs text-center border-none'>
+                                        {new Date(date).toLocaleDateString('en-UK', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: '2-digit',
+                                        })}
+                                    </p>
+                                    <p className='text-center text-xs border-none'>
+                                        {new Date(date).toLocaleTimeString('en-UK', {
+                                            hour: 'numeric',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        })}
+                                    </p>
+                                </th>
+                            ))}
+                        <th>
+                            <p className='no-border text-center'>Percentage</p>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {attendances.length > 0 &&
+                        attendances.map((attendance, index) => (
                             <tr key={attendance._id}>
                                 <td>{attendance.rollNo}</td>
                                 <td className='text-bold'>{attendance.name}</td>
@@ -121,12 +117,8 @@ const TeacherSubjectAttendanceList = () => {
                                 </td>
                             </tr>
                         ))}
-                    </tbody>
-                </Table>
-            )}
-            {errorMessage && (
-                <div className='text-center mt-16 text-error text-xl'>No attendances found for this subject</div>
-            )}
+                </tbody>
+            </Table>
         </div>
     );
 };

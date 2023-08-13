@@ -3,7 +3,6 @@ import { Link, Outlet } from 'react-router-dom';
 import Error404 from './Utils/Error404';
 import AppContext from './Context/AppContext';
 import CustomError from './Utils/CustomError';
-import CompleteTeacherSignup from './Teacher/CompleteTeacherSignup';
 
 const Dashboard = (props) => {
     const ctx = useContext(AppContext);

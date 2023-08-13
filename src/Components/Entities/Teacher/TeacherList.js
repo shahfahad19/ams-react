@@ -44,7 +44,7 @@ const TeacherList = (props) => {
     }, []);
 
     const viewTeacher = (teacherId) => {
-        ctx.navigate('/admin/teacher/' + teacherId);
+        ctx.navigate(`/${ctx.userData.role}/teachers/${teacherId}`);
     };
     return (
         <div className='flex-grow'>

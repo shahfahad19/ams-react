@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MainView = () => {
+const SuperAdminMainView = () => {
     return (
         <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
             <div className='bg-gray-200 p-4'>Departments</div>
@@ -13,4 +13,4 @@ const MainView = () => {
     );
 };
 
-export default MainView;
+export default SuperAdminMainView;

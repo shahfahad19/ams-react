@@ -17,7 +17,7 @@ const Table = (props) => {
 
             {props.error && props.error !== '' && (
                 <div className='relative h-80'>
-                    <div className='error text-error'>&#9888; {props.error}</div>
+                    <div className='error text-error'>{props.error}</div>
                 </div>
             )}
         </div>

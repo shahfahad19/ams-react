@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import AppContext from '../../Context/AppContext';
 import { Outlet, useParams } from 'react-router-dom';
-import DepartmentName from '../../Entities/Department/DepartmentName';
+import AppContext from '../../Context/AppContext';
+import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 import Menu, { MenuItem, MenuItems } from '../../Utils/Menu';
 
