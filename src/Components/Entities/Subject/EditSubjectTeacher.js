@@ -4,8 +4,6 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
 import { AlertModal, ModalButton, ModalCloseBtn, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 import Spinner from '../../Utils/Spinner';
 
@@ -17,7 +15,6 @@ const EditSubjectTeacher = (props) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [subject, setSubject] = useOutletContext();
     const params = useParams();
-    const MySwal = withReactContent(Swal);
     const department = useRef();
     const [assignLoadingModal, setAssignLoadingModal] = useState(false);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);

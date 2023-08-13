@@ -2,6 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
+import './index.css';
+import Error from './Router/Error';
+
+import Login from './Components/Auth/Login';
+import SignUp from './Components/Auth/SignUp';
+import Redirect from './Components/Utils/Redirect';
+import Welcome from './Components/Welcome';
 import AddSemester from './Components/Entities/Semester/AddSemester';
 import AddSubject from './Components/Entities/Subject/AddSubject';
 import EditSemester from './Components/Entities/Semester/EditSemester';
@@ -11,16 +18,9 @@ import SubjectList from './Components/Entities/Subject/SubjectList';
 import AttendanceList from './Components/Entities/Attendance/AttendanceList';
 import InviteLink from './Components/Entities/Batch/BatchInviteLink';
 import ForgotPassword from './Components/Auth/ForgotPassword';
-import Login from './Components/Auth/Login';
-import SignUp from './Components/Auth/SignUp';
-import Redirect from './Components/Utils/Redirect';
-import Welcome from './Components/Welcome';
-import './index.css';
-import Error from './Router/Error';
 import EditSubjectTeacher from './Components/Entities/Subject/EditSubjectTeacher';
 import TeacherSubjectsList from './Components/Entities/Subject/TeacherSubjectsList';
 import TakeAttendance from './Components/Entities/Attendance/TakeAttendance';
-import TeacherSubjectAttendanceList from './Components/Entities/Attendance/TeacherSubjectAttendanceList';
 import RemoveSubject from './Components/Entities/Subject/RemoveSubject';
 import DepartmentList from './Components/Entities/Department/DepartmentList';
 import AddDepartment from './Components/Entities/Department/AddDepartment';
@@ -181,8 +181,16 @@ const router = createBrowserRouter([
                                 element: <Redirect to='semesters' />,
                             },
                             {
+                                path: 'add-semester',
+                                element: <AddSemester />,
+                            },
+                            {
                                 path: 'students',
                                 element: <StudentList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditBatch />,
                             },
                         ],
                     },
@@ -198,6 +206,14 @@ const router = createBrowserRouter([
                                 path: 'subjects',
                                 element: <SubjectList />,
                             },
+                            {
+                                path: 'edit',
+                                element: <EditSemester />,
+                            },
+                            {
+                                path: 'add-subject',
+                                element: <AddSubject />,
+                            },
                         ],
                     },
                     {
@@ -211,6 +227,14 @@ const router = createBrowserRouter([
                             {
                                 path: 'attendance',
                                 element: <AttendanceList />,
+                            },
+                            {
+                                path: 'teacher',
+                                element: <EditSubjectTeacher />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditSubject />,
                             },
                         ],
                     },
@@ -355,7 +379,7 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: 'attendance',
-                                element: <TeacherSubjectAttendanceList />,
+                                element: <AttendanceList />,
                             },
                             {
                                 path: 'teacher',
@@ -385,11 +409,11 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: '',
-                                element: <TeacherSubjectAttendanceList />,
+                                element: <AttendanceList />,
                             },
                             {
                                 path: 'attendance',
-                                element: <TeacherSubjectAttendanceList />,
+                                element: <AttendanceList />,
                             },
                             {
                                 path: 'take-attendance',

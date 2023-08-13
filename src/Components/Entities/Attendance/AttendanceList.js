@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
-import { SpinnerWithText } from '../../Utils/Spinner';
 
-const AttendanceList = () => {
+const SubjectAttendanceList = () => {
     const [attendances, setAttendances] = useState([]);
     const [loading, isLoading] = useState(true);
+    const [dates, setDates] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const ctx = useContext(AppContext);
 
@@ -22,13 +22,13 @@ const AttendanceList = () => {
                 },
             })
             .then((response) => {
-                setErrorMessage('');
                 setAttendances(response.data.data.attendances);
+                setDates(response.data.data.dates);
+
                 if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
                 isLoading(false);
             })
             .catch((error) => {
-                console.log(error);
                 setErrorMessage(error.response.data.message || error.message);
                 isLoading(false);
             });
@@ -38,79 +38,88 @@ const AttendanceList = () => {
         <div className='flex-grow'>
             <SubSectionHeader text='Attendance List' />
 
-            {!errorMessage && attendances.length === 0 && (
-                <SpinnerWithText>Getting subject attendance...</SpinnerWithText>
-            )}
-            {attendances.length > 0 && (
-                <Table className='md:table-compact'>
-                    <thead>
-                        <tr>
-                            <th className='normal-case font-semibold border border-neutral'>R.no</th>
-                            <th className='normal-case font-semibold border border-neutral'>Name</th>
-                            {attendances.length > 0 &&
-                                attendances[0].dates.map((date) => (
-                                    <th
-                                        key={date}
-                                        className='text-center text-xs normal-case font-semibold border border-neutral'
-                                    >
-                                        <div>
-                                            {new Date(date).toLocaleDateString('en-UK', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: '2-digit',
-                                            })}
-                                        </div>
-                                        <div className='border border-neutral border-b-0'></div>
-                                        <div>
-                                            {new Date(date).toLocaleTimeString('en-UK', {
-                                                hour: 'numeric',
-                                                minute: '2-digit',
-                                                hour12: true,
-                                            })}
-                                        </div>
-                                    </th>
-                                ))}
-                            <th className='text-center normal-case font-semibold border border-neutral'>Percentage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {attendances.map((attendance) => (
+            <Table error={errorMessage} loading={loading}>
+                <thead>
+                    <tr>
+                        <th>R.no</th>
+                        <th>Name</th>
+                        {attendances.length > 0 &&
+                            attendances[0].dates.map((date) => (
+                                <th key={date}>
+                                    <p className='text-xs text-center border-none'>
+                                        {new Date(date).toLocaleDateString('en-UK', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: '2-digit',
+                                        })}
+                                    </p>
+                                    <p className='text-center text-xs border-none'>
+                                        {new Date(date).toLocaleTimeString('en-UK', {
+                                            hour: 'numeric',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        })}
+                                    </p>
+                                </th>
+                            ))}
+                        <th>
+                            <p className='no-border text-center'>Percentage</p>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {attendances.length > 0 &&
+                        attendances.map((attendance, index) => (
                             <tr key={attendance._id}>
-                                <td className='border border-neutral'>{attendance.rollNo}</td>
-                                <td className='border border-neutral text-bold'>{attendance.name}</td>
-                                {attendance.attendance.map((att, i) => (
-                                    <td
-                                        key={i}
-                                        className={`${
-                                            att.status[0] === 'p'
-                                                ? 'text-success'
-                                                : att.status[0] === 'a'
-                                                ? 'text-error'
-                                                : 'text-warning'
-                                        } text-center font-bold border border-neutral`}
-                                    >
-                                        {att.status[0].toUpperCase()}
-                                    </td>
+                                <td>{attendance.rollNo}</td>
+                                <td className='text-bold'>{attendance.name}</td>
+
+                                {dates.map((date, index) => (
+                                    <React.Fragment key={index}>
+                                        {attendance.dates.indexOf(date) === -1 && (
+                                            <td>
+                                                <p className='text-center font-medium text-neutral'>X</p>
+                                            </td>
+                                        )}
+                                        {attendance.dates.indexOf(date) > -1 && (
+                                            <td key={index}>
+                                                <p
+                                                    className={`${
+                                                        attendance.attendance[attendance.dates.indexOf(date)]
+                                                            .status[0] === 'p'
+                                                            ? 'text-success'
+                                                            : attendance.attendance[attendance.dates.indexOf(date)]
+                                                                  .status[0] === 'a'
+                                                            ? 'text-error'
+                                                            : 'text-warning'
+                                                    } text-center font-medium `}
+                                                >
+                                                    {attendance.attendance[
+                                                        attendance.dates.indexOf(date)
+                                                    ].status[0].toUpperCase()}
+                                                </p>
+                                            </td>
+                                        )}
+                                    </React.Fragment>
                                 ))}
-                                <td
-                                    className={`${
-                                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
-                                    } text-center border border-neutral font-semibold`}
-                                >
-                                    {attendance.percentage === '100%'
-                                        ? attendance.percentage
-                                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
+
+                                <td>
+                                    <p
+                                        className={`${
+                                            parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                                        } text-center font-semibold`}
+                                    >
+                                        {attendance.percentage === '100%'
+                                            ? attendance.percentage
+                                            : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                                    </p>
                                 </td>
                             </tr>
                         ))}
-                    </tbody>
-                </Table>
-            )}
-            {errorMessage && (
-                <div className='text-center mt-16 text-error text-xl'>No attendances found for this subject</div>
-            )}
+                </tbody>
+            </Table>
         </div>
     );
 };
 
-export default AttendanceList;
+export default SubjectAttendanceList;

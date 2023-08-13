@@ -35,18 +35,27 @@ const ViewBatch = () => {
 
     return (
         <>
-            <DepartmentName name={ctx.userData.department} />
-
+            {batch && <DepartmentName name={batch.admin.department} />}
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='/admin/batches'>Batches</BreadCrumb>
-                <BreadCrumb>{batch ? 'Batch ' + batch.name : 'Loading...'}</BreadCrumb>
+                {ctx.userData.role === 'admin' && <BreadCrumb to='/admin/batches'>Batches</BreadCrumb>}
+
+                {batch && (
+                    <>
+                        {ctx.userData.role === 'super-admin' && (
+                            <BreadCrumb to={`/super-admin/department/${batch.admin}/batches`}>Batches</BreadCrumb>
+                        )}
+                        <BreadCrumb>Batch {batch.name}</BreadCrumb>
+                    </>
+                )}
+
+                {!batch && <BreadCrumb>Loading...</BreadCrumb>}
             </BreadCrumbs>
             <Menu>
                 <MenuItems>
                     <MenuItem text='Semesters' tab='semesters' />
                     <MenuItem text='Students' tab='students' />
-                    {ctx.userData.role === 'admin' && <MenuItem text='Edit Batch' tab='edit' />}
+                    <MenuItem text='Edit Batch' tab='edit' />
                     <MenuItem text='Invite Link' tab='invite' />
                 </MenuItems>
             </Menu>

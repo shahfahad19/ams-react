@@ -32,15 +32,24 @@ const ViewSemester = (props) => {
 
     return (
         <>
-            <DepartmentName name={ctx.userData.department} />
-
+            {semester.name && <DepartmentName name={semester.batch.admin.department} />}
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='../Batches'>Batches</BreadCrumb>
+                {ctx.userData.role === 'admin' && <BreadCrumb to='../batches'>Batches</BreadCrumb>}
                 {semester.name && (
                     <>
-                        <BreadCrumb to={'/admin/batch/' + semester.batch._id}>Batch {semester.batch.name}</BreadCrumb>
-                        <BreadCrumb to={'/admin/batch/' + semester.batch._id + '/semesters'}>Semesters</BreadCrumb>
+                        {ctx.userData.role === 'super-admin' && (
+                            <BreadCrumb to={`/super-admin/department/${semester.batch.admin}/batches`}>
+                                Batches
+                            </BreadCrumb>
+                        )}
+
+                        <BreadCrumb to={'/' + ctx.userData.role + '/batch/' + semester.batch._id}>
+                            Batch {semester.batch.name}
+                        </BreadCrumb>
+                        <BreadCrumb to={'/' + ctx.userData.role + '/batch/' + semester.batch._id + '/semesters'}>
+                            Semesters
+                        </BreadCrumb>
 
                         <BreadCrumb>Semester {semester.name}</BreadCrumb>
                     </>

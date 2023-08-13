@@ -30,23 +30,29 @@ const ViewSubject = () => {
 
     return (
         <>
-            <DepartmentName name={ctx.userData.department} />
-
+            {subject.name && <DepartmentName name={subject.semester.batch.admin.department} />}
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='../batches'>Batches</BreadCrumb>
+                {ctx.userData.role === 'admin' && <BreadCrumb to='../batches'>Batches</BreadCrumb>}
                 {subject.name && (
                     <>
-                        <BreadCrumb to={'/admin/batch/' + subject.semester.batch._id}>
+                        {ctx.userData.role === 'super-admin' && (
+                            <BreadCrumb to={`/super-admin/department/${subject.semester.batch.admin}/batches`}>
+                                Batches
+                            </BreadCrumb>
+                        )}
+                        <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}`}>
                             Batch {subject.semester.batch.name}
                         </BreadCrumb>
-                        <BreadCrumb to={'/admin/batch/' + subject.semester.batch._id + '/semesters'}>
+                        <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}/semesters`}>
                             Semesters
                         </BreadCrumb>
-                        <BreadCrumb to={'/admin/semester/' + subject.semester._id}>
+                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
                             Semester {subject.semester.name}
                         </BreadCrumb>
-                        <BreadCrumb to={'/admin/semester/' + subject.semester._id + '/subjects'}>Subjects</BreadCrumb>
+                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
+                            Subjects
+                        </BreadCrumb>
                         <BreadCrumb>{subject.name}</BreadCrumb>
                     </>
                 )}
