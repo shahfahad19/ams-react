@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 
 const AppContext = React.createContext({
     header: '',
@@ -20,8 +18,6 @@ const AppContext = React.createContext({
     logout: () => {},
     login: () => {},
     changeTheme: () => {},
-    showSwal: () => {},
-    Swal: () => {},
     navigate: () => {},
     computeError: (error) => {},
     successAlert: (text) => {},
@@ -33,7 +29,6 @@ export const AppContextProvider = (props) => {
     const [loggedInAs, setLoggedInAs] = useState();
     const [error, setError] = useState();
     const navigate = useNavigate();
-    const MySwal = withReactContent(Swal);
 
     const [theme, setTheme] = useState('light');
 
@@ -114,14 +109,6 @@ export const AppContextProvider = (props) => {
         setToken('');
     };
 
-    const showSwalHandler = (type, message) => {
-        MySwal.fire({
-            icon: type === 0 ? 'error' : 'success',
-            title: type === 0 ? 'Error' : 'Success',
-            text: message,
-        });
-    };
-
     const computeError = (error) => {
         let errorMessage = error.message;
         if (error.response) errorMessage = error.response.data.message;
@@ -170,8 +157,6 @@ export const AppContextProvider = (props) => {
                 btnClasses: 'btn btn-primary btn-block',
                 inputClasses: 'input w-full input-block input-lg',
                 selectClasses: 'select select-block select-lg',
-                showSwal: showSwalHandler,
-                Swal: MySwal,
                 navigate: navigate,
                 computeError: computeError,
                 successAlert: successAlert,

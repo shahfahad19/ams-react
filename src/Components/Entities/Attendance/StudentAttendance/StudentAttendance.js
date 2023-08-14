@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
+import AppContext from '../../../Context/AppContext';
+import Message from '../../../Main/Message';
 import AttendanceInfoTable from './AttendanceInfoTable';
 import SubjectInfoTable from './SubjectInfoTable';
 import AttendanceTable from './AttendanceTable';
-import Form, { FormControl, FormField, FormGroup, FormLabel, FormWrapper } from '../../Utils/Form';
-import Spinner from '../../Utils/Spinner';
+import Form, { FormControl, FormField, FormGroup, FormLabel, FormWrapper } from '../../../Utils/Form';
+import Spinner from '../../../Utils/Spinner';
 import { useParams } from 'react-router-dom';
+import SubSectionHeader from '../../../Utils/SubSectionHeader';
 
 const StudentAttendance = () => {
     const ctx = useContext(AppContext);
@@ -150,14 +151,11 @@ const StudentAttendance = () => {
                         <div className='m-3 w-full lg:w-2/3'>
                             {subject !== null && (
                                 <>
-                                    <div className='flex flex-col items-center sm:items-start space-y-3 sm:space-y-0 sm:flex-row justify-between'>
-                                        <div>
-                                            <SubjectInfoTable subject={subject} />
-                                        </div>
-                                        <div>
-                                            <AttendanceInfoTable subject={subject} />
-                                        </div>
-                                    </div>
+                                    <SubSectionHeader text='Subject Info' />
+                                    <AttendanceInfoTable subject={subject} />
+
+                                    <br />
+                                    <SubSectionHeader text='Attendance' />
 
                                     <div className='flex justify-center m-2'>
                                         <AttendanceTable subject={subject} />
@@ -168,6 +166,7 @@ const StudentAttendance = () => {
                     </div>
                 </div>
             )}
+            <div className='h-14'></div>
         </>
     );
 };

@@ -17,7 +17,7 @@ const TeacherSubjectsList = () => {
         let url = '';
         if (ctx.userData.role === 'teacher') {
             url = `${ctx.baseURL}/subjects/get/teacher-subjects?sort=archived,name`;
-        } else if (ctx.userData.role === 'admin') {
+        } else if (ctx.userData.role === 'admin' || ctx.userData.role === 'super-admin') {
             url = `${ctx.baseURL}/subjects/get/teacher-subjects/${params.teacherId}?sort=archived,name`;
         }
         axios

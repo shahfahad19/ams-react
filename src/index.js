@@ -20,13 +20,13 @@ import InviteLink from './Components/Entities/Batch/BatchInviteLink';
 import ForgotPassword from './Components/Auth/ForgotPassword';
 import EditSubjectTeacher from './Components/Entities/Subject/EditSubjectTeacher';
 import TeacherSubjectsList from './Components/Entities/Subject/TeacherSubjectsList';
-import TakeAttendance from './Components/Entities/Attendance/TakeAttendance';
+import TakeAttendance from './Components/Entities/Attendance/TakeAttendance/TakeAttendance';
 import RemoveSubject from './Components/Entities/Subject/RemoveSubject';
 import DepartmentList from './Components/Entities/Department/DepartmentList';
 import AddDepartment from './Components/Entities/Department/AddDepartment';
 import TeacherList from './Components/Entities/Teacher/TeacherList';
 import AddTeacher from './Components/Entities/Teacher/AddTeacher';
-import StudentAttendance from './Components/Entities/Attendance/StudentAttendance';
+import StudentAttendance from './Components/Entities/Attendance/StudentAttendance/StudentAttendance';
 import DepartmentInfo from './Components/Entities/Department/DepartmentInfo';
 import DefaultSubjectList from './Components/Entities/DepartmentSubject/DefaultSubjectList';
 import BatchList from './Components/Entities/Batch/BatchList';
@@ -57,6 +57,8 @@ import StudentDashboard from './Components/Dashboards/StudentDashboard';
 import ViewProfile from './Components/Profiles/ViewProfile';
 import TeacherDashboard from './Components/Dashboards/TeacherDashboard';
 import ViewTeacherSubject from './Components/Entities/Subject/ViewTeacherSubject';
+import StudentMainView from './Components/Views/StudentMainView';
+import StudentAttendanceForSubject from './Components/Entities/Attendance/StudentAttendanceForSubject';
 
 const router = createBrowserRouter([
     {
@@ -235,6 +237,28 @@ const router = createBrowserRouter([
                             {
                                 path: 'edit',
                                 element: <EditSubject />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'teacher/:teacherId',
+                        element: <ViewTeacher />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='info' />,
+                            },
+                            {
+                                path: 'info',
+                                element: <TeacherInfo />,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <TeacherSubjectsList />,
+                            },
+                            {
+                                path: 'edit',
+                                element: <EditTeacherInfo />,
                             },
                         ],
                     },
@@ -429,13 +453,57 @@ const router = createBrowserRouter([
             },
 
             // Paths for student
+            // {
+            //     path: 'student',
+            //     element: <StudentDashboard />,
+            //     children: [
+            //         {
+            //             path: '',
+            //             element: <StudentAttendance />,
+            //         },
+            //     ],
+            // },
             {
                 path: 'student',
                 element: <StudentDashboard />,
                 children: [
                     {
                         path: '',
-                        element: <StudentAttendance />,
+                        element: <StudentMainView />,
+                        children: [
+                            {
+                                path: '',
+                                element: <SemesterList />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'semester/:semesterId',
+                        element: <ViewSemester />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='subjects' />,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <SubjectList />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'subject/:subjectId',
+                        element: <ViewSubject />,
+                        children: [
+                            {
+                                path: '',
+                                element: <Redirect to='attendance' />,
+                            },
+                            {
+                                path: 'attendance',
+                                element: <StudentAttendanceForSubject />,
+                            },
+                        ],
                     },
                 ],
             },

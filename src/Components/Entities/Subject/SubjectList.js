@@ -37,7 +37,7 @@ const SubjectList = () => {
     }, []);
 
     const viewSubject = (subjectId) => {
-        ctx.navigate(`/${ctx.userData.role}/subject/${subjectId}/attendance`);
+        ctx.navigate(`/${ctx.userData.role}/subject/${subjectId}`);
     };
     return (
         <div>

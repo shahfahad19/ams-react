@@ -29,6 +29,7 @@ const SubjectAttendanceList = () => {
                 isLoading(false);
             })
             .catch((error) => {
+                console.log(error.response.data);
                 setErrorMessage(error.response.data.message || error.message);
                 isLoading(false);
             });
@@ -109,7 +110,9 @@ const SubjectAttendanceList = () => {
                                             parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
                                         } text-center font-semibold`}
                                     >
-                                        {attendance.percentage === '100%'
+                                        {attendance.percentage === 'N/A'
+                                            ? attendance.percentage
+                                            : attendance.percentage === '100%'
                                             ? attendance.percentage
                                             : parseFloat(attendance.percentage).toFixed(2) + '%'}
                                     </p>

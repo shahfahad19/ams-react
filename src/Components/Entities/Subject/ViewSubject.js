@@ -34,10 +34,10 @@ const ViewSubject = () => {
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
                 {ctx.userData.role === 'admin' && <BreadCrumb to='../batches'>Batches</BreadCrumb>}
-                {subject.name && (
+                {subject.name && ctx.userData.role !== 'student' && (
                     <>
                         {ctx.userData.role === 'super-admin' && (
-                            <BreadCrumb to={`/super-admin/department/${subject.semester.batch.admin}/batches`}>
+                            <BreadCrumb to={`/super-admin/department/${subject.semester.batch.admin._id}/batches`}>
                                 Batches
                             </BreadCrumb>
                         )}
@@ -56,17 +56,33 @@ const ViewSubject = () => {
                         <BreadCrumb>{subject.name}</BreadCrumb>
                     </>
                 )}
+                {subject.name && ctx.userData.role === 'student' && (
+                    <>
+                        <BreadCrumb to={`/students`}>Semesters</BreadCrumb>
+                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
+                            Semester {subject.semester.name}
+                        </BreadCrumb>
+                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
+                            Subjects
+                        </BreadCrumb>
+                        <BreadCrumb>{subject.name}</BreadCrumb>
+                    </>
+                )}
                 {!subject.name && <BreadCrumb>Loading...</BreadCrumb>}
             </BreadCrumbs>
-            <Menu>
-                <MenuItems>
-                    <>
-                        <MenuItem text='Attendance' tab='attendance' />
-                        <MenuItem text='Teacher' tab='teacher' />
-                        <MenuItem text='Edit Subject' tab='edit' />
-                    </>
-                </MenuItems>
-            </Menu>
+
+            {ctx.userData.role !== 'student' && (
+                <Menu>
+                    <MenuItems>
+                        <>
+                            <MenuItem text='Attendance' tab='attendance' />
+                            <MenuItem text='Teacher' tab='teacher' />
+                            <MenuItem text='Edit Subject' tab='edit' />
+                        </>
+                    </MenuItems>
+                </Menu>
+            )}
+
             <Outlet context={[subject, setSubject]} />
         </>
     );

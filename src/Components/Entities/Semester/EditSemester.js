@@ -2,10 +2,6 @@ import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
-import SemesterDeleteBtn from './DeleteSemesterBtn';
 import Form, {
     FormControl,
     FormField,

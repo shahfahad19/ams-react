@@ -15,8 +15,10 @@ const BatchList = () => {
 
     const params = useParams();
     useEffect(() => {
+        const batch = ctx.userData.role === 'student' ? ctx.userData.batch : params.batchId;
+        console.log(batch);
         axios
-            .get(`${ctx.baseURL}/semesters?batch=${params.batchId}&sort=archived,name`, {
+            .get(`${ctx.baseURL}/semesters?batch=${batch}&sort=archived,name`, {
                 credentials: 'include',
                 headers: {
                     Authorization: 'Bearer ' + ctx.token,
@@ -37,7 +39,7 @@ const BatchList = () => {
     }, []);
 
     const viewSemester = (semesterId) => {
-        ctx.navigate(`/${ctx.userData.role}/semester/${semesterId}/subjects`);
+        ctx.navigate(`/${ctx.userData.role}/semester/${semesterId}`);
     };
     return (
         <div className='flex-grow'>

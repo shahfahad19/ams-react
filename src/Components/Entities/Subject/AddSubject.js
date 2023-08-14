@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import SubSectionHeader from '../../Utils/SubSectionHeader';
 import BackButton from '../../Utils/BackButton';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 import DepartmentName from '../Department/DepartmentName';
@@ -44,8 +43,11 @@ const AddSubject = () => {
             })
 
             .catch((error) => {
-                if (error.response) ctx.showSwal(0, error.response.data.message);
-                else ctx.showSwal(0, error.message);
+                setAlert({
+                    show: true,
+                    type: 'error',
+                    text: ctx.computeError(error),
+                });
             });
     }, [newSubject]);
 

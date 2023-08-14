@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
 import AppContext from '../Context/AppContext';
 import Form, {
     FormControl,
@@ -27,8 +25,6 @@ const UpdatePassword = () => {
         show: false,
         text: '',
     });
-
-    const MySwal = withReactContent(Swal);
 
     const {
         register,

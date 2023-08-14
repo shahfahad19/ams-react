@@ -5,6 +5,7 @@ import AppContext from '../../Context/AppContext';
 import Menu, { MenuItems, MenuItem } from '../../Utils/Menu';
 import SideBarTitle from '../../Utils/SideBarTitle';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
+import DepartmentName from './DepartmentName';
 
 const ViewDepartment = () => {
     const params = useParams();
@@ -32,6 +33,7 @@ const ViewDepartment = () => {
 
     return (
         <>
+            {department.department && <DepartmentName name={department.department} />}
             <BreadCrumbs>
                 <BreadCrumb to='/'>Home</BreadCrumb>
                 <BreadCrumb to='../'>Departments</BreadCrumb>

@@ -39,12 +39,11 @@ const TeacherList = (props) => {
                 if (error.response) setErrorMessage(error.response.data.message);
                 else setErrorMessage(error.message);
                 isLoading(false);
-                console.log(error);
             });
     }, []);
 
     const viewTeacher = (teacherId) => {
-        ctx.navigate('/teacher/' + teacherId);
+        ctx.navigate(ctx.userData.role + '/teacher/' + teacherId);
     };
     return (
         <div className='flex-grow'>

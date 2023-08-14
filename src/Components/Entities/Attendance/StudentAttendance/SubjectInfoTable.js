@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import AppContext from '../../Context/AppContext';
+import AppContext from '../../../Context/AppContext';
 import axios from 'axios';
 
 const SubjectInfoTable = (props) => {

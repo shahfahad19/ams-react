@@ -51,9 +51,9 @@ const StudentList = () => {
                     <tr>
                         <th>Roll No.</th>
                         <th>Photo</th>
-
                         <th>Name</th>
-                        <th>Account Confirmed</th>
+                        <th>Reg. No</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,10 +72,8 @@ const StudentList = () => {
                                     </td>
 
                                     <td>{student.name}</td>
-                                    <td>
-                                        {student.confirmed && <TickMark />}
-                                        {!student.confirmed && <CrossMark />}
-                                    </td>
+                                    <td>{student.registrationNo}</td>
+                                    <td>{student.email}</td>
                                 </tr>
                             );
                         })}

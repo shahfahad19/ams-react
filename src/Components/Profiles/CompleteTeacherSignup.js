@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Message from '../Main/Message';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const CompleteTeacherSignup = () => {
@@ -13,7 +10,6 @@ const CompleteTeacherSignup = () => {
     const [alert, setAlert] = useState(false);
     const [err, setError] = useState('');
 
-    const MySwal = withReactContent(Swal);
     const {
         register,
         watch,
@@ -22,11 +18,7 @@ const CompleteTeacherSignup = () => {
     } = useForm();
 
     useEffect(() => {
-        ctx.Swal.fire({
-            title: 'Welcome to AMS',
-            icon: 'info',
-            text: 'Please confirm your details before using the website!',
-        });
+        // TODO: Add alert for welcome and ask to complete profile
     }, []);
 
     const submitForm = (data) => {
