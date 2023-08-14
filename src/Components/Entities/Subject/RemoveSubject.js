@@ -2,115 +2,115 @@ import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
-import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2';
+import { SpinnerWithText } from '../../Utils/Spinner';
+import { FormWrapper } from '../../Utils/Form';
+import { AlertModal, ModalButton, ModalCloseBtn, ModalTitle, ModalWrapper } from '../../Utils/Modal';
 
 const RemoveSubject = (props) => {
     const [subject, setSubject] = useOutletContext();
-    const params = useParams();
-    const MySwal = withReactContent(Swal);
 
     const ctx = useContext(AppContext);
 
-    const removeSubjectConfirmation = () => {
-        MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, remove it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: 'Removing subject',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        MySwal.showLoading();
+    const [btnState, setBtnState] = useState('');
 
-                        // axios req
-                        axios
-                            .patch(
-                                `${ctx.baseURL}/subjects/remove/teacher-subjects/${subject._id}`,
-                                {
-                                    subject: subject.Id,
-                                },
-                                {
-                                    credentials: 'include',
-                                    headers: {
-                                        Authorization: 'Bearer ' + ctx.token,
-                                    },
-                                }
-                            )
-                            .then((response) => {
-                                MySwal.close();
+    const [showConfimationModal, setShowConfirmationModal] = useState(false);
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+        text: '',
+    });
 
-                                MySwal.fire({
-                                    icon: 'success',
-                                    title: 'Removed!',
-                                    message: 'Removed successfully',
-                                    showConfirmButton: true,
-                                }).then(() => {
-                                    window.location.assign('/teacher');
-                                });
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                MySwal.close();
+    const confirmationModalHandler = () => {
+        setShowConfirmationModal(!showConfimationModal);
+    };
 
-                                if (error.response) {
-                                    MySwal.fire({
-                                        icon: 'error',
-                                        title: 'Something went wrong!',
-                                        message: error.response.data.message,
-                                        showConfirmButton: true,
-                                        confirmButtonText: 'Ok',
-                                    });
-                                } else {
-                                    MySwal.fire({
-                                        icon: 'error',
-                                        title: 'Something went wrong!',
-                                        message: error.message,
-                                        showConfirmButton: true,
-                                        confirmButtonText: 'Ok',
-                                    });
-                                }
-                            });
+    const successModalHandler = () => {
+        ctx.navigate(-1, { replace: true });
+    };
+
+    const errorModalHandler = () => {
+        setAlertModal({ show: false });
+    };
+
+    const removeSubject = async () => {
+        setBtnState('btn-loading');
+        await axios
+            .patch(
+                `${ctx.baseURL}/subjects/remove/teacher-subjects/${subject._id}`,
+                {
+                    subject: subject.Id,
+                },
+                {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
                     },
+                }
+            )
+            .then((response) => {
+                setShowConfirmationModal(false);
+
+                setAlertModal({
+                    show: true,
+                    type: 'success',
+                    text: 'Teacher removed successfully',
                 });
-            }
-        });
+            })
+            .catch((error) => {
+                setShowConfirmationModal(false);
+
+                setAlertModal({
+                    show: true,
+                    type: 'error',
+                    text: ctx.computeError(error),
+                });
+            });
+        setBtnState('');
     };
 
     return (
-        <div className='flex-grow'>
+        <>
             <SubSectionHeader text='Remove Subject' />
-            <div className='flex justify-center text-center'>
-                <div className='rounded-lg mt-10 shadow-xl w-11/12 md:w-8/12 lg:w-3/5 p-6'>
-                    {subject.name && (
-                        <>
-                            <p className='text-xl'>Click following button to remove this subject from list.</p>
-                            <p className='text-lg text-error p-5'>Note: You cannot reverse this action.</p>
-                            <div className='text-center'>
-                                <button className='btn btn-error' onClick={removeSubjectConfirmation}>
-                                    Remove
-                                </button>
-                            </div>
-                        </>
-                    )}
-                    {!subject.name && (
+            <FormWrapper>
+                {subject.name && (
+                    <div className='p-5'>
+                        <p className='text-xl'>Click following button to remove this subject from your list.</p>
+                        <p className='text-error py-5'>Note: You cannot reverse this action.</p>
                         <div className='text-center'>
-                            <div className='loader inline-block'></div>
+                            <button className='btn btn-error' onClick={confirmationModalHandler}>
+                                Remove
+                            </button>
                         </div>
-                    )}
-                </div>
-            </div>
-        </div>
+                    </div>
+                )}
+                {!subject.name && <SpinnerWithText>Please wait...</SpinnerWithText>}
+            </FormWrapper>
+
+            {showConfimationModal && (
+                <>
+                    <ModalWrapper>
+                        {btnState === '' && <ModalCloseBtn handler={confirmationModalHandler} />}
+                        <ModalTitle>Are you sure?</ModalTitle>
+                        <span>This subject will be removed from your list!</span>
+                        <div className='flex gap-3'>
+                            <ModalButton className={`btn-error ${btnState}`} handler={removeSubject}>
+                                Delete
+                            </ModalButton>
+
+                            {btnState === '' && <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>}
+                        </div>
+                    </ModalWrapper>
+                </>
+            )}
+
+            {alertModal.show && (
+                <AlertModal
+                    type={alertModal.type}
+                    text={alertModal.text}
+                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+                />
+            )}
+        </>
     );
 };
 

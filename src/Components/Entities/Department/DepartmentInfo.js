@@ -1,87 +1,83 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { Form, useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import Message from '../../Main/Message';
 import DepartmentDeleteBtn from './DepartmentDeleteBtn';
 import { SpinnerWithText } from '../../Utils/Spinner';
-import { FormWrapper } from '../../Utils/Form';
+import { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt, FormWrapper } from '../../Utils/Form';
+import { ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
+import { AlertModal } from '../../Utils/Modal';
 
 const DepartmentInfo = () => {
     const ctx = useContext(AppContext);
     const params = useParams();
     const [department, setDepartment] = useOutletContext();
+    const emailRef = useRef();
     const navigate = useNavigate();
+    const [btnState, setBtnState] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     const MySwal = withReactContent(Swal);
+    const [showEditAdminModal, setShowEditAdminModal] = useState();
+    const [alertModal, setAlertModal] = useState({
+        show: false,
+    });
 
-    const changeAdmin = () => {
-        MySwal.fire({
-            title: 'Enter new email',
-            input: 'email',
-            inputPlaceholder: 'name@example.com',
-            showCancelButton: true,
-            confirmButtonText: 'Submit',
-            showLoaderOnConfirm: true, // Display loading indicator
-            preConfirm: async (email) => {
-                try {
-                    const response = await axios.patch(
-                        `${ctx.baseURL}/users/department/${params.departmentId}/updateEmail`,
-                        { email },
-                        {
-                            credentials: 'include',
-                            headers: {
-                                Authorization: 'Bearer ' + ctx.token,
-                            },
-                        }
-                    );
-                    return response.data; // Return response data to be displayed
-                } catch (error) {
-                    // Handle error condition
-                    if (error.response) {
-                        if (error.response.data.error.code === 11000) throw new Error('Email already in use');
-                        else throw new Error(error.response.data.message);
-                    } else {
-                        throw new Error(error.message);
-                    }
+    const editAdminModalHandler = () => setShowEditAdminModal(!showEditAdminModal);
+
+    const alertModalHandler = () => setAlertModal(false);
+
+    const changeAdmin = async () => {
+        const email = emailRef.current.value;
+
+        if (email === '') {
+            setEmailError('Email required');
+            return;
+        } else setEmailError('');
+
+        setBtnState('btn-loading');
+        await axios
+            .patch(
+                `${ctx.baseURL}/users/department/${params.departmentId}/updateEmail`,
+                { email },
+                {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: 'Bearer ' + ctx.token,
+                    },
                 }
-            },
-        })
-            .then((result) => {
-                setDepartment(result.value.data.user);
-                if (result.isConfirmed) {
-                    MySwal.fire({
-                        title: 'Success',
-                        text: 'Updated successfully',
-                        icon: 'success',
-                    });
-                }
+            )
+            .then((response) => {
+                setDepartment(response.data.data.user);
+                setShowEditAdminModal(false);
+                setAlertModal({
+                    show: true,
+                    type: 'success',
+                    text: 'Admin changed successfully',
+                });
             })
             .catch((error) => {
-                // Handle error if preConfirm function throws an error
-                MySwal.fire({
-                    title: 'Error',
-                    text: error,
-                    icon: 'error',
+                setShowEditAdminModal(false);
+                let errorMessage = ctx.computeError(error);
+                if (error.response && error.response.data.error.code === 11000) errorMessage = 'Email already in use';
+                setAlertModal({
+                    show: true,
+                    type: 'success',
+                    text: errorMessage,
                 });
             });
+        setBtnState('');
     };
 
     return (
         <>
+            <SubSectionHeader text='Department Info' />
             {department.name && (
                 <FormWrapper>
                     <table className='table'>
-                        <thead>
-                            <tr>
-                                <th colSpan={2} className='font-medium text-center'>
-                                    Department
-                                </th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <th className='font-medium'>Department</th>
@@ -113,7 +109,7 @@ const DepartmentInfo = () => {
                             </tr>
                         </tbody>
                     </table>
-                    <button className='btn btn-block btn-secondary mt-1' onClick={changeAdmin}>
+                    <button className='btn btn-block btn-secondary mt-1' onClick={editAdminModalHandler}>
                         Change Admin
                     </button>
                     <DepartmentDeleteBtn
@@ -127,6 +123,39 @@ const DepartmentInfo = () => {
             )}
 
             {!department.name && <SpinnerWithText>Fetching department info...</SpinnerWithText>}
+
+            {showEditAdminModal && (
+                <ModalWrapper>
+                    {btnState === '' && <ModalCloseBtn handler={editAdminModalHandler} />}
+                    <ModalTitle>Change Admin</ModalTitle>
+                    <Form onSubmit={changeAdmin}>
+                        <FormGroup>
+                            <FormField>
+                                <FormLabel>New Email</FormLabel>
+                                <FormControl>
+                                    <input
+                                        className={ctx.inputClasses}
+                                        type='text'
+                                        placeholder='Enter new admin email'
+                                        ref={emailRef}
+                                    />
+                                </FormControl>
+                                {emailError !== '' && <FormLabelAlt>{emailError}</FormLabelAlt>}
+                            </FormField>
+                        </FormGroup>
+                        <div className='flex gap-3 mt-3'>
+                            <button type='submit' className={`btn btn-secondary btn-block ${btnState}`}>
+                                Update
+                            </button>
+                            {btnState === '' && <ModalButton handler={editAdminModalHandler}>Cancel</ModalButton>}
+                        </div>
+                    </Form>
+                </ModalWrapper>
+            )}
+
+            {alertModal.show && (
+                <AlertModal type={alertModal.type} text={alertModal.text} handler={alertModalHandler} />
+            )}
         </>
     );
 };

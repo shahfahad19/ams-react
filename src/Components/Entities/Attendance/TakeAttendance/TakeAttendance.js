@@ -106,11 +106,6 @@ const TakeAttendance = () => {
             .then((response) => {
                 saveAttendance(true);
                 setLoadingModal({ show: false });
-                setAlertModal({
-                    show: true,
-                    type: 'success',
-                    text: 'Attendance saved successfully',
-                });
             })
             .catch((error) => {
                 setLoadingModal({ show: false });
