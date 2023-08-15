@@ -7,85 +7,90 @@ import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewSubject = () => {
-    const params = useParams();
-    const ctx = useContext(AppContext);
+  const params = useParams();
+  const ctx = useContext(AppContext);
 
-    const [subject, setSubject] = useState([]);
+  const [subject, setSubject] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                setSubject(response.data.data.subject);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
+  useEffect(() => {
+    axios
+      .get(`${ctx.baseURL}/subjects/${params.subjectId}`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
+      .then((response) => {
+        setSubject(response.data.data.subject);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            ctx.navigate('/404', { replace: true });
+          }
+        }
+      });
+  }, []);
 
-    return (
-        <>
-            {subject.name && <DepartmentName name={subject.semester.batch.admin.department} />}
-            <BreadCrumbs>
-                <BreadCrumb to='/'>Home</BreadCrumb>
-                {ctx.userData.role === 'admin' && <BreadCrumb to='../batches'>Batches</BreadCrumb>}
-                {subject.name && ctx.userData.role !== 'student' && (
-                    <>
-                        {ctx.userData.role === 'super-admin' && (
-                            <BreadCrumb to={`/super-admin/department/${subject.semester.batch.admin._id}/batches`}>
-                                Batches
-                            </BreadCrumb>
-                        )}
-                        <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}`}>
-                            Batch {subject.semester.batch.name}
-                        </BreadCrumb>
-                        <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}/semesters`}>
-                            Semesters
-                        </BreadCrumb>
-                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
-                            Semester {subject.semester.name}
-                        </BreadCrumb>
-                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
-                            Subjects
-                        </BreadCrumb>
-                        <BreadCrumb>{subject.name}</BreadCrumb>
-                    </>
-                )}
-                {subject.name && ctx.userData.role === 'student' && (
-                    <>
-                        <BreadCrumb to={`/students`}>Semesters</BreadCrumb>
-                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
-                            Semester {subject.semester.name}
-                        </BreadCrumb>
-                        <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
-                            Subjects
-                        </BreadCrumb>
-                        <BreadCrumb>{subject.name}</BreadCrumb>
-                    </>
-                )}
-                {!subject.name && <BreadCrumb>Loading...</BreadCrumb>}
-            </BreadCrumbs>
-
-            {ctx.userData.role !== 'student' && (
-                <Menu>
-                    <MenuItems>
-                        <>
-                            <MenuItem text='Attendance' tab='attendance' />
-                            <MenuItem text='Teacher' tab='teacher' />
-                            <MenuItem text='Edit Subject' tab='edit' />
-                        </>
-                    </MenuItems>
-                </Menu>
+  return (
+    <>
+      {subject.name && <DepartmentName name={subject.semester.batch.admin.department} />}
+      <BreadCrumbs>
+        <BreadCrumb to="/">Home</BreadCrumb>
+        {ctx.userData.role === 'admin' && <BreadCrumb to="../batches">Batches</BreadCrumb>}
+        {subject.name && ctx.userData.role !== 'student' && (
+          <>
+            {ctx.userData.role === 'super-admin' && (
+              <BreadCrumb
+                to={`/super-admin/department/${subject.semester.batch.admin._id}/batches`}>
+                Batches
+              </BreadCrumb>
             )}
+            <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}`}>
+              Batch {subject.semester.batch.name}
+            </BreadCrumb>
+            <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}/semesters`}>
+              Semesters
+            </BreadCrumb>
+            <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
+              Semester {subject.semester.name}
+            </BreadCrumb>
+            <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
+              Subjects
+            </BreadCrumb>
+            <BreadCrumb>{subject.name}</BreadCrumb>
+          </>
+        )}
+        {subject.name && ctx.userData.role === 'student' && (
+          <>
+            <BreadCrumb to="/student">Semesters</BreadCrumb>
+            <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
+              Semester {subject.semester.name}
+            </BreadCrumb>
+            <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
+              Subjects
+            </BreadCrumb>
+            <BreadCrumb>{subject.name}</BreadCrumb>
+          </>
+        )}
+        {!subject.name && <BreadCrumb>Loading...</BreadCrumb>}
+      </BreadCrumbs>
 
-            <Outlet context={[subject, setSubject]} />
-        </>
-    );
+      {ctx.userData.role !== 'student' && (
+        <Menu>
+          <MenuItems>
+            <>
+              <MenuItem text="Attendance" tab="attendance" />
+              <MenuItem text="Teacher" tab="teacher" />
+              <MenuItem text="Edit Subject" tab="edit" />
+            </>
+          </MenuItems>
+        </Menu>
+      )}
+
+      <Outlet context={[subject, setSubject]} />
+    </>
+  );
 };
 
 export default ViewSubject;

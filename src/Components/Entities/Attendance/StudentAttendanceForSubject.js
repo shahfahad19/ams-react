@@ -1,164 +1,160 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import Message from '../../Main/Message';
-import Spinner from '../../Utils/Spinner';
 import { useParams } from 'react-router-dom';
 import Table from '../../Utils/Table';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 
 const StudentAttendanceForSubject = () => {
-    const ctx = useContext(AppContext);
-    const params = useParams();
-    const [attendance, setAttendance] = useState();
-    const [alert, setAlert] = useState(false);
-    const [loading, isLoading] = useState(true);
+  const ctx = useContext(AppContext);
+  const params = useParams();
+  const [attendance, setAttendance] = useState();
+  const [loading, isLoading] = useState(true);
 
-    const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-        axios
-            .get(`${ctx.baseURL}/attendances/student/${ctx.userData._id}/subject/${params.subjectId}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                if (response.data.attendances.length === 0) {
-                    setErrorMessage('No attendances found');
-                } else {
-                    setAttendance(response.data.attendances[0]);
-                }
-            })
-            .catch((error) => {
-                if (error.response) setErrorMessage(error.response.data.message);
-                else setErrorMessage(error.message);
-                setAlert(true);
-            })
-            .finally(() => {
-                isLoading(false);
-            });
-    }, []);
+  useEffect(() => {
+    axios
+      .get(`${ctx.baseURL}/attendances/student/${ctx.userData._id}/subject/${params.subjectId}`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
+      .then((response) => {
+        if (response.data.attendances.length === 0) {
+          setErrorMessage('No attendances found');
+        } else {
+          setAttendance(response.data.attendances[0]);
+        }
+      })
+      .catch((error) => {
+        if (error.response) setErrorMessage(error.response.data.message);
+        else setErrorMessage(error.message);
+      })
+      .finally(() => {
+        isLoading(false);
+      });
+  }, []);
 
-    return (
+  return (
+    <>
+      <SubSectionHeader text="Attendance" />
+      {attendance && (
         <>
-            <SubSectionHeader text='Attendance' />
-            {attendance && (
-                <>
-                    <table className='table table-compact md:hidden'>
-                        <tbody>
-                            <tr>
-                                <th>Total Classes</th>
-                                <td className='border-r'>{attendance.totalClasses}</td>
+          <table className="table table-compact md:hidden">
+            <tbody>
+              <tr>
+                <th>Total Classes</th>
+                <td className="border-r">{attendance.totalClasses}</td>
 
-                                <th>Present</th>
-                                <td>{attendance.present}</td>
-                            </tr>
-                            <tr>
-                                <th>Absent</th>
-                                <td className='border-r'>{attendance.absent}</td>
+                <th>Present</th>
+                <td>{attendance.present}</td>
+              </tr>
+              <tr>
+                <th>Absent</th>
+                <td className="border-r">{attendance.absent}</td>
 
-                                <th>Leave</th>
-                                <td>{attendance.leave}</td>
-                            </tr>
-                            <tr>
-                                <th colSpan={2}>Percentage</th>
-                                <td colSpan={2}>
-                                    {attendance.percentage === 'N/A'
-                                        ? attendance.percentage
-                                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table className='table table-compact hidden md:table'>
-                        <tbody>
-                            <tr>
-                                <th className='border-r'>
-                                    <span className='mr-5'>Total classes:</span> {attendance.totalClasses}
-                                </th>
+                <th>Leave</th>
+                <td>{attendance.leave}</td>
+              </tr>
+              <tr>
+                <th colSpan={2}>Percentage</th>
+                <td colSpan={2}>
+                  {attendance.percentage === 'N/A'
+                    ? attendance.percentage
+                    : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table className="table table-compact hidden md:table">
+            <tbody>
+              <tr>
+                <th className="border-r">
+                  <span className="mr-5">Total classes:</span> {attendance.totalClasses}
+                </th>
 
-                                <th className='border-r'>
-                                    <span className='mr-5'>Present:</span> {attendance.present}
-                                </th>
+                <th className="border-r">
+                  <span className="mr-5">Present:</span> {attendance.present}
+                </th>
 
-                                <th className='border-r'>
-                                    <span className='mr-5'>Absent:</span> {attendance.absent}
-                                </th>
+                <th className="border-r">
+                  <span className="mr-5">Absent:</span> {attendance.absent}
+                </th>
 
-                                <th className='border-r'>
-                                    <span className='mr-5'>Leave:</span> {attendance.leave}
-                                </th>
-                                <th>
-                                    <span className='mr-5'>Percentage</span>
-                                    {attendance.percentage === 'N/A'
-                                        ? attendance.percentage
-                                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
-                                </th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </>
-            )}
-            <Table loading={loading} error={errorMessage}>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {attendance &&
-                        attendance.attendances.map((att, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        {new Date(attendance.dates[index]).toLocaleDateString('en-PK', {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: '2-digit',
-                                        })}
-                                    </td>
-                                    <td>
-                                        {new Date(attendance.dates[index]).toLocaleTimeString('en-PK', {
-                                            hour: 'numeric',
-                                            minute: '2-digit',
-                                            hour12: true,
-                                        })}
-                                    </td>
-                                    <td>
-                                        <span
-                                            className={`font-medium ${
-                                                att.status === 'present'
-                                                    ? 'text-success'
-                                                    : att.status === 'absent'
-                                                    ? 'text-error'
-                                                    : 'text-warning'
-                                            }`}
-                                        >
-                                            {att.status[0].toUpperCase() + att.status.slice(1)}
-                                        </span>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                </tbody>
-            </Table>
-
-            {attendance && attendance.totalClasses > attendance.attendances.length && (
-                <p className='p-2 text-error text-sm my-2'>
-                    * Your attendance was not recorded in {attendance.totalClasses - attendance.attendances.length}{' '}
-                    class{attendance.totalClasses - attendance.attendances.length === 1 ? '' : 'es'}.
-                </p>
-            )}
-
-            <div className='h-14'></div>
+                <th className="border-r">
+                  <span className="mr-5">Leave:</span> {attendance.leave}
+                </th>
+                <th>
+                  <span className="mr-5">Percentage</span>
+                  {attendance.percentage === 'N/A'
+                    ? attendance.percentage
+                    : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                </th>
+              </tr>
+            </tbody>
+          </table>
         </>
-    );
+      )}
+      <Table loading={loading} error={errorMessage}>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {attendance &&
+            attendance.attendances.map((att, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    {new Date(attendance.dates[index]).toLocaleDateString('en-PK', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: '2-digit'
+                    })}
+                  </td>
+                  <td>
+                    {new Date(attendance.dates[index]).toLocaleTimeString('en-PK', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </td>
+                  <td>
+                    <span
+                      className={`font-medium ${
+                        att.status === 'present'
+                          ? 'text-success'
+                          : att.status === 'absent'
+                          ? 'text-error'
+                          : 'text-warning'
+                      }`}>
+                      {att.status[0].toUpperCase() + att.status.slice(1)}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </Table>
+
+      {attendance && attendance.totalClasses > attendance.attendances.length && (
+        <p className="p-2 text-error text-sm my-2">
+          * Your attendance was not recorded in{' '}
+          {attendance.totalClasses - attendance.attendances.length} class
+          {attendance.totalClasses - attendance.attendances.length === 1 ? '' : 'es'}.
+        </p>
+      )}
+
+      <div className="h-14"></div>
+    </>
+  );
 };
 
 export default StudentAttendanceForSubject;

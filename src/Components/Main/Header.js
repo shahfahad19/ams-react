@@ -76,7 +76,7 @@ const Header = () => {
                                     </label>
 
                                     <div className='dropdown-menu dropdown-menu-bottom-left'>
-                                        <Link className='dropdown-item text-sm' to={`/profile`} tabIndex='-1'>
+                                        <Link className='dropdown-item text-sm' to='/profile' tabIndex='-1'>
                                             Profile
                                         </Link>
                                         <Link to={'/'} className='dropdown-item text-sm' tabIndex='-1' onClick={logout}>

@@ -8,7 +8,7 @@ import axios from 'axios';
 import DepartmentDeleteBtn from './DepartmentDeleteBtn';
 import { SpinnerWithText } from '../../Utils/Spinner';
 import { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt, FormWrapper } from '../../Utils/Form';
-import { ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
+import { ModalButton, ModalCloseBtn,  ModalTitle, ModalWrapper } from '../../Utils/Modal';
 import { AlertModal } from '../../Utils/Modal';
 
 const DepartmentInfo = () => {

@@ -7,59 +7,63 @@ import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 import Menu, { MenuItem, MenuItems } from '../../Utils/Menu';
 
 const ViewStudent = () => {
-    const ctx = useContext(AppContext);
-    const params = useParams();
-    const [student, setStudent] = useState(null);
+  const ctx = useContext(AppContext);
+  const params = useParams();
+  const [student, setStudent] = useState(null);
 
-    useEffect(() => {
-        const getData = async () => {
-            await axios
-                .get(`${ctx.baseURL}/users/students/${params.studentId}`, {
-                    credentials: 'include',
-                    headers: {
-                        Authorization: 'Bearer ' + ctx.token,
-                    },
-                })
-                .then((response) => {
-                    setStudent(response.data.data.student);
-                })
-                .catch((error) => {
-                    // TODO: Handle error
-                });
-        };
+  useEffect(() => {
+    const getData = async () => {
+      await axios
+        .get(`${ctx.baseURL}/users/students/${params.studentId}`, {
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        })
+        .then((response) => {
+          setStudent(response.data.data.student);
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status === 404) {
+              ctx.navigate('/404', { replace: true });
+            }
+          }
+        });
+    };
 
-        getData();
-    }, []);
+    getData();
+  }, []);
 
-    return (
-        <>
-            <DepartmentName name={ctx.userData.department} />
+  return (
+    <>
+      <DepartmentName name={ctx.userData.department} />
 
-            <BreadCrumbs>
-                <BreadCrumb to='/'>Home</BreadCrumb>
-                <BreadCrumb to='../batches'>Batches</BreadCrumb>
-                {student && (
-                    <>
-                        <BreadCrumb to={`../batch/${student.batch._id}`}>Batch {student.batch.name}</BreadCrumb>
-                        <BreadCrumb to={`../batch/${student.batch._id}/students`}>Students</BreadCrumb>
+      <BreadCrumbs>
+        <BreadCrumb to="/">Home</BreadCrumb>
+        <BreadCrumb to="../batches">Batches</BreadCrumb>
+        {student && (
+          <>
+            <BreadCrumb to={`../batch/${student.batch._id}`}>Batch {student.batch.name}</BreadCrumb>
+            <BreadCrumb to={`../batch/${student.batch._id}/students`}>Students</BreadCrumb>
 
-                        <BreadCrumb>{student.name}</BreadCrumb>
-                    </>
-                )}
-                {!student && <BreadCrumb>Loading...</BreadCrumb>}
-            </BreadCrumbs>
-            <Menu>
-                <MenuItems>
-                    <>
-                        <MenuItem text='Info' tab='info' />
-                        <MenuItem text='Attendances' tab='attendance' />
-                        <MenuItem text='Edit Info' tab='edit' />
-                    </>
-                </MenuItems>
-            </Menu>
-            <Outlet context={[student, setStudent]} />
-        </>
-    );
+            <BreadCrumb>{student.name}</BreadCrumb>
+          </>
+        )}
+        {!student && <BreadCrumb>Loading...</BreadCrumb>}
+      </BreadCrumbs>
+      <Menu>
+        <MenuItems>
+          <>
+            <MenuItem text="Info" tab="info" />
+            <MenuItem text="Attendances" tab="attendance" />
+            <MenuItem text="Edit Info" tab="edit" />
+          </>
+        </MenuItems>
+      </Menu>
+      <Outlet context={[student, setStudent]} />
+    </>
+  );
 };
 
 export default ViewStudent;

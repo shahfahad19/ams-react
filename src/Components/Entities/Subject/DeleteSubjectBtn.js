@@ -1,138 +1,147 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
-import Form, { FormControl, FormField, FormGroup, FormLabelAlt } from '../../Utils/Form';
-import { AlertModal, ModalButton, ModalCloseBtn, ModalFormButton, ModalTitle, ModalWrapper } from '../../Utils/Modal';
+import Form, { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt } from '../../Utils/Form';
+import {
+  AlertModal,
+  ModalButton,
+  ModalCloseBtn,
+  ModalFormButton,
+  ModalTitle,
+  ModalWrapper
+} from '../../Utils/Modal';
 
 const DeleteSubjectBtn = ({ ctx, navigate, subject, params, className }) => {
-    const subjectName = useRef();
-    const [subjectNameError, setSubjectNameError] = useState('');
-    const [btnState, setBtnState] = useState('');
+  const subjectName = useRef();
+  const [subjectNameError, setSubjectNameError] = useState('');
+  const [btnState, setBtnState] = useState('');
 
-    const [showConfimationModal, setShowConfirmationModal] = useState(false);
-    const [showPostConfimationModal, setShowPostConfirmationModal] = useState(false);
-    const [alertModal, setAlertModal] = useState({
-        show: false,
-        text: '',
-    });
+  const [showConfimationModal, setShowConfirmationModal] = useState(false);
+  const [showPostConfimationModal, setShowPostConfirmationModal] = useState(false);
+  const [alertModal, setAlertModal] = useState({
+    show: false,
+    text: ''
+  });
 
-    const confirmationModalHandler = () => {
-        setShowConfirmationModal(showConfimationModal !== true);
-    };
+  const confirmationModalHandler = () => {
+    setShowConfirmationModal(showConfimationModal !== true);
+  };
 
-    const postConfirmationModalHandler = () => {
-        setShowConfirmationModal(false);
-        setShowPostConfirmationModal(showPostConfimationModal !== true);
-    };
+  const postConfirmationModalHandler = () => {
+    setShowConfirmationModal(false);
+    setShowPostConfirmationModal(showPostConfimationModal !== true);
+  };
 
-    const successModalHandler = () => {
-        navigate(-1, { replace: true });
-    };
+  const successModalHandler = () => {
+    navigate(-1, { replace: true });
+  };
 
-    const errorModalHandler = () => {
-        setAlertModal({ show: false });
-    };
+  const errorModalHandler = () => {
+    setAlertModal({ show: false });
+  };
 
-    const deleteSubject = async (event) => {
-        event.preventDefault();
-        if (subjectName.current.value === '') {
-            setSubjectNameError('Enter subject name');
-            return;
-        } else if (subjectName.current.value !== subject.name) {
-            setSubjectNameError('Subject name does not match');
-            return;
-        } else setSubjectNameError('');
+  const deleteSubject = async (event) => {
+    event.preventDefault();
+    if (subjectName.current.value === '') {
+      setSubjectNameError('Enter subject name');
+      return;
+    } else if (subjectName.current.value !== subject.name) {
+      setSubjectNameError('Subject name does not match');
+      return;
+    } else setSubjectNameError('');
 
-        setBtnState('btn-loading');
-        await axios
-            .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                setShowPostConfirmationModal(false);
-                setAlertModal({
-                    type: 'success',
-                    show: true,
-                    text: 'Subject deleted successfully',
-                });
-            })
-            .catch((error) => {
-                setShowPostConfirmationModal(false);
+    setBtnState('btn-loading');
+    await axios
+      .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
+      .then(() => {
+        setShowPostConfirmationModal(false);
+        setAlertModal({
+          type: 'success',
+          show: true,
+          text: 'Subject deleted successfully'
+        });
+      })
+      .catch((error) => {
+        setShowPostConfirmationModal(false);
 
-                const errorMessage = ctx.computeError(error);
-                setAlertModal({
-                    type: 'error',
-                    show: true,
-                    text: errorMessage,
-                });
-            });
-        setBtnState('');
-    };
+        const errorMessage = ctx.computeError(error);
+        setAlertModal({
+          type: 'error',
+          show: true,
+          text: errorMessage
+        });
+      });
+    setBtnState('');
+  };
 
-    return (
+  return (
+    <>
+      <button
+        className={`${ctx.btnClasses} btn-error ${className} mt-2`}
+        onClick={confirmationModalHandler}>
+        Delete Subject
+      </button>
+
+      {showConfimationModal && (
         <>
-            <button className={`${ctx.btnClasses} btn-error ${className} mt-2`} onClick={confirmationModalHandler}>
-                Delete Subject
-            </button>
+          <ModalWrapper>
+            <ModalCloseBtn handler={confirmationModalHandler} />
+            <ModalTitle>Are you sure?</ModalTitle>
+            <span>This subject will be deleted permanently from database!</span>
+            <div className="flex gap-3">
+              <ModalButton className="btn-error" handler={postConfirmationModalHandler}>
+                Delete
+              </ModalButton>
 
-            {showConfimationModal && (
-                <>
-                    <ModalWrapper>
-                        <ModalCloseBtn handler={confirmationModalHandler} />
-                        <ModalTitle>Are you sure?</ModalTitle>
-                        <span>This subject will be deleted permanently from database!</span>
-                        <div className='flex gap-3'>
-                            <ModalButton className='btn-error' handler={postConfirmationModalHandler}>
-                                Delete
-                            </ModalButton>
-
-                            <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
-                        </div>
-                    </ModalWrapper>
-                </>
-            )}
-
-            {showPostConfimationModal && (
-                <ModalWrapper>
-                    {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
-                    <ModalTitle>Confirm Subject Name</ModalTitle>
-                    <Form onSubmit={deleteSubject}>
-                        <FormGroup>
-                            <FormField>
-                                <FormField>Enter complete name of the subject to confirm</FormField>
-                                <FormControl>
-                                    <input
-                                        className={ctx.inputClasses}
-                                        type='text'
-                                        placeholder='Subject Name'
-                                        ref={subjectName}
-                                    />
-                                </FormControl>
-                                {subjectNameError !== '' && <FormLabelAlt>{subjectNameError}</FormLabelAlt>}
-                            </FormField>
-                        </FormGroup>
-                        <div className='flex gap-3 mt-3'>
-                            <ModalFormButton className={btnState}>Delete</ModalFormButton>
-
-                            {btnState === '' && (
-                                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
-                            )}
-                        </div>
-                    </Form>
-                </ModalWrapper>
-            )}
-
-            {alertModal.show && (
-                <AlertModal
-                    type={alertModal.type}
-                    text={alertModal.text}
-                    handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
-                />
-            )}
+              <ModalButton handler={confirmationModalHandler}>Cancel</ModalButton>
+            </div>
+          </ModalWrapper>
         </>
-    );
+      )}
+
+      {showPostConfimationModal && (
+        <ModalWrapper>
+          {btnState === '' && <ModalCloseBtn handler={postConfirmationModalHandler} />}
+          <ModalTitle>Confirm Subject Name</ModalTitle>
+          <Form onSubmit={deleteSubject}>
+            <FormGroup>
+              <FormField>
+                <FormLabel>Enter complete name of the subject to confirm</FormLabel>
+                <FormControl>
+                  <input
+                    className={ctx.inputClasses}
+                    type="text"
+                    placeholder="Subject Name"
+                    ref={subjectName}
+                  />
+                </FormControl>
+                {subjectNameError !== '' && <FormLabelAlt>{subjectNameError}</FormLabelAlt>}
+              </FormField>
+            </FormGroup>
+            <div className="flex gap-3 mt-3">
+              <ModalFormButton className={btnState}>Delete</ModalFormButton>
+
+              {btnState === '' && (
+                <ModalButton handler={postConfirmationModalHandler}>Cancel</ModalButton>
+              )}
+            </div>
+          </Form>
+        </ModalWrapper>
+      )}
+
+      {alertModal.show && (
+        <AlertModal
+          type={alertModal.type}
+          text={alertModal.text}
+          handler={alertModal.type === 'success' ? successModalHandler : errorModalHandler}
+        />
+      )}
+    </>
+  );
 };
 
 export default DeleteSubjectBtn;

@@ -61,454 +61,454 @@ import StudentMainView from './Components/Views/StudentMainView';
 import StudentAttendanceForSubject from './Components/Entities/Attendance/StudentAttendanceForSubject';
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <App />,
-        errorElement: <Error />,
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: '',
+        element: <Welcome />
+      },
+      {
+        path: '404',
+        element: <Error404 />
+      },
+      {
+        path: 'login',
+        element: <Login />
+      },
+      {
+        path: 'signup',
+        element: <SignUp />
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />
+      },
+      {
+        path: 'confirm-account',
+        element: <ConfirmAccount />
+      },
+      {
+        path: 'profile',
+        element: <ViewProfile />,
         children: [
-            {
+          {
+            path: '',
+            element: <Redirect to="view" />
+          },
+          {
+            path: 'view',
+            element: <Profile />
+          },
+          {
+            path: 'edit-profile',
+            element: <EditProfile />
+          },
+          {
+            path: 'edit-photo',
+            element: <EditPic />
+          },
+          {
+            path: 'update-password',
+            element: <UpdatePassword />
+          }
+        ]
+      },
+
+      // Paths for super admin
+      {
+        path: 'super-admin',
+        element: <SuperAdminDashboard />,
+        children: [
+          {
+            path: '',
+            element: <DepartmentList />
+          },
+          {
+            path: 'student/:studentId',
+            element: <ViewStudent />
+          },
+          {
+            path: 'add-department',
+            element: <AddDepartment />
+          },
+          {
+            path: 'department/:departmentId/add-subject',
+            element: <AddDefaultSubject />
+          },
+          {
+            path: 'department/:departmentId',
+            element: <ViewDepartment />,
+            children: [
+              {
                 path: '',
-                element: <Welcome />,
-            },
-            {
-                path: '404',
-                element: <Error404 />,
-            },
-            {
-                path: 'login',
-                element: <Login />,
-            },
-            {
-                path: 'signup',
-                element: <SignUp />,
-            },
-            {
-                path: 'forgot-password',
-                element: <ForgotPassword />,
-            },
-            {
-                path: 'confirm-account',
-                element: <ConfirmAccount />,
-            },
-            {
-                path: 'profile',
-                element: <ViewProfile />,
-                children: [
-                    {
-                        path: '',
-                        element: <Redirect to='view' />,
-                    },
-                    {
-                        path: 'view',
-                        element: <Profile />,
-                    },
-                    {
-                        path: 'edit-profile',
-                        element: <EditProfile />,
-                    },
-                    {
-                        path: 'edit-photo',
-                        element: <EditPic />,
-                    },
-                    {
-                        path: 'update-password',
-                        element: <UpdatePassword />,
-                    },
-                ],
-            },
+                element: <Redirect to="info" />
+              },
+              {
+                path: 'info',
+                element: <DepartmentInfo />
+              },
 
-            // Paths for super admin
-            {
-                path: 'super-admin',
-                element: <SuperAdminDashboard />,
-                children: [
-                    {
-                        path: '',
-                        element: <DepartmentList />,
-                    },
-                    {
-                        path: 'student/:studentId',
-                        element: <ViewStudent />,
-                    },
-                    {
-                        path: 'add-department',
-                        element: <AddDepartment />,
-                    },
-                    {
-                        path: 'department/:departmentId/add-subject',
-                        element: <AddDefaultSubject />,
-                    },
-                    {
-                        path: 'department/:departmentId',
-                        element: <ViewDepartment />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='info' />,
-                            },
-                            {
-                                path: 'info',
-                                element: <DepartmentInfo />,
-                            },
+              {
+                path: 'batches',
+                element: <BatchList />
+              },
+              {
+                path: 'teachers',
+                element: <TeacherList />
+              },
+              {
+                path: 'subjects',
+                element: <DefaultSubjectList />
+              }
+            ]
+          },
 
-                            {
-                                path: 'batches',
-                                element: <BatchList />,
-                            },
-                            {
-                                path: 'teachers',
-                                element: <TeacherList />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <DefaultSubjectList />,
-                            },
-                        ],
-                    },
-
-                    {
-                        path: 'batch/:batchId',
-                        element: <ViewBatch />,
-                        children: [
-                            {
-                                path: 'semesters',
-                                element: <SemesterList />,
-                            },
-                            {
-                                path: 'invite',
-                                element: <InviteLink />,
-                            },
-                            {
-                                path: '',
-                                element: <Redirect to='semesters' />,
-                            },
-                            {
-                                path: 'add-semester',
-                                element: <AddSemester />,
-                            },
-                            {
-                                path: 'students',
-                                element: <StudentList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditBatch />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'semester/:semesterId',
-                        element: <ViewSemester />,
-                        children: [
-                            {
-                                path: '',
-                                element: <SubjectList />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <SubjectList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditSemester />,
-                            },
-                            {
-                                path: 'add-subject',
-                                element: <AddSubject />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'subject/:subjectId',
-                        element: <ViewSubject />,
-                        children: [
-                            {
-                                path: '',
-                                element: <AttendanceList />,
-                            },
-                            {
-                                path: 'attendance',
-                                element: <AttendanceList />,
-                            },
-                            {
-                                path: 'teacher',
-                                element: <EditSubjectTeacher />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditSubject />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'teacher/:teacherId',
-                        element: <ViewTeacher />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='info' />,
-                            },
-                            {
-                                path: 'info',
-                                element: <TeacherInfo />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <TeacherSubjectsList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditTeacherInfo />,
-                            },
-                        ],
-                    },
-                ],
-            },
-            // Paths for Admin (Department Admin)
-            {
-                path: 'admin',
-                element: <AdminDashboard />,
-                children: [
-                    {
-                        path: '',
-                        element: <AdminMainView />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='/admin/batches' />,
-                            },
-                            {
-                                path: 'batches',
-                                element: <BatchList />,
-                            },
-                            {
-                                path: 'teachers',
-                                element: <TeacherList />,
-                            },
-                        ],
-                    },
-
-                    {
-                        path: 'batch/:batchId/add-semester',
-                        element: <AddSemester />,
-                    },
-                    {
-                        path: 'student/:studentId',
-                        element: <ViewStudent />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='info' />,
-                            },
-                            {
-                                path: 'info',
-                                element: <StudentInfo />,
-                            },
-                            {
-                                path: 'attendance',
-                                element: <StudentAttendance />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditStudentInfo />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'semester/:semesterId/add-subject',
-                        element: <AddSubject />,
-                    },
-                    {
-                        path: 'batch/:batchId',
-                        element: <ViewBatch />,
-                        children: [
-                            {
-                                path: 'semesters',
-                                element: <SemesterList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditBatch />,
-                            },
-                            {
-                                path: 'invite',
-                                element: <InviteLink />,
-                            },
-                            {
-                                path: '',
-                                element: <Redirect to='semesters' />,
-                            },
-                            {
-                                path: 'students',
-                                element: <StudentList />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'teacher/:teacherId',
-                        element: <ViewTeacher />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='info' />,
-                            },
-                            {
-                                path: 'info',
-                                element: <TeacherInfo />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <TeacherSubjectsList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditTeacherInfo />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'add-batch',
-                        element: <AddBatch />,
-                    },
-
-                    {
-                        path: 'add-teacher',
-                        element: <AddTeacher />,
-                    },
-                    {
-                        path: 'semester/:semesterId',
-                        element: <ViewSemester />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='subjects' />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <SubjectList />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditSemester />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'subject/:subjectId',
-                        element: <ViewSubject />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='attendance' />,
-                            },
-                            {
-                                path: 'attendance',
-                                element: <AttendanceList />,
-                            },
-                            {
-                                path: 'teacher',
-                                element: <EditSubjectTeacher />,
-                            },
-                            {
-                                path: 'edit',
-                                element: <EditSubject />,
-                            },
-                        ],
-                    },
-                ],
-            },
-
-            // Paths for Teacher
-            {
+          {
+            path: 'batch/:batchId',
+            element: <ViewBatch />,
+            children: [
+              {
+                path: 'semesters',
+                element: <SemesterList />
+              },
+              {
+                path: 'invite',
+                element: <InviteLink />
+              },
+              {
+                path: '',
+                element: <Redirect to="semesters" />
+              },
+              {
+                path: 'add-semester',
+                element: <AddSemester />
+              },
+              {
+                path: 'students',
+                element: <StudentList />
+              },
+              {
+                path: 'edit',
+                element: <EditBatch />
+              }
+            ]
+          },
+          {
+            path: 'semester/:semesterId',
+            element: <ViewSemester />,
+            children: [
+              {
+                path: '',
+                element: <SubjectList />
+              },
+              {
+                path: 'subjects',
+                element: <SubjectList />
+              },
+              {
+                path: 'edit',
+                element: <EditSemester />
+              },
+              {
+                path: 'add-subject',
+                element: <AddSubject />
+              }
+            ]
+          },
+          {
+            path: 'subject/:subjectId',
+            element: <ViewSubject />,
+            children: [
+              {
+                path: '',
+                element: <AttendanceList />
+              },
+              {
+                path: 'attendance',
+                element: <AttendanceList />
+              },
+              {
                 path: 'teacher',
-                element: <TeacherDashboard />,
-                children: [
-                    {
-                        path: '',
-                        element: <TeacherSubjectsList />,
-                    },
-                    {
-                        path: 'subject/:subjectId',
-                        element: <ViewTeacherSubject />,
-                        children: [
-                            {
-                                path: '',
-                                element: <AttendanceList />,
-                            },
-                            {
-                                path: 'attendance',
-                                element: <AttendanceList />,
-                            },
-                            {
-                                path: 'take-attendance',
-                                element: <TakeAttendance />,
-                            },
-                            {
-                                path: 'remove',
-                                element: <RemoveSubject />,
-                            },
-                        ],
-                    },
-                ],
-            },
+                element: <EditSubjectTeacher />
+              },
+              {
+                path: 'edit',
+                element: <EditSubject />
+              }
+            ]
+          },
+          {
+            path: 'teacher/:teacherId',
+            element: <ViewTeacher />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="info" />
+              },
+              {
+                path: 'info',
+                element: <TeacherInfo />
+              },
+              {
+                path: 'subjects',
+                element: <TeacherSubjectsList />
+              },
+              {
+                path: 'edit',
+                element: <EditTeacherInfo />
+              }
+            ]
+          }
+        ]
+      },
+      // Paths for Admin (Department Admin)
+      {
+        path: 'admin',
+        element: <AdminDashboard />,
+        children: [
+          {
+            path: '',
+            element: <AdminMainView />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="/admin/batches" />
+              },
+              {
+                path: 'batches',
+                element: <BatchList />
+              },
+              {
+                path: 'teachers',
+                element: <TeacherList />
+              }
+            ]
+          },
 
-            // Paths for student
-            // {
-            //     path: 'student',
-            //     element: <StudentDashboard />,
-            //     children: [
-            //         {
-            //             path: '',
-            //             element: <StudentAttendance />,
-            //         },
-            //     ],
-            // },
-            {
-                path: 'student',
-                element: <StudentDashboard />,
-                children: [
-                    {
-                        path: '',
-                        element: <StudentMainView />,
-                        children: [
-                            {
-                                path: '',
-                                element: <SemesterList />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'semester/:semesterId',
-                        element: <ViewSemester />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='subjects' />,
-                            },
-                            {
-                                path: 'subjects',
-                                element: <SubjectList />,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'subject/:subjectId',
-                        element: <ViewSubject />,
-                        children: [
-                            {
-                                path: '',
-                                element: <Redirect to='attendance' />,
-                            },
-                            {
-                                path: 'attendance',
-                                element: <StudentAttendanceForSubject />,
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
+          {
+            path: 'batch/:batchId/add-semester',
+            element: <AddSemester />
+          },
+          {
+            path: 'student/:studentId',
+            element: <ViewStudent />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="info" />
+              },
+              {
+                path: 'info',
+                element: <StudentInfo />
+              },
+              {
+                path: 'attendance',
+                element: <StudentAttendance />
+              },
+              {
+                path: 'edit',
+                element: <EditStudentInfo />
+              }
+            ]
+          },
+          {
+            path: 'semester/:semesterId/add-subject',
+            element: <AddSubject />
+          },
+          {
+            path: 'batch/:batchId',
+            element: <ViewBatch />,
+            children: [
+              {
+                path: 'semesters',
+                element: <SemesterList />
+              },
+              {
+                path: 'edit',
+                element: <EditBatch />
+              },
+              {
+                path: 'invite',
+                element: <InviteLink />
+              },
+              {
+                path: '',
+                element: <Redirect to="semesters" />
+              },
+              {
+                path: 'students',
+                element: <StudentList />
+              }
+            ]
+          },
+          {
+            path: 'teacher/:teacherId',
+            element: <ViewTeacher />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="info" />
+              },
+              {
+                path: 'info',
+                element: <TeacherInfo />
+              },
+              {
+                path: 'subjects',
+                element: <TeacherSubjectsList />
+              },
+              {
+                path: 'edit',
+                element: <EditTeacherInfo />
+              }
+            ]
+          },
+          {
+            path: 'add-batch',
+            element: <AddBatch />
+          },
+
+          {
+            path: 'add-teacher',
+            element: <AddTeacher />
+          },
+          {
+            path: 'semester/:semesterId',
+            element: <ViewSemester />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="subjects" />
+              },
+              {
+                path: 'subjects',
+                element: <SubjectList />
+              },
+              {
+                path: 'edit',
+                element: <EditSemester />
+              }
+            ]
+          },
+          {
+            path: 'subject/:subjectId',
+            element: <ViewSubject />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="attendance" />
+              },
+              {
+                path: 'attendance',
+                element: <AttendanceList />
+              },
+              {
+                path: 'teacher',
+                element: <EditSubjectTeacher />
+              },
+              {
+                path: 'edit',
+                element: <EditSubject />
+              }
+            ]
+          }
+        ]
+      },
+
+      // Paths for Teacher
+      {
+        path: 'teacher',
+        element: <TeacherDashboard />,
+        children: [
+          {
+            path: '',
+            element: <TeacherSubjectsList />
+          },
+          {
+            path: 'subject/:subjectId',
+            element: <ViewTeacherSubject />,
+            children: [
+              {
+                path: '',
+                element: <AttendanceList />
+              },
+              {
+                path: 'attendance',
+                element: <AttendanceList />
+              },
+              {
+                path: 'take-attendance',
+                element: <TakeAttendance />
+              },
+              {
+                path: 'remove',
+                element: <RemoveSubject />
+              }
+            ]
+          }
+        ]
+      },
+
+      // Paths for student
+      // {
+      //     path: 'student',
+      //     element: <StudentDashboard />,
+      //     children: [
+      //         {
+      //             path: '',
+      //             element: <StudentAttendance />,
+      //         },
+      //     ],
+      // },
+      {
+        path: 'student',
+        element: <StudentDashboard />,
+        children: [
+          {
+            path: '',
+            element: <StudentMainView />,
+            children: [
+              {
+                path: '',
+                element: <SemesterList />
+              }
+            ]
+          },
+          {
+            path: 'semester/:semesterId',
+            element: <ViewSemester />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="subjects" />
+              },
+              {
+                path: 'subjects',
+                element: <SubjectList />
+              }
+            ]
+          },
+          {
+            path: 'subject/:subjectId',
+            element: <ViewSubject />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="attendance" />
+              },
+              {
+                path: 'attendance',
+                element: <StudentAttendanceForSubject />
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(<RouterProvider router={router} />);

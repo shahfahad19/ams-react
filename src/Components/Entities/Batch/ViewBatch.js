@@ -7,61 +7,62 @@ import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 
 const ViewBatch = () => {
-    const params = useParams();
-    const ctx = useContext(AppContext);
+  const params = useParams();
+  const ctx = useContext(AppContext);
 
-    const [batch, setBatch] = useState();
+  const [batch, setBatch] = useState();
 
-    useEffect(() => {
-        axios
-            .get(`${ctx.baseURL}/batches/${params.batchId}`, {
-                credentials: 'include',
-                headers: {
-                    Authorization: 'Bearer ' + ctx.token,
-                },
-            })
-            .then((response) => {
-                setBatch(response.data.data.batch);
-            })
-            .catch((error) => {
-                console.log(error);
-                if (error.response) {
-                    if (error.response.status === 404) {
-                        ctx.navigate('/404', { replace: true });
-                    }
-                }
-            });
-    }, []);
+  useEffect(() => {
+    axios
+      .get(`${ctx.baseURL}/batches/${params.batchId}`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
+      .then((response) => {
+        setBatch(response.data.data.batch);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            ctx.navigate('/404', { replace: true });
+          }
+        }
+      });
+  }, []);
 
-    return (
-        <>
-            {batch && <DepartmentName name={batch.admin.department} />}
-            <BreadCrumbs>
-                <BreadCrumb to='/'>Home</BreadCrumb>
-                {ctx.userData.role === 'admin' && <BreadCrumb to='/admin/batches'>Batches</BreadCrumb>}
+  return (
+    <>
+      {batch && <DepartmentName name={batch.admin.department} />}
+      <BreadCrumbs>
+        <BreadCrumb to="/">Home</BreadCrumb>
+        {ctx.userData.role === 'admin' && <BreadCrumb to="/admin/batches">Batches</BreadCrumb>}
 
-                {batch && (
-                    <>
-                        {ctx.userData.role === 'super-admin' && (
-                            <BreadCrumb to={`/super-admin/department/${batch.admin._id}/batches`}>Batches</BreadCrumb>
-                        )}
-                        <BreadCrumb>Batch {batch.name}</BreadCrumb>
-                    </>
-                )}
+        {batch && (
+          <>
+            {ctx.userData.role === 'super-admin' && (
+              <BreadCrumb to={`/super-admin/department/${batch.admin._id}/batches`}>
+                Batches
+              </BreadCrumb>
+            )}
+            <BreadCrumb>Batch {batch.name}</BreadCrumb>
+          </>
+        )}
 
-                {!batch && <BreadCrumb>Loading...</BreadCrumb>}
-            </BreadCrumbs>
-            <Menu>
-                <MenuItems>
-                    <MenuItem text='Semesters' tab='semesters' />
-                    <MenuItem text='Students' tab='students' />
-                    <MenuItem text='Edit Batch' tab='edit' />
-                    <MenuItem text='Invite Link' tab='invite' />
-                </MenuItems>
-            </Menu>
-            <Outlet context={[batch, setBatch]} />
-        </>
-    );
+        {!batch && <BreadCrumb>Loading...</BreadCrumb>}
+      </BreadCrumbs>
+      <Menu>
+        <MenuItems>
+          <MenuItem text="Semesters" tab="semesters" />
+          <MenuItem text="Students" tab="students" />
+          <MenuItem text="Edit Batch" tab="edit" />
+          <MenuItem text="Invite Link" tab="invite" />
+        </MenuItems>
+      </Menu>
+      <Outlet context={[batch, setBatch]} />
+    </>
+  );
 };
 
 export default ViewBatch;
