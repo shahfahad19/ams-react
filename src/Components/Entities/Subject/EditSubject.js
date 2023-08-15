@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubjectDeleteBtn from './DeleteSubjectBtn';
 import { FormField, FormLabel, FormTitle, FormWrapper } from '../../Utils/Form';
 import Spinner from '../../Utils/Spinner';
 
 const EditSubject = () => {
-  const navigate = useNavigate();
   const [subject] = useOutletContext();
   const params = useParams();
   const ctx = useContext(AppContext);
@@ -27,7 +26,7 @@ const EditSubject = () => {
           </FormField>
 
           <div className="form-control flex items-center flex-row justify-center mt-3">
-            <SubjectDeleteBtn ctx={ctx} params={params} subject={subject} navigate={navigate} />
+            <SubjectDeleteBtn ctx={ctx} params={params} subject={subject} />
           </div>
         </FormWrapper>
       )}

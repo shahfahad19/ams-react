@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import { useForm } from 'react-hook-form';
 import Form, {
@@ -19,13 +19,12 @@ import Alert from '../Utils/Alert';
 const Login = () => {
   const [btnState, setBtnState] = useState('');
   const [alert, setAlert] = useState({ show: false });
-  const navigate = useNavigate();
   const ctx = useContext(AppContext);
   const [searchParams] = useSearchParams();
 
   // REDIRECTING IF USER IS ALREADY LOGGED IN
   if (ctx.isLoggedIn === true) {
-    navigate('/');
+    ctx.navigate('/');
   }
 
   const {

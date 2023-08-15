@@ -6,7 +6,8 @@ const DepartmentName = ({ name, className }) => {
   const departmentName = name || ctx.userData.department;
 
   return (
-    <div className={`text-center text-xl md:text-2xl font-bold text-primary mb-2 ${className}`}>
+    <div
+      className={`text-center text-xl md:text-2xl font-bold text-primary mb-2 select-none ${className}`}>
       Department of {departmentName}
     </div>
   );

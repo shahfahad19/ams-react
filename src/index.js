@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import Error from './Router/Error';
-
 import Login from './Components/Auth/Login';
 import SignUp from './Components/Auth/SignUp';
 import Redirect from './Components/Utils/Redirect';

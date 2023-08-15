@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import DeleteBatchBtn from './DeleteBatchBtn';
 import Spinner from '../../Utils/Spinner';
@@ -28,7 +28,6 @@ const EditBatch = () => {
   const archived = useRef();
   const [alert, setAlert] = useState({ show: false });
 
-  const navigate = useNavigate();
   const ctx = useContext(AppContext);
 
   const batchNameHandler = () => {
@@ -170,7 +169,7 @@ const EditBatch = () => {
               <FormSubmitBtn className={submitBtnState}>Update</FormSubmitBtn>
             </FormGroup>
           </Form>
-          <DeleteBatchBtn ctx={ctx} params={params} navigate={navigate} batchData={batchData} />
+          <DeleteBatchBtn ctx={ctx} params={params} batchData={batchData} />
           <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
         </FormWrapper>
       )}

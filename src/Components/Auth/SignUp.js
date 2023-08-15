@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
@@ -19,7 +19,6 @@ import Alert from '../Utils/Alert';
 const SignUp = () => {
   const ctx = useContext(AppContext);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   let code = searchParams.get('code');
   if (code === null || code === undefined) code = '';
@@ -29,7 +28,7 @@ const SignUp = () => {
   }
   // REDIRECTING IF USER IS ALREADY LOGGED IN
   if (ctx.isLoggedIn === true) {
-    navigate('/');
+    ctx.navigate('/');
   }
 
   const [btnState, setBtnState] = useState('');

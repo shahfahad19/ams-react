@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useOutletContext } from 'react-router-dom';
-import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import { SpinnerWithText } from '../../Utils/Spinner';
 
 const BatchInviteLink = () => {
   const [batch] = useOutletContext();
-  const batchCode = batch.batchCode || undefined;
-  const ctx = useContext(AppContext);
+  const batchLink = batch ? `https://amsapp.vercel.app/signup?code=${batch.batchCode}` : '';
 
   function formChanged() {}
 
@@ -14,30 +13,30 @@ const BatchInviteLink = () => {
     await navigator.share({
       title: 'SignUp in AMS App',
       text: 'Click the following link to signup for Attendance Managment System',
-      url: `${ctx.baseURL}/signup?code=${batchCode}`
+      url: batchLink
     });
   };
 
   const copyLink = () => {
-    if (batchCode === undefined) return;
-    navigator.clipboard.writeText(`${ctx.baseURL}/signup?code=${batchCode}`);
+    if (batch.batchCode === undefined) return;
+    navigator.clipboard.writeText(batchLink);
   };
 
   return (
     <div className="pb-20">
       <SubSectionHeader text="Invite Link" />
-      {batchCode !== undefined && (
+      {batch && (
         <div className="flex flex-col md:flex-row md:space-x-10 my-4 space-y-5 md:space-y-0 items-center justify-center">
           <div className="md:block">
             <img
-              src={` https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://amsapp.vercel.app/signup?code=${batchCode}`}
+              src={` https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${batchLink}`}
               alt="QR"
             />
           </div>
           <div className="flex flex-col text-sm md:text-lg">
             <div>
-              Share the code <span className="code font-bold text-primary">{batchCode}</span> with
-              students
+              Share the code <span className="code font-bold text-primary">{batch.batchCode}</span>{' '}
+              with students
             </div>
             <div className="divider divider-horizontal sm:w-72 md:w-80">OR</div>
 
@@ -47,7 +46,7 @@ const BatchInviteLink = () => {
                 <input
                   id="link"
                   onChange={formChanged}
-                  value={batchCode ? `https://amsapp.vercel.app/signup?code=${batchCode}` : '...'}
+                  value={batch.batchCode ? batchLink : '...'}
                   className="input input-sm md:input-md w-full rounded-none"
                   disabled
                 />
@@ -68,6 +67,7 @@ const BatchInviteLink = () => {
           </div>
         </div>
       )}
+      {!batch && <SpinnerWithText>Fetching batch info...</SpinnerWithText>}
     </div>
   );
 };

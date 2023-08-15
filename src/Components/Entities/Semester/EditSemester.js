@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Form, {
   FormControl,
@@ -16,7 +16,6 @@ import Alert from '../../Utils/Alert';
 import Spinner from '../../Utils/Spinner';
 
 const EditSemester = () => {
-  const navigate = useNavigate();
   const [btnState, setBtnState] = useState();
   const [semester, setSemester] = useOutletContext();
   const params = useParams();
@@ -130,7 +129,7 @@ const EditSemester = () => {
               </div>
             </FormGroup>
           </Form>
-          <DeleteSemesterBtn ctx={ctx} params={params} navigate={navigate} semester={semester} />
+          <DeleteSemesterBtn ctx={ctx} params={params} semester={semester} />
           <Alert
             alert={alert}
             closeAlert={() => {

@@ -42,6 +42,7 @@ const StudentAttendanceForSubject = () => {
       <SubSectionHeader text="Attendance" />
       {attendance && (
         <>
+          {/* Table for mobile */}
           <table className="table table-compact md:hidden">
             <tbody>
               <tr>
@@ -61,13 +62,23 @@ const StudentAttendanceForSubject = () => {
               <tr>
                 <th colSpan={2}>Percentage</th>
                 <td colSpan={2}>
-                  {attendance.percentage === 'N/A'
-                    ? attendance.percentage
-                    : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                  {attendance.percentage === 'N/A' && <span>N/A</span>}
+                  {attendance.percentage !== 'N/A' && (
+                    <span
+                      className={
+                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                      }>
+                      {attendance.percentage === 'N/A'
+                        ? attendance.percentage
+                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                    </span>
+                  )}
                 </td>
               </tr>
             </tbody>
           </table>
+
+          {/* Table for Desktop */}
           <table className="table table-compact hidden md:table">
             <tbody>
               <tr>
@@ -88,9 +99,17 @@ const StudentAttendanceForSubject = () => {
                 </th>
                 <th>
                   <span className="mr-5">Percentage</span>
-                  {attendance.percentage === 'N/A'
-                    ? attendance.percentage
-                    : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                  {attendance.percentage === 'N/A' && <span>N/A</span>}
+                  {attendance.percentage !== 'N/A' && (
+                    <span
+                      className={
+                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                      }>
+                      {attendance.percentage === 'N/A'
+                        ? attendance.percentage
+                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                    </span>
+                  )}
                 </th>
               </tr>
             </tbody>
