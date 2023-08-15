@@ -10,7 +10,7 @@ import {
   ModalWrapper
 } from '../../Utils/Modal';
 
-const DeleteSubjectBtn = ({ ctx, navigate, subject, params, className }) => {
+const DeleteSubjectBtn = ({ ctx, subject, params, className }) => {
   const subjectName = useRef();
   const [subjectNameError, setSubjectNameError] = useState('');
   const [btnState, setBtnState] = useState('');
@@ -32,7 +32,7 @@ const DeleteSubjectBtn = ({ ctx, navigate, subject, params, className }) => {
   };
 
   const successModalHandler = () => {
-    navigate(-1, { replace: true });
+    ctx.navigate(-1, { replace: true });
   };
 
   const errorModalHandler = () => {

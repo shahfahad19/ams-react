@@ -10,7 +10,7 @@ import {
   ModalWrapper
 } from '../../Utils/Modal';
 
-const DeleteSemesterBtn = ({ ctx, navigate, semester, params, className }) => {
+const DeleteSemesterBtn = ({ ctx, semester, params, className }) => {
   const semesterName = useRef();
   const [semesterNameError, setSemesterNameError] = useState('');
   const [btnState, setBtnState] = useState('');
@@ -32,7 +32,7 @@ const DeleteSemesterBtn = ({ ctx, navigate, semester, params, className }) => {
   };
 
   const successModalHandler = () => {
-    navigate(-1, { replace: true });
+    ctx.navigate(-1, { replace: true });
   };
 
   const errorModalHandler = () => {

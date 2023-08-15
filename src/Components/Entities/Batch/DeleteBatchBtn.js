@@ -10,7 +10,7 @@ import {
   ModalWrapper
 } from '../../Utils/Modal';
 
-const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
+const DeleteBatchBtn = ({ ctx, batchData, params, className }) => {
   const batchName = useRef();
   const [batchNameError, setBatchNameError] = useState('');
   const [btnState, setBtnState] = useState('');
@@ -32,7 +32,7 @@ const DeleteBatchBtn = ({ ctx, navigate, batchData, params, className }) => {
   };
 
   const successModalHandler = () => {
-    navigate(-1, { replace: true });
+    ctx.navigate(-1, { replace: true });
   };
 
   const errorModalHandler = () => {

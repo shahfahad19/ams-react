@@ -10,7 +10,7 @@ import {
 } from '../../Utils/Modal';
 import Form, { FormControl, FormField, FormGroup, FormLabel, FormLabelAlt } from '../../Utils/Form';
 
-const DepartmentDeleteBtn = ({ department, navigate, params, ctx, className }) => {
+const DepartmentDeleteBtn = ({ department, params, ctx, className }) => {
   const departmentName = useRef();
   const [departmentNameError, setDepartmentNameError] = useState('');
   const [btnState, setBtnState] = useState('');
@@ -33,7 +33,7 @@ const DepartmentDeleteBtn = ({ department, navigate, params, ctx, className }) =
   };
 
   const successModalHandler = () => {
-    navigate(-1, { replace: true });
+    ctx.navigate(-1, { replace: true });
   };
 
   const errorModalHandler = () => {
