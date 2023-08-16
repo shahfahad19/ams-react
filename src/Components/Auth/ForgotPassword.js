@@ -34,11 +34,11 @@ const ForgotPassword = () => {
       .then((response) => {
         setAlert(ctx.successAlert(response.data.message));
       })
-      .error((error) => {
+      .catch((error) => {
         setAlert({
           show: true,
           text: ctx.computeError(error),
-          type: 'success'
+          type: 'error'
         });
       })
       .finally(() => {
@@ -85,8 +85,8 @@ const ForgotPassword = () => {
             Signup
           </Link>
         </div>
+        <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
       </FormWrapper>
-      <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
     </>
   );
 };
