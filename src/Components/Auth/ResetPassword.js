@@ -38,7 +38,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     axios
-      .get(`${ctx.baseURL}/user/checkResetToken?token=${searchParams.get('token')}`)
+      .get(`${ctx.baseURL}/user/checkResetToken/${searchParams.get('token')}`)
       .then(() => {
         setIsLinkValid(true);
       })
@@ -61,7 +61,7 @@ const ResetPassword = () => {
     });
     setBtnState('btn-loading');
     axios
-      .patch(`${ctx.baseURL}/user/resetPassword`, data, {
+      .patch(`${ctx.baseURL}/user/resetPassword/${searchParams.get('token')}`, data, {
         credentials: 'include',
         headers: {
           Authorization: 'Bearer ' + ctx.token
