@@ -16,7 +16,7 @@ import { ModalButton, ModalCloseBtn, ModalTitle, ModalWrapper } from '../Utils/M
 import Alert from '../Utils/Alert';
 import { HideIcon, ShowIcon } from '../Utils/Icons';
 
-const CompleteTeacherSignup = () => {
+const CompleteAdminSignup = () => {
   const ctx = useContext(AppContext);
   const [btnState, setBtnState] = useState('');
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
@@ -89,25 +89,6 @@ const CompleteTeacherSignup = () => {
                 />
               </FormControl>
               {errors.name && <FormLabelAlt>{errors.name.message}</FormLabelAlt>}
-            </FormField>
-
-            <FormField>
-              <FormLabel>Gender</FormLabel>
-              <FormControl>
-                <select
-                  className={`${ctx.selectClasses} ${errors.gender && 'select-error'}`}
-                  defaultValue={ctx.userData.gender}
-                  {...register('gender', {
-                    required: {
-                      value: true,
-                      message: 'Please select an option'
-                    }
-                  })}>
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </FormControl>
             </FormField>
 
             <FormField>
@@ -199,4 +180,4 @@ const CompleteTeacherSignup = () => {
   );
 };
 
-export default CompleteTeacherSignup;
+export default CompleteAdminSignup;

@@ -13,22 +13,37 @@ import Form, {
   FormTitle,
   FormWrapper
 } from '../Utils/Form';
+import Alert from '../Utils/Alert';
 
 const ForgotPassword = () => {
   const [btnState, setBtnState] = useState('');
 
   const ctx = useContext(AppContext);
+  const [alert, setAlert] = useState({ show: false });
 
   const email = useRef();
   const captcha = useRef();
 
   const submitForm = async (event) => {
     event.preventDefault();
-    setBtnState('loading');
-    await axios.post(`${ctx.baseURL}/user/forgotPassword?token=${captcha.current.getValue()}`, {
-      email: email.current.value
-    });
-    //TODO: handle response
+    setBtnState('btn-loading');
+    await axios
+      .post(`${ctx.baseURL}/user/forgotPassword?token=${captcha.current.getValue()}`, {
+        email: email.current.value
+      })
+      .then((response) => {
+        setAlert(ctx.successAlert(response.data.message));
+      })
+      .error((error) => {
+        setAlert({
+          show: true,
+          text: ctx.computeError(error),
+          type: 'success'
+        });
+      })
+      .finally(() => {
+        setBtnState('');
+      });
 
     setBtnState('');
   };
@@ -71,6 +86,7 @@ const ForgotPassword = () => {
           </Link>
         </div>
       </FormWrapper>
+      <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
     </>
   );
 };

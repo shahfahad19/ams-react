@@ -58,6 +58,7 @@ import TeacherDashboard from './Components/Dashboards/TeacherDashboard';
 import ViewTeacherSubject from './Components/Entities/Subject/ViewTeacherSubject';
 import StudentMainView from './Components/Views/StudentMainView';
 import StudentAttendanceForSubject from './Components/Entities/Attendance/StudentAttendanceForSubject';
+import CustomError from './Components/Utils/CustomError';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: '404',
         element: <Error404 />
+      },
+      {
+        path: 'error',
+        element: <CustomError />
       },
       {
         path: 'login',

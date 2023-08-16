@@ -22,11 +22,7 @@ const ViewTeacherSubject = () => {
         setSubject(response.data.data.subject);
       })
       .catch((error) => {
-        if (error.response) {
-          if (error.response.status === 404) {
-            ctx.navigate('/404', { replace: true });
-          }
-        }
+        ctx.handleError(error);
       });
   }, []);
 

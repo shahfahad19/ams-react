@@ -3,10 +3,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import Table from '../../Utils/Table';
-import TickMark from '../../Utils/TickMark';
-import CrossMark from '../../Utils/CrossMark';
 
 import SubSectionHeader from '../../Utils/SubSectionHeader';
+import { CheckIcon, CrossIcon } from '../../Utils/Icons';
 
 const TeacherList = () => {
   const params = useParams();
@@ -89,8 +88,8 @@ const TeacherList = () => {
                   <td>{teacher.gender === 'male' ? 'Male' : 'Female'}</td>
                   <td>{teacher.designation}</td>
                   <td>
-                    {teacher.approved && <TickMark />}
-                    {!teacher.approved && <CrossMark />}
+                    {teacher.approved && <CheckIcon />}
+                    {!teacher.approved && <CrossIcon />}
                   </td>
                 </tr>
               );

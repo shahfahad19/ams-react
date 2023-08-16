@@ -24,13 +24,11 @@ const ViewSemester = () => {
       })
       .then((response) => {
         setSemester(response.data.data.semester);
+        // eslint-disable-next-line no-console
+        console.log(response);
       })
       .catch((error) => {
-        if (error.response) {
-          if (error.response.status === 404) {
-            ctx.navigate('/404', { replace: true });
-          }
-        }
+        ctx.handleError(error);
       });
   }, []);
 

@@ -4,8 +4,7 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
-import TickMark from '../../Utils/TickMark';
-import CrossMark from '../../Utils/CrossMark';
+import { CheckIcon, CrossIcon } from '../../Utils/Icons';
 
 const BatchList = () => {
   const [semesters, setSemesters] = useState([]);
@@ -68,8 +67,8 @@ const BatchList = () => {
                   <th>{index + 1}</th>
                   <td>Semester {semester.name}</td>
                   <td>
-                    {!semester.archived && <TickMark />}
-                    {semester.archived && <CrossMark />}
+                    {!semester.archived && <CheckIcon />}
+                    {semester.archived && <CrossIcon />}
                   </td>
                 </tr>
               );

@@ -4,8 +4,7 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
-import CrossMark from '../../Utils/CrossMark';
-import TickMark from '../../Utils/TickMark';
+import { CheckIcon, CrossIcon } from '../../Utils/Icons';
 
 const BatchList = () => {
   const params = useParams();
@@ -70,8 +69,8 @@ const BatchList = () => {
                   <th>{index + 1}</th>
                   <td>Batch {batch.name}</td>
                   <td>
-                    {!batch.archived && <TickMark />}
-                    {batch.archived && <CrossMark />}
+                    {!batch.archived && <CheckIcon />}
+                    {batch.archived && <CrossIcon />}
                   </td>
                 </tr>
               );

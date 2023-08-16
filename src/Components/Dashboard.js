@@ -4,6 +4,8 @@ import Error404 from './Utils/Error404';
 import AppContext from './Context/AppContext';
 import CustomError from './Utils/CustomError';
 import StudentVerification from './Entities/Student/StudentVerification';
+import CompleteTeacherSignup from './Profiles/CompleteTeacherSignup';
+import CompleteAdminSignup from './Profiles/CompleteAdminSignup';
 
 const Dashboard = (props) => {
   const ctx = useContext(AppContext);
@@ -21,9 +23,34 @@ const Dashboard = (props) => {
 
       {ctx.isLoggedIn === true && ctx.loggedInAs === props.role && (
         <>
-          {!ctx.userData.confirmed && ctx.userData.role === 'student' && <StudentVerification />}
+          {/* If user is super admin, render outlet */}
+          {ctx.userData.role === 'super-admin' && <Outlet />}
 
-          <Outlet />
+          {/* If user is admin, render outlet. If profile is not approved by user, open complete profile page */}
+          {ctx.userData.role === 'admin' && (
+            <>
+              {ctx.userData.approved && <Outlet />}
+
+              {!ctx.userData.approved && <CompleteAdminSignup ctx={ctx} />}
+            </>
+          )}
+
+          {/* If user is teacher, render outlet. If profile is not approved by user, open complete profile page */}
+
+          {ctx.userData.role === 'teacher' && (
+            <>
+              {ctx.userData.approved && <Outlet />}
+              {!ctx.userData.approved && <CompleteTeacherSignup ctx={ctx} />}
+            </>
+          )}
+
+          {/* If user is student, render outlet. If user has not confirm their email, show confirmation alert*/}
+          {ctx.userData.role === 'student' && (
+            <>
+              {!ctx.userData.confirmed && <StudentVerification />}
+              <Outlet />
+            </>
+          )}
         </>
       )}
 
@@ -32,8 +59,6 @@ const Dashboard = (props) => {
       )}
 
       {ctx.error && <CustomError error={ctx.error} />}
-
-      {/* {ctx.isLoggedIn === true && !ctx.userData.approved && <CompleteTeacherSignup ctx={ctx} />} */}
     </>
   );
 };

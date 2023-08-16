@@ -21,7 +21,8 @@ const AppContext = React.createContext({
   navigate: () => {},
   computeError: () => {},
   successAlert: () => {},
-  errorAlert: () => {}
+  errorAlert: () => {},
+  handleError: () => {}
 });
 
 export const AppContextProvider = (props) => {
@@ -68,8 +69,9 @@ export const AppContextProvider = (props) => {
           setLoggedIn(true);
         })
         .catch((error) => {
-          setError(error);
           setLoggedIn(false);
+          setError(error);
+          navigate('/error');
         });
 
     document.body.setAttribute('data-theme', savedTheme);
@@ -145,6 +147,11 @@ export const AppContextProvider = (props) => {
     }
   };
 
+  const handleError = (error) => {
+    setError(error);
+    navigate('/error', { replace: true });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -160,7 +167,7 @@ export const AppContextProvider = (props) => {
         // eslint-disable-next-line no-undef
         captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
         error: error,
-
+        handleError,
         btnClasses: 'btn btn-primary btn-block',
         inputClasses: 'input w-full input-block input-lg',
         selectClasses: 'select select-block select-lg',

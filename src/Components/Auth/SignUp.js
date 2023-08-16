@@ -15,10 +15,13 @@ import Form, {
   FormWrapper
 } from '../Utils/Form';
 import Alert from '../Utils/Alert';
+import { HideIcon, ShowIcon } from '../Utils/Icons';
 
 const SignUp = () => {
   const ctx = useContext(AppContext);
   const [searchParams] = useSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   let code = searchParams.get('code');
   if (code === null || code === undefined) code = '';
@@ -32,7 +35,7 @@ const SignUp = () => {
   }
 
   const [btnState, setBtnState] = useState('');
-  const [alert, setAlert] = useState({ sjow: false });
+  const [alert, setAlert] = useState({ show: false });
   const captcha = useRef();
   const {
     register,
@@ -77,6 +80,9 @@ const SignUp = () => {
       return false;
     }
   };
+
+  const toggleShowPassword = () => setShowPassword(!showPassword);
+  const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   return (
     <FormWrapper>
@@ -193,11 +199,11 @@ const SignUp = () => {
                   maxLength: {
                     value: 15,
                     message: 'Batch code should be 4 characters'
-                  },
-                  pattern: {
-                    value: /[0-9A-Fa-f]{4}/g,
-                    message: 'Batch code is invalid'
                   }
+                  // pattern: {
+                  //   value: /[0-9A-Fa-f]{4}/g,
+                  //   message: 'Batch code is invalid'
+                  // }
                 })}
               />
             </FormControl>
@@ -207,25 +213,33 @@ const SignUp = () => {
           <FormField>
             <FormLabel>Password</FormLabel>
             <FormControl>
-              <input
-                className={`${ctx.inputClasses} ${errors.password && 'input-error'}`}
-                type="password"
-                placeholder="********"
-                {...register('password', {
-                  required: {
-                    value: true,
-                    message: 'Password is required'
-                  },
-                  minLength: {
-                    value: 8,
-                    message: 'Password should at least be be 8 characters'
-                  },
-                  maxLength: {
-                    value: 25,
-                    message: 'Maximum length of password exceeded (25)'
-                  }
-                })}
-              />
+              <div className="relative w-full">
+                <input
+                  className={`${ctx.inputClasses} ${errors.password && 'input-error'}`}
+                  type={showPassword ? 'text' : 'password'}
+                  {...register('password', {
+                    required: {
+                      value: true,
+                      message: 'Password is required'
+                    },
+                    minLength: {
+                      value: 8,
+                      message: 'Password should at least be be 8 characters'
+                    },
+                    maxLength: {
+                      value: 25,
+                      message: 'Maximum length of password exceeded (25)'
+                    }
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={toggleShowPassword}
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+                  {!showPassword && <ShowIcon />}
+                  {showPassword && <HideIcon />}
+                </button>
+              </div>
             </FormControl>
             {errors.password && <FormLabelAlt>{errors.password.message}</FormLabelAlt>}
           </FormField>
@@ -233,22 +247,30 @@ const SignUp = () => {
           <FormField>
             <FormLabel>Confirm Password</FormLabel>
             <FormControl>
-              <input
-                className={`${ctx.inputClasses} ${errors.passwordConfirm && 'input-error'}`}
-                type="password"
-                placeholder="********"
-                {...register('passwordConfirm', {
-                  required: {
-                    value: true,
-                    message: 'Enter password again'
-                  },
-                  validate: (val) => {
-                    if (watch('password') !== val) {
-                      return 'Passwords do no match';
+              <div className="relative w-full">
+                <input
+                  className={`${ctx.inputClasses} ${errors.passwordConfirm && 'input-error'}`}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  {...register('passwordConfirm', {
+                    required: {
+                      value: true,
+                      message: 'Enter password again'
+                    },
+                    validate: (val) => {
+                      if (watch('password') !== val) {
+                        return 'Passwords do no match';
+                      }
                     }
-                  }
-                })}
-              />
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={toggleShowConfirmPassword}
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+                  {!showConfirmPassword && <ShowIcon />}
+                  {showConfirmPassword && <HideIcon />}
+                </button>
+              </div>
             </FormControl>
             {errors.passwordConfirm && (
               <FormLabelAlt>{errors.passwordConfirm.message}</FormLabelAlt>
@@ -270,9 +292,8 @@ const SignUp = () => {
 
           <FormSubmitBtn className={btnState}>Create Account</FormSubmitBtn>
         </FormGroup>
-
-        <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
       </Form>
+      <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
 
       <div className="p-3 text-center font-regular">
         Already have an account?&nbsp;

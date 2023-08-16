@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
-import TickMark from '../../Utils/TickMark';
-import CrossMark from '../../Utils/CrossMark';
 
 const SubjectList = () => {
   const [subjects, setSubjects] = useState([]);
@@ -54,7 +52,6 @@ const SubjectList = () => {
             <th>Name</th>
             <th>Credit Hours</th>
             <th>Teacher</th>
-            <th>Active</th>
           </tr>
         </thead>
         <tbody>
@@ -66,10 +63,6 @@ const SubjectList = () => {
                   <td>{subject.name}</td>
                   <td>{subject.creditHours}</td>
                   <td>{subject.teacher ? subject.teacher.name : 'Not Assigned'}</td>
-                  <td>
-                    {!subject.archived && <TickMark />}
-                    {subject.archived && <CrossMark />}
-                  </td>
                 </tr>
               );
             })}
