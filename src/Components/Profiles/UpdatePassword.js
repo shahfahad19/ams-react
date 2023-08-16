@@ -14,6 +14,7 @@ import Form, {
 } from '../Utils/Form';
 import Alert from '../Utils/Alert';
 import { AlertModal } from '../Utils/Modal';
+import { HideIcon, ShowIcon } from '../Utils/Icons';
 
 const UpdatePassword = () => {
   const ctx = useContext(AppContext);
@@ -26,9 +27,16 @@ const UpdatePassword = () => {
     text: ''
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const toggleShowPassword = () => setShowPassword(!showPassword);
+  const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+  const toggleShowCurrentPassword = () => setShowCurrentPassword(!showCurrentPassword);
+
   const {
     register,
-
+    watch,
     handleSubmit,
     formState: { errors }
   } = useForm();
@@ -77,81 +85,95 @@ const UpdatePassword = () => {
             <FormField>
               <FormLabel>Current Password</FormLabel>
               <FormControl>
-                <input
-                  className={`${ctx.inputClasses} ${errors.passwordCurrent && 'input-error'}`}
-                  type="password"
-                  placeholder="********"
-                  {...register('passwordCurrent', {
-                    required: {
-                      value: true,
-                      message: 'Current Password is required'
-                    },
-                    minLength: {
-                      value: 8,
-                      message: 'Password should at least be be 6 characters'
-                    },
-                    maxLength: {
-                      value: 25,
-                      message: 'Maximum length of password exceeded (25)'
-                    }
-                  })}
-                />
+                <div className="relative w-full">
+                  <input
+                    className={`${ctx.inputClasses} ${errors.passwordCurrent && 'input-error'}`}
+                    type={showCurrentPassword ? 'text' : 'password'}
+                    {...register('passwordCurrent', {
+                      required: {
+                        value: true,
+                        message: 'Password is required'
+                      }
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleShowCurrentPassword}
+                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+                    {!showPassword && <ShowIcon />}
+                    {showPassword && <HideIcon />}
+                  </button>
+                </div>
               </FormControl>
               {errors.passwordCurrent && (
                 <FormLabelAlt>{errors.passwordCurrent.message}</FormLabelAlt>
               )}
             </FormField>
+
             <FormField>
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <input
-                  className={`${ctx.inputClasses} ${errors.password && 'input-error'}`}
-                  type="password"
-                  placeholder="********"
-                  {...register('password', {
-                    required: {
-                      value: true,
-                      message: 'Enter new password'
-                    },
-                    minLength: {
-                      value: 8,
-                      message: 'Password should at least be be 6 characters'
-                    },
-                    maxLength: {
-                      value: 25,
-                      message: 'Maximum length of password exceeded (25)'
-                    }
-                  })}
-                />
+                <div className="relative w-full">
+                  <input
+                    className={`${ctx.inputClasses} ${errors.password && 'input-error'}`}
+                    type={showPassword ? 'text' : 'password'}
+                    {...register('password', {
+                      required: {
+                        value: true,
+                        message: 'Password is required'
+                      },
+                      minLength: {
+                        value: 8,
+                        message: 'Password should at least be be 8 characters'
+                      },
+                      maxLength: {
+                        value: 25,
+                        message: 'Maximum length of password exceeded (25)'
+                      }
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleShowPassword}
+                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+                    {!showPassword && <ShowIcon />}
+                    {showPassword && <HideIcon />}
+                  </button>
+                </div>
               </FormControl>
               {errors.password && <FormLabelAlt>{errors.password.message}</FormLabelAlt>}
             </FormField>
 
             <FormField>
-              <FormLabel>Re-enter Password</FormLabel>
+              <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <input
-                  className={`${ctx.inputClasses} ${errors.passwordConfirm && 'input-error'}`}
-                  type="password"
-                  placeholder="********"
-                  {...register('passwordConfirm', {
-                    required: {
-                      value: true,
-                      message: 'Enter new password again'
-                    },
-                    minLength: {
-                      value: 6,
-                      message: 'Password should at least be be 6 characters'
-                    },
-                    maxLength: {
-                      value: 25,
-                      message: 'Maximum length of password exceeded (25)'
-                    }
-                  })}
-                />
+                <div className="relative w-full">
+                  <input
+                    className={`${ctx.inputClasses} ${errors.passwordConfirm && 'input-error'}`}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    {...register('passwordConfirm', {
+                      required: {
+                        value: true,
+                        message: 'Enter password again'
+                      },
+                      validate: (val) => {
+                        if (watch('password') !== val) {
+                          return 'Passwords do no match';
+                        }
+                      }
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleShowConfirmPassword}
+                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+                    {!showConfirmPassword && <ShowIcon />}
+                    {showConfirmPassword && <HideIcon />}
+                  </button>
+                </div>
               </FormControl>
               {errors.passwordConfirm && (
-                <FormLabelAlt> {errors.passwordConfirm.message}</FormLabelAlt>
+                <FormLabelAlt>{errors.passwordConfirm.message}</FormLabelAlt>
               )}
             </FormField>
             <FormSubmitBtn className={btnState}>Update</FormSubmitBtn>

@@ -59,6 +59,7 @@ import ViewTeacherSubject from './Components/Entities/Subject/ViewTeacherSubject
 import StudentMainView from './Components/Views/StudentMainView';
 import StudentAttendanceForSubject from './Components/Entities/Attendance/StudentAttendanceForSubject';
 import CustomError from './Components/Utils/CustomError';
+import ResetPassword from './Components/Auth/ResetPassword';
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
       {
         path: 'confirm-account',
         element: <ConfirmAccount />
+      },
+      {
+        path: 'reset-password',
+        element: <ResetPassword />
       },
       {
         path: 'profile',
