@@ -22,7 +22,8 @@ const AppContext = React.createContext({
   computeError: () => {},
   successAlert: () => {},
   errorAlert: () => {},
-  handleError: () => {}
+  handleError: () => {},
+  setUserData: () => {}
 });
 
 export const AppContextProvider = (props) => {
@@ -168,6 +169,7 @@ export const AppContextProvider = (props) => {
         captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
         error: error,
         handleError,
+        setUserData,
         btnClasses: 'btn btn-primary btn-block',
         inputClasses: 'input w-full input-block input-lg',
         selectClasses: 'select select-block select-lg',

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import AppContext from '../Context/AppContext';
@@ -46,20 +47,42 @@ const EditPic = () => {
     setBtnState('btn-loading');
     const formData = new FormData();
     formData.append('image', image);
-    axios
-      .post(`${ctx.baseURL}/user/updatePhoto`, formData, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+    formData.append('user_id', ctx.userData._id);
+
+    // Send a POST request to the PHP script
+    await axios
+      .post('https://ams-images.000webhostapp.com/upload_image.php', formData)
+      .then((response) => {
+        const imageUrl = response.data.url; // JSON response from the PHP script
+        updateProfile(imageUrl);
       })
-      .then(() => {
+      .catch((error) => {
+        const errorMessage = ctx.computeError(error);
+        setAlert(ctx.errorAlert(errorMessage));
+      });
+    return;
+  };
+
+  const updateProfile = (photo) => {
+    axios
+      .patch(
+        `${ctx.baseURL}/user/updateProfile`,
+        { photo },
+        {
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        }
+      )
+      .then((response) => {
         setBtnState('');
         setAlert({
           show: true,
           type: 'success',
           text: 'Updated successfully!'
         });
+        ctx.setUserData(response.data.data.user);
       })
       .catch((error) => {
         setBtnState('');
