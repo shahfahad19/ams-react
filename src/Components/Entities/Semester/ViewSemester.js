@@ -43,17 +43,19 @@ const ViewSemester = () => {
             {semester.name && (
               <>
                 {ctx.userData.role === 'super-admin' && (
-                  <BreadCrumb to={`/super-admin/department/${semester.batch.admin._id}/batches`}>
-                    Batches
-                  </BreadCrumb>
+                  <>
+                    <BreadCrumb to="/super-admin/departments">Departments</BreadCrumb>
+                    <BreadCrumb to={`/super-admin/department/${semester.batch.admin._id}`}>
+                      {semester.batch.admin.department}
+                    </BreadCrumb>
+                    <BreadCrumb to={`/super-admin/department/${semester.batch.admin._id}/batches`}>
+                      Batches
+                    </BreadCrumb>
+                  </>
                 )}
 
                 <BreadCrumb to={'/' + ctx.userData.role + '/batch/' + semester.batch._id}>
                   Batch {semester.batch.name}
-                </BreadCrumb>
-                <BreadCrumb
-                  to={'/' + ctx.userData.role + '/batch/' + semester.batch._id + '/semesters'}>
-                  Semesters
                 </BreadCrumb>
 
                 <BreadCrumb>Semester {semester.name}</BreadCrumb>

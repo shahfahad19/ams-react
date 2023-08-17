@@ -57,6 +57,7 @@ const DepartmentList = () => {
             <th></th>
             <th className="normal-case font-medium text-sm">Department</th>
             <th className="normal-case font-medium text-sm">Admin</th>
+            <th className="normal-case font-medium text-sm">Admin Photo</th>
           </tr>
         </thead>
         <tbody>
@@ -70,6 +71,20 @@ const DepartmentList = () => {
                   <th>{index + 1}</th>
                   <td>{department.department}</td>
                   <td>{department.email}</td>
+                  <td>
+                    {' '}
+                    <div className="popover popover-hover">
+                      <img
+                        className="w-10 popover-trigger rounded-full"
+                        src={department.photo}
+                        alt={department.name + '_pic'}
+                      />
+                      <div className="popover-content sm:popover-left">
+                        <div className="popover-arrow"></div>
+                        <img src={department.photo} alt={department.name + '_pic'} />
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               );
             })}

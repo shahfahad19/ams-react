@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import DepartmentName from '../Department/DepartmentName';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
@@ -15,12 +15,18 @@ import Form, {
 } from '../../Utils/Form';
 import Alert from '../../Utils/Alert';
 import BackButton from '../../Utils/BackButton';
+import { useParams } from 'react-router-dom';
 const AddBatch = () => {
   const [btnState, setBtnState] = useState('');
   const batch = useRef();
+  const params = useParams();
+
+  // will be used if super admin is logged in
+  const [departmentName, setDepartmentName] = useState();
 
   const ctx = useContext(AppContext);
   const [formError, setFormError] = useState('');
+  const dept = params.departmentId;
   const [alert, setAlert] = useState({ show: false });
 
   const batchNameHandler = () => {
@@ -33,6 +39,24 @@ const AddBatch = () => {
       setFormError('');
     }
   };
+
+  useEffect(() => {
+    if (ctx.userData.role === 'super-admin') {
+      axios
+        .get(`${ctx.baseURL}/users/department/${params.departmentId}`, {
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        })
+        .then((response) => {
+          setDepartmentName(response.data.data.department.department);
+        })
+        .catch((error) => {
+          ctx.handleError(error);
+        });
+    }
+  }, []);
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -52,7 +76,7 @@ const AddBatch = () => {
     let token = ctx.token;
     await axios
       .post(
-        `${ctx.baseURL}/batches`,
+        `${ctx.baseURL}/batches${ctx.userData.role === 'admin' ? '' : '?department=' + dept}`,
         { name: batchName },
         {
           headers: {
@@ -85,10 +109,16 @@ const AddBatch = () => {
 
   return (
     <>
-      <DepartmentName name={ctx.userData.name} />
+      {ctx.userData.role === 'admin' && <DepartmentName name={ctx.userData.name} />}
+      {ctx.userData.role === 'super-admin' && departmentName && (
+        <DepartmentName name={departmentName} />
+      )}
+
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>
-        <BreadCrumb to="../batches">Batches</BreadCrumb>
+        {ctx.userData.role === 'super-admin' && <BreadCrumb to="./../batches">Batches</BreadCrumb>}
+        {ctx.userData.role === 'admin' && <BreadCrumb to="../batches">Batches</BreadCrumb>}
+
         <BreadCrumb>Add Batch</BreadCrumb>
       </BreadCrumbs>
       <FormWrapper>

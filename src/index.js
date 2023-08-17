@@ -143,9 +143,22 @@ const router = createBrowserRouter([
             path: 'add-department',
             element: <AddDepartment />
           },
+
+          {
+            path: 'department/:departmentId/add-batch',
+            element: <AddBatch />
+          },
+          {
+            path: 'batch/:batchId/add-semester',
+            element: <AddSemester />
+          },
           {
             path: 'department/:departmentId/add-subject',
             element: <AddDefaultSubject />
+          },
+          {
+            path: 'semester/:semesterId/add-subject',
+            element: <AddSubject />
           },
           {
             path: 'department/:departmentId',
@@ -192,10 +205,6 @@ const router = createBrowserRouter([
                 element: <Redirect to="semesters" />
               },
               {
-                path: 'add-semester',
-                element: <AddSemester />
-              },
-              {
                 path: 'students',
                 element: <StudentList />
               },
@@ -211,7 +220,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <SubjectList />
+                element: <Redirect to="subjects" />
               },
               {
                 path: 'subjects',
@@ -220,10 +229,6 @@ const router = createBrowserRouter([
               {
                 path: 'edit',
                 element: <EditSemester />
-              },
-              {
-                path: 'add-subject',
-                element: <AddSubject />
               }
             ]
           },
@@ -233,7 +238,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <AttendanceList />
+                element: <Redirect to="attendance" />
               },
               {
                 path: 'attendance',
@@ -461,17 +466,6 @@ const router = createBrowserRouter([
         ]
       },
 
-      // Paths for student
-      // {
-      //     path: 'student',
-      //     element: <StudentDashboard />,
-      //     children: [
-      //         {
-      //             path: '',
-      //             element: <StudentAttendance />,
-      //         },
-      //     ],
-      // },
       {
         path: 'student',
         element: <StudentDashboard />,

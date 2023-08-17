@@ -37,22 +37,22 @@ const ViewSubject = () => {
         {subject.name && ctx.userData.role !== 'student' && (
           <>
             {ctx.userData.role === 'super-admin' && (
-              <BreadCrumb
-                to={`/super-admin/department/${subject.semester.batch.admin._id}/batches`}>
-                Batches
-              </BreadCrumb>
+              <>
+                <BreadCrumb to="/super-admin">Departments</BreadCrumb>
+                <BreadCrumb to={`/super-admin/department/${subject.semester.batch.admin._id}`}>
+                  {subject.semester.batch.admin.department}
+                </BreadCrumb>
+                <BreadCrumb
+                  to={`/super-admin/department/${subject.semester.batch.admin._id}/batches`}>
+                  Batches
+                </BreadCrumb>
+              </>
             )}
             <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}`}>
               Batch {subject.semester.batch.name}
             </BreadCrumb>
-            <BreadCrumb to={`/${ctx.userData.role}/batch/${subject.semester.batch._id}/semesters`}>
-              Semesters
-            </BreadCrumb>
             <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}`}>
               Semester {subject.semester.name}
-            </BreadCrumb>
-            <BreadCrumb to={`/${ctx.userData.role}/semester/${subject.semester._id}/subjects`}>
-              Subjects
             </BreadCrumb>
             <BreadCrumb>{subject.name}</BreadCrumb>
           </>

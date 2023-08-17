@@ -41,7 +41,7 @@ const SubjectList = () => {
       <SubSectionHeader
         text="Subject List"
         showBtn={true}
-        btnLink="../add-subject"
+        btnLink="./add-subject"
         btnText="Add Subject"
       />
 

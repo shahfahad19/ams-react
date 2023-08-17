@@ -63,11 +63,17 @@ const StudentList = () => {
                   <th>{student.rollNo}</th>
 
                   <td>
-                    <label className="avatar">
-                      <div className="w-12 rounded-md">
-                        <img src={student.photo} alt="profile_pic" />
+                    <div className="popover popover-hover">
+                      <img
+                        className="w-10 popover-trigger rounded-full"
+                        src={student.photo}
+                        alt={student.name + '_pic'}
+                      />
+                      <div className="popover-content sm:popover-right">
+                        <div className="popover-arrow"></div>
+                        <img src={student.photo} alt={student.name + '_pic'} />
                       </div>
-                    </label>
+                    </div>
                   </td>
 
                   <td>{student.name}</td>

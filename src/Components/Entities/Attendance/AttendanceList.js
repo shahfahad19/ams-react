@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
@@ -9,6 +9,8 @@ const SubjectAttendanceList = () => {
   const [attendances, setAttendances] = useState([]);
   const [loading, isLoading] = useState(true);
   const [dates, setDates] = useState([]);
+  const [attendanceIds, setAttendanceIds] = useState([]);
+
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
 
@@ -24,7 +26,7 @@ const SubjectAttendanceList = () => {
       .then((response) => {
         setAttendances(response.data.data.attendances);
         setDates(response.data.data.dates);
-
+        setAttendanceIds(response.data.data.ids);
         if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
         isLoading(false);
       })
@@ -44,22 +46,24 @@ const SubjectAttendanceList = () => {
             <th>R.no</th>
             <th>Name</th>
             {attendances.length > 0 &&
-              attendances[0].dates.map((date) => (
+              attendances[0].dates.map((date, index) => (
                 <th key={date}>
-                  <p className="text-xs text-center border-none">
-                    {new Date(date).toLocaleDateString('en-UK', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: '2-digit'
-                    })}
-                  </p>
-                  <p className="text-center text-xs border-none">
-                    {new Date(date).toLocaleTimeString('en-UK', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true
-                    })}
-                  </p>
+                  <Link className="underline" to={`${attendanceIds[index]}`}>
+                    <p className="text-xs text-center border-none">
+                      {new Date(date).toLocaleDateString('en-PK', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: '2-digit'
+                      })}
+                    </p>
+                    <p className="text-center text-xs border-none">
+                      {new Date(date).toLocaleTimeString('en-PK', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                      })}
+                    </p>
+                  </Link>
                 </th>
               ))}
             <th>
@@ -117,6 +121,18 @@ const SubjectAttendanceList = () => {
             ))}
         </tbody>
       </Table>
+      <div className="flex justify-evenly text-sm p-4">
+        <p>
+          <span className="text-success font-bold">P</span> - Present
+        </p>
+        <p>
+          <span className="text-error font-bold">A</span> - Absent
+        </p>
+        <p>
+          <span className="text-warning font-bold">L</span> - Leave
+        </p>
+      </div>
+      <div className="h-14"></div>
     </div>
   );
 };

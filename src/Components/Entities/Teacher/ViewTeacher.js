@@ -34,11 +34,26 @@ const ViewTeacher = () => {
 
   return (
     <>
-      <DepartmentName name={ctx.userData.department} />
+      {ctx.userData.role === 'admin' && <DepartmentName name={ctx.userData.department} />}
+      {ctx.userData.role === 'super-admin' && teacher && (
+        <DepartmentName name={teacher.departmentId.department} />
+      )}
 
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>
-        <BreadCrumb to="../teachers">Teachers</BreadCrumb>
+        {ctx.userData.role === 'super-admin' && teacher && (
+          <>
+            <BreadCrumb to="/super-admin">Departments</BreadCrumb>
+            <BreadCrumb to={`/super-admin/department/${teacher.departmentId._id}`}>
+              {teacher.departmentId.department}
+            </BreadCrumb>
+            <BreadCrumb to={`/super-admin/department/${teacher.departmentId._id}/teachers`}>
+              Teachers
+            </BreadCrumb>
+          </>
+        )}
+
+        {ctx.userData.role === 'admin' && <BreadCrumb to="../teachers">Teachers</BreadCrumb>}
         {!teacher && <BreadCrumb>Loading...</BreadCrumb>}
         {teacher && <BreadCrumb>{teacher.name}</BreadCrumb>}
       </BreadCrumbs>

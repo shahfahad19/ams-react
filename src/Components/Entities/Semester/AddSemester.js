@@ -96,7 +96,14 @@ const AddSemester = () => {
 
   return (
     <>
-      <DepartmentName name={ctx.userData.department} className="mb-2" />
+      {ctx.userData.role === 'admin' && (
+        <DepartmentName name={ctx.userData.department} className="mb-2" />
+      )}
+
+      {ctx.userData.role === 'super-admin' && batch && (
+        <DepartmentName name={batch.admin.department} className="mb-2" />
+      )}
+
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>
         <BreadCrumb to="../batches">Batches</BreadCrumb>
