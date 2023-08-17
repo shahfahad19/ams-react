@@ -61,7 +61,7 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 0.5em;
+  width: 0px;
 }
 
 ::-webkit-scrollbar-track {
@@ -70,5 +70,5 @@ code {
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0);
-  border-radius: 8px;
+  border-radius: 0px;
 }

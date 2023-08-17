@@ -97,11 +97,17 @@ const DepartmentInfo = () => {
                     <div className="h-full">{department.name}</div>
 
                     <div>
-                      <label tabIndex={0} className="avatar select-none">
-                        <div className="w-10 rounded-full">
-                          <img src={department.photo} alt="profile_pic" />
+                      <div className="popover popover-hover">
+                        <img
+                          className="w-10 popover-trigger rounded-full"
+                          src={department.photo}
+                          alt={department.name + '_pic'}
+                        />
+                        <div className="popover-content sm:popover-right">
+                          <div className="popover-arrow"></div>
+                          <img src={department.photo} alt={department.name + '_pic'} />
                         </div>
-                      </label>
+                      </div>
                     </div>
                   </div>
                 </td>

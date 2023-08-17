@@ -48,7 +48,9 @@ const SubjectAttendanceList = () => {
             {attendances.length > 0 &&
               attendances[0].dates.map((date, index) => (
                 <th key={date}>
-                  <Link className="underline" to={`${attendanceIds[index]}`}>
+                  <Link
+                    className="underline"
+                    to={`/${ctx.userData.role}/attendance/${attendanceIds[index]}`}>
                     <p className="text-xs text-center border-none">
                       {new Date(date).toLocaleDateString('en-PK', {
                         day: '2-digit',

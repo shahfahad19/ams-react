@@ -116,7 +116,12 @@ const AddBatch = () => {
 
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>
-        {ctx.userData.role === 'super-admin' && <BreadCrumb to="./../batches">Batches</BreadCrumb>}
+        {ctx.userData.role === 'super-admin' && (
+          <>
+            <BreadCrumb to="../">Departments</BreadCrumb>
+            <BreadCrumb to="./../batches">Batches</BreadCrumb>
+          </>
+        )}
         {ctx.userData.role === 'admin' && <BreadCrumb to="../batches">Batches</BreadCrumb>}
 
         <BreadCrumb>Add Batch</BreadCrumb>
@@ -144,7 +149,10 @@ const AddBatch = () => {
         </Form>
         <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
 
-        <BackButton to="/admin/batches" text="Batch List" />
+        <BackButton
+          to={ctx.userData.role === 'admin' ? '../batches' : './../batches'}
+          text="Batch List"
+        />
       </FormWrapper>
     </>
   );

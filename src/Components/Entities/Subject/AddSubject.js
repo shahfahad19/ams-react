@@ -126,33 +126,23 @@ const AddSubject = () => {
           <>
             {ctx.userData.role === 'super-admin' && (
               <>
-                <BreadCrumb to="/super-admin">Departments</BreadCrumb>
-                <BreadCrumb to={`/super-admin/department/${semester.batch.admin._id}`}>
+                <BreadCrumb to="../">Departments</BreadCrumb>
+                <BreadCrumb to={`../department/${semester.batch.admin._id}`}>
                   {semester.batch.admin.department}
                 </BreadCrumb>
-                <BreadCrumb to={`/super-admin/department/${semester.batch.admin._id}/batches`}>
+                <BreadCrumb to={`../department/${semester.batch.admin._id}/batches`}>
                   Batches
                 </BreadCrumb>
-                <BreadCrumb to={'/super-admin/batch/' + semester.batch._id}>
-                  Batch {semester.batch.name}
-                </BreadCrumb>
-                <BreadCrumb to={`/super-admin/batch/${semester.batch._id}/semesters`}>
-                  Semesters
-                </BreadCrumb>
-                <BreadCrumb to={`/super-admin/semester/${semester.id}`}>
-                  Semester {semester.name}
-                </BreadCrumb>
               </>
             )}
+            <BreadCrumb to={'../batch/' + semester.batch._id}>
+              Batch {semester.batch.name}
+            </BreadCrumb>
 
-            {ctx.userData.role === 'admin' && (
-              <>
-                <BreadCrumb to={`../batch/${semester.batch._id}/semesters`}>Semesters</BreadCrumb>
-                <BreadCrumb to={`../batch/${semester.batch._id}/semesters/${semester.id}`}>
-                  Semester {semester.name}
-                </BreadCrumb>
-              </>
-            )}
+            <BreadCrumb to={`../batch/${semester.batch._id}/semesters`}>Semesters</BreadCrumb>
+            <BreadCrumb to={`../batch/${semester.batch._id}/semesters/${semester.id}`}>
+              Semester {semester.name}
+            </BreadCrumb>
 
             <BreadCrumb>Add Subject</BreadCrumb>
           </>

@@ -96,11 +96,17 @@ const TeacherList = () => {
                   }}>
                   <th>{index + 1}</th>
                   <td>
-                    <label className="avatar">
-                      <div className="w-10 rounded-full">
-                        <img src={teacher.photo} alt="profile_pic" />
+                    <div className="popover popover-hover">
+                      <img
+                        className="w-10 popover-trigger rounded-full"
+                        src={teacher.photo}
+                        alt={teacher.name + '_pic'}
+                      />
+                      <div className="popover-content sm:popover-right">
+                        <div className="popover-arrow"></div>
+                        <img src={teacher.photo} alt={teacher.name + '_pic'} />
                       </div>
-                    </label>
+                    </div>
                   </td>
                   <td>{teacher.name}</td>
                   <td>{teacher.email}</td>

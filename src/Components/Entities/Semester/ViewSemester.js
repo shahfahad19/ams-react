@@ -24,8 +24,6 @@ const ViewSemester = () => {
       })
       .then((response) => {
         setSemester(response.data.data.semester);
-        // eslint-disable-next-line no-console
-        console.log(response);
       })
       .catch((error) => {
         ctx.handleError(error);

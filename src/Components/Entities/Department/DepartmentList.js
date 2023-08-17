@@ -72,7 +72,6 @@ const DepartmentList = () => {
                   <td>{department.department}</td>
                   <td>{department.email}</td>
                   <td>
-                    {' '}
                     <div className="popover popover-hover">
                       <img
                         className="w-10 popover-trigger rounded-full"
