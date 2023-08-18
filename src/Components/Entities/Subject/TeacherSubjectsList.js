@@ -33,7 +33,7 @@ const TeacherSubjectsList = () => {
         if (response.data.data.subjects.length === 0)
           setErrorMessage(
             ctx.userData.role === 'teacher'
-              ? 'No subjects are assigned to you so far!'
+              ? 'No subjects are assigned to you yet!'
               : 'No subjects assigned to this teacher'
           );
       })

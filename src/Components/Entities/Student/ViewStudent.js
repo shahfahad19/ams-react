@@ -33,7 +33,10 @@ const ViewStudent = () => {
 
   return (
     <>
-      <DepartmentName name={ctx.userData.department} />
+      {ctx.userData.role === 'admin' && <DepartmentName name={ctx.userData.department} />}
+      {ctx.userData.role === 'super-admin' && student && (
+        <DepartmentName name={student.batch.admin.department} />
+      )}
 
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>

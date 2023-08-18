@@ -61,6 +61,7 @@ import StudentAttendanceForSubject from './Components/Entities/Attendance/Studen
 import CustomError from './Components/Utils/CustomError';
 import ResetPassword from './Components/Auth/ResetPassword';
 import SingleAttendance from './Components/Entities/Attendance/SingleAttendance';
+import Search from './Components/Search/Search';
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
         element: <ResetPassword />
       },
       {
+        path: 'search',
+        element: <Search />
+      },
+      {
         path: 'profile',
         element: <ViewProfile />,
         children: [
@@ -138,7 +143,25 @@ const router = createBrowserRouter([
           },
           {
             path: 'student/:studentId',
-            element: <ViewStudent />
+            element: <ViewStudent />,
+            children: [
+              {
+                path: '',
+                element: <Redirect to="info" />
+              },
+              {
+                path: 'info',
+                element: <StudentInfo />
+              },
+              {
+                path: 'attendance',
+                element: <StudentAttendance />
+              },
+              {
+                path: 'edit',
+                element: <EditStudentInfo />
+              }
+            ]
           },
           {
             path: 'add-department',

@@ -101,7 +101,7 @@ const SingleAttendance = () => {
               <th>Marked By</th>
               <td>
                 {attendance.marked_by
-                  ? `${attendance.marked_by.name} ${attendance.marked_by.email}`
+                  ? `${attendance.marked_by.name} (${attendance.marked_by.email})`
                   : 'Teacher not found'}
               </td>
             </tr>

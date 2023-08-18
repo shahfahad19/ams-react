@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
+import { CheckIcon, CrossIcon } from '../../Utils/Icons';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -15,7 +16,7 @@ const StudentList = () => {
 
   useEffect(() => {
     axios
-      .get(`${ctx.baseURL}/users/students?batch=${params.batchId}&sort=rollNo`, {
+      .get(`${ctx.baseURL}/users/students?batch=${params.batchId}&sort=-confirmed,rollNo`, {
         credentials: 'include',
         headers: {
           Authorization: 'Bearer ' + ctx.token
@@ -50,6 +51,7 @@ const StudentList = () => {
             <th>Name</th>
             <th>Reg. No</th>
             <th>Email</th>
+            <th>Account Confirmed</th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +81,10 @@ const StudentList = () => {
                   <td>{student.name}</td>
                   <td>{student.registrationNo}</td>
                   <td>{student.email}</td>
+                  <td>
+                    {student.confirmed && <CheckIcon />}
+                    {!student.confirmed && <CrossIcon />}
+                  </td>
                 </tr>
               );
             })}

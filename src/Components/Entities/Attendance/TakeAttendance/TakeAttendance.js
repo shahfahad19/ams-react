@@ -37,7 +37,7 @@ const TakeAttendance = () => {
         setSubject(subjectRes.data.data.subject);
         axios
           .get(
-            `${ctx.baseURL}/users/students?batch=${subjectRes.data.data.subject.semester.batch.id}&sort=rollNo`,
+            `${ctx.baseURL}/users/students?batch=${subjectRes.data.data.subject.semester.batch.id}&sort=rollNo&confirmed=true`,
             {
               credentials: 'include',
               headers: {
@@ -46,6 +46,8 @@ const TakeAttendance = () => {
             }
           )
           .then((studentsRes) => {
+            // eslint-disable-next-line no-console
+            console.log(studentsRes.data.data.students);
             if (studentsRes.data.data.students.length === 0) {
               setErrorMessage('No student have signed up for this batch yet');
             }

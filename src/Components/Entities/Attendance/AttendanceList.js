@@ -49,8 +49,12 @@ const SubjectAttendanceList = () => {
               attendances[0].dates.map((date, index) => (
                 <th key={date}>
                   <Link
-                    className="underline"
-                    to={`/${ctx.userData.role}/attendance/${attendanceIds[index]}`}>
+                    className={ctx.userData.role === 'teacher' ? '' : 'underline'}
+                    to={
+                      ctx.userData.role !== 'teacher'
+                        ? `/${ctx.userData.role}/attendance/${attendanceIds[index]}`
+                        : ''
+                    }>
                     <p className="text-xs text-center border-none">
                       {new Date(date).toLocaleDateString('en-PK', {
                         day: '2-digit',
@@ -108,16 +112,19 @@ const SubjectAttendanceList = () => {
                 ))}
 
                 <td>
-                  <p
-                    className={`${
-                      parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
-                    } text-center font-semibold`}>
-                    {attendance.percentage === 'N/A'
-                      ? attendance.percentage
-                      : attendance.percentage === '100%'
-                      ? attendance.percentage
-                      : parseFloat(attendance.percentage).toFixed(2) + '%'}
-                  </p>
+                  {attendance.percentage === 'N/A' && (
+                    <p className="text-center font-semibold">N/A</p>
+                  )}
+                  {attendance.percentage !== 'N/A' && (
+                    <p
+                      className={`${
+                        parseFloat(attendance.percentage) < 75.0 ? 'text-error' : 'text-success'
+                      } text-center font-semibold`}>
+                      {attendance.percentage === '100%'
+                        ? attendance.percentage
+                        : parseFloat(attendance.percentage).toFixed(2) + '%'}
+                    </p>
+                  )}
                 </td>
               </tr>
             ))}
@@ -132,6 +139,9 @@ const SubjectAttendanceList = () => {
         </p>
         <p>
           <span className="text-warning font-bold">L</span> - Leave
+        </p>
+        <p>
+          <span className="text-neutral font-bold">X</span> - Not Marked
         </p>
       </div>
       <div className="h-14"></div>
