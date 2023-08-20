@@ -14,7 +14,12 @@ const RemoveEmail = () => {
   });
   useEffect(() => {
     axios
-      .get(`${ctx.baseURL}/user/removeEmail/${searchParams.get('token')}`)
+      .get(`${ctx.baseURL}/user/removeEmail/${searchParams.get('token')}`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
       .then(() => {
         isLoading(false);
         setAlertModal({

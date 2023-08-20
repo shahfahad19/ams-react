@@ -18,6 +18,8 @@ import { SpinnerWithText } from '../Utils/Spinner';
 const EditProfile = () => {
   const ctx = useContext(AppContext);
   const [btnState, setBtnState] = useState('');
+  const [removeBtnState, setRemoveBtnState] = useState('');
+
   const [alert, setAlert] = useState({
     show: false
   });
@@ -36,16 +38,46 @@ const EditProfile = () => {
           Authorization: 'Bearer ' + ctx.token
         }
       })
-      .then(() => {
+      .then((response) => {
         setBtnState('');
         setAlert({
           show: true,
           type: 'success',
           text: 'Profile updated successfully!'
         });
+        ctx.setUserData(response.data.data.user);
       })
       .catch((error) => {
         setBtnState('');
+        setAlert({
+          show: true,
+          type: 'error',
+          text: ctx.computeError(error)
+        });
+      });
+  };
+
+  const removeEmail = () => {
+    setRemoveBtnState('btn-loading');
+    axios
+      .get(`${ctx.baseURL}/user/removeEmail/fromProfile`, {
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
+      .then(() => {
+        setRemoveBtnState('');
+
+        setAlert({
+          show: true,
+          type: 'success',
+          text: 'Email removed successfully'
+        });
+      })
+      .catch((error) => {
+        setRemoveBtnState('');
+
         setAlert({
           show: true,
           type: 'error',
@@ -115,6 +147,22 @@ const EditProfile = () => {
             <FormSubmitBtn className={btnState}>Update</FormSubmitBtn>
           </Form>
           <Alert alert={alert} closeAlert={() => setAlert({ show: false })} />
+
+          {ctx.userData.newEmail && (
+            <div className="alert rounded-xl p-4 mt-4">
+              <div className="flex flex-col w-full">
+                <div>Pending Email</div>
+                <div className="text-sm flex justify-between items-center">
+                  <p>{ctx.userData.newEmail}</p>
+                  <button
+                    onClick={removeEmail}
+                    className={`btn btn-sm btn-solid-error ${removeBtnState}`}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </FormWrapper>
       )}
 
