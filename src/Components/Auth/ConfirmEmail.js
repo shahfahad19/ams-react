@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { AlertModal, ModalTitle, ModalWrapper } from '../Utils/Modal';
 import Spinner from '../Utils/Spinner';
 
-const ConfirmAccount = () => {
+const ConfirmEmail = () => {
   const ctx = useContext(AppContext);
   const [searchParams] = useSearchParams();
   const [loading, isLoading] = useState(true);
@@ -14,13 +14,13 @@ const ConfirmAccount = () => {
   });
   useEffect(() => {
     axios
-      .get(`${ctx.baseURL}/user/confirmAccount/${searchParams.get('token')}`)
+      .get(`${ctx.baseURL}/user/confirmEmail/${searchParams.get('token')}`)
       .then(() => {
         isLoading(false);
         setAlertModal({
           show: true,
           type: 'success',
-          text: 'Account confirmed successfully'
+          text: 'Email confirmed successfully'
         });
       })
       .catch((error) => {
@@ -33,12 +33,12 @@ const ConfirmAccount = () => {
       });
   }, []);
 
-  const alertModalHandler = () => ctx.navigate('/', { replace: true });
+  const alertModalHandler = () => window.location.replace('/profile/view', { replace: true });
   return (
     <>
       {loading && (
         <ModalWrapper>
-          <ModalTitle>Confirming Account</ModalTitle>
+          <ModalTitle>Confirm Email</ModalTitle>
           <div className="flex justify-center mb-2">
             <Spinner />
           </div>
@@ -51,4 +51,4 @@ const ConfirmAccount = () => {
   );
 };
 
-export default ConfirmAccount;
+export default ConfirmEmail;

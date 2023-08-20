@@ -62,6 +62,8 @@ import CustomError from './Components/Utils/CustomError';
 import ResetPassword from './Components/Auth/ResetPassword';
 import SingleAttendance from './Components/Entities/Attendance/SingleAttendance';
 import Search from './Components/Search/Search';
+import ConfirmEmail from './Components/Auth/ConfirmEmail';
+import RemoveEmail from './Components/Auth/RemoveEmail';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
       {
         path: 'confirm-account',
         element: <ConfirmAccount />
+      },
+      {
+        path: 'confirm-email',
+        element: <ConfirmEmail />
+      },
+      {
+        path: 'remove-email',
+        element: <RemoveEmail />
       },
       {
         path: 'reset-password',
