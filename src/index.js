@@ -177,7 +177,6 @@ const router = createBrowserRouter([
             path: 'add-department',
             element: <AddDepartment />
           },
-
           {
             path: 'department/:departmentId/add-batch',
             element: <AddBatch />
@@ -197,6 +196,10 @@ const router = createBrowserRouter([
           {
             path: 'attendance/:attendanceId',
             element: <SingleAttendance />
+          },
+          {
+            path: 'department/:departmentId/add-teacher',
+            element: <AddTeacher />
           },
           {
             path: 'department/:departmentId',

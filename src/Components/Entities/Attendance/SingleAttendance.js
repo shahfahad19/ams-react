@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '../../Context/AppContext';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Table from '../../Utils/Table';
 import DepartmentName from '../Department/DepartmentName';
@@ -48,7 +48,7 @@ const SingleAttendance = () => {
           <>
             {ctx.userData.role === 'super-admin' && (
               <>
-                <BreadCrumb to="/super-admin">Departments</BreadCrumb>
+                <BreadCrumb to="../">Departments</BreadCrumb>
                 <BreadCrumb to={`../department/${attendance.subject.semester.batch.admin._id}`}>
                   {attendance.subject.semester.batch.admin.department}
                 </BreadCrumb>
@@ -131,7 +131,11 @@ const SingleAttendance = () => {
               return (
                 <tr key={index}>
                   <td>{att.student.rollNo}</td>
-                  <td>{att.student.name}</td>
+                  <td>
+                    <Link className="underline" to={`../student/${att.student._id}`}>
+                      {att.student.name}
+                    </Link>
+                  </td>
                   <td>
                     <span
                       className={`font-medium ${

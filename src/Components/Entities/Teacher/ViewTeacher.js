@@ -43,11 +43,11 @@ const ViewTeacher = () => {
         <BreadCrumb to="/">Home</BreadCrumb>
         {ctx.userData.role === 'super-admin' && teacher && (
           <>
-            <BreadCrumb to="/super-admin">Departments</BreadCrumb>
-            <BreadCrumb to={`/super-admin/department/${teacher.departmentId._id}`}>
+            <BreadCrumb to="../">Departments</BreadCrumb>
+            <BreadCrumb to={`../department/${teacher.departmentId._id}`}>
               {teacher.departmentId.department}
             </BreadCrumb>
-            <BreadCrumb to={`/super-admin/department/${teacher.departmentId._id}/teachers`}>
+            <BreadCrumb to={`../department/${teacher.departmentId._id}/teachers`}>
               Teachers
             </BreadCrumb>
           </>

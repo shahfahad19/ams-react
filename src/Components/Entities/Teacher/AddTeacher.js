@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '../../Context/AppContext';
 import BackButton from '../../Utils/BackButton';
 import DepartmentName from '../Department/DepartmentName';
@@ -16,9 +16,12 @@ import {
 import Alert from '../../Utils/Alert';
 import { BreadCrumb, BreadCrumbs } from '../../Utils/BreadCrumbs';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 const AddTeacher = () => {
+  const params = useParams();
   const [btnState, setBtnState] = useState('');
+  const [departmentName, setDepartmentName] = useState();
 
   const ctx = useContext(AppContext);
 
@@ -29,6 +32,24 @@ const AddTeacher = () => {
     formState: { errors },
     reset
   } = useForm();
+
+  useEffect(() => {
+    if (ctx.userData.role === 'super-admin') {
+      axios
+        .get(`${ctx.baseURL}/users/department/${params.departmentId}`, {
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        })
+        .then((response) => {
+          setDepartmentName(response.data.data.department.department);
+        })
+        .catch((error) => {
+          ctx.handleError(error);
+        });
+    }
+  }, []);
 
   const submitForm = async (data) => {
     setBtnState('btn-loading');
@@ -69,28 +90,39 @@ const AddTeacher = () => {
 
   return (
     <>
-      <DepartmentName name={ctx.userData.department} />
+      {ctx.userData.role === 'admin' && <DepartmentName name={ctx.userData.name} />}
+      {ctx.userData.role === 'super-admin' && departmentName && (
+        <DepartmentName name={departmentName} />
+      )}
+
       <BreadCrumbs>
         <BreadCrumb to="/">Home</BreadCrumb>
-        <BreadCrumb to="../teachers">Teachers</BreadCrumb>
+        {departmentName && ctx.userData.role === 'super-admin' && (
+          <>
+            <BreadCrumb to="../">Departments</BreadCrumb>
+            <BreadCrumb to="./../">{departmentName}</BreadCrumb>
+          </>
+        )}
+
+        <BreadCrumb to="./../teachers">Teachers</BreadCrumb>
         <BreadCrumb>Add Teacher</BreadCrumb>
       </BreadCrumbs>
+
       <FormWrapper>
         <form className="font-medium w-full" onSubmit={handleSubmit(submitForm)}>
           <FormTitle>Add Teacher</FormTitle>
           <FormGroup>
             <FormField>
-              <FormLabel>Teacher Name</FormLabel>
+              <label className="form-label">
+                <span className="form-label">Email</span>
+                <span className="form-label-alt">(optional)</span>
+              </label>
               <FormControl>
                 <input
                   className={`${ctx.inputClasses}${errors.name ? ' input-error' : ''}`}
                   type="text"
                   placeholder="Enter Teacher's Name"
                   {...register('name', {
-                    required: {
-                      value: true,
-                      message: 'Teacher name required'
-                    },
                     minLength: {
                       value: 3,
                       message: 'Minimum 3 characters required'
@@ -148,16 +180,14 @@ const AddTeacher = () => {
             </FormField>
 
             <FormField>
-              <FormLabel>Gender</FormLabel>
+              <label className="form-label">
+                <span className="form-label">Gender</span>
+                <span className="form-label-alt">(optional)</span>
+              </label>
               <FormControl>
                 <select
                   className={`${ctx.selectClasses}${errors.gender ? ' select-error' : ''}`}
-                  {...register('gender', {
-                    required: {
-                      value: true,
-                      message: 'Gender required'
-                    }
-                  })}>
+                  {...register('gender')}>
                   <option value="">Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -169,6 +199,9 @@ const AddTeacher = () => {
             <FormSubmitBtn className={btnState}>Add Teacher</FormSubmitBtn>
           </FormGroup>
         </form>
+        <small>
+          Teacher will be required to fill optional values when completing their profile
+        </small>
 
         <Alert
           alert={alert}
@@ -176,8 +209,11 @@ const AddTeacher = () => {
             setAlert({ show: false });
           }}
         />
+        <br />
         <BackButton to="/admin/teachers" text="Teachers List" />
       </FormWrapper>
+
+      <div className="h-14"></div>
     </>
   );
 };

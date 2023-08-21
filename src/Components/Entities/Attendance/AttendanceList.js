@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../Context/AppContext';
 import SubSectionHeader from '../../Utils/SubSectionHeader';
 import Table from '../../Utils/Table';
+import { CSVLink } from 'react-csv';
 
 const SubjectAttendanceList = () => {
   const [attendances, setAttendances] = useState([]);
@@ -13,6 +15,7 @@ const SubjectAttendanceList = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
+  const csvData = [];
 
   const params = useParams();
   useEffect(() => {
@@ -29,6 +32,26 @@ const SubjectAttendanceList = () => {
         setAttendanceIds(response.data.data.ids);
         if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
         isLoading(false);
+
+        // Prepare CSV data
+        response.data.data.attendances.forEach((attendance) => {
+          const rowData = [attendance.rollNo, attendance.name];
+
+          response.data.data.dates.forEach((date) => {
+            const dateIndex = attendance.dates.indexOf(date);
+
+            if (dateIndex === -1) {
+              rowData.push('X');
+            } else {
+              const status = attendance.attendance[dateIndex].status[0].toUpperCase();
+              rowData.push(status);
+            }
+          });
+
+          rowData.push(attendance.percentage);
+          csvData.push(rowData);
+          console.log(csvData);
+        });
       })
       .catch((error) => {
         setErrorMessage(ctx.computeError(error));
@@ -82,7 +105,11 @@ const SubjectAttendanceList = () => {
             attendances.map((attendance) => (
               <tr key={attendance._id}>
                 <td>{attendance.rollNo}</td>
-                <td className="text-bold">{attendance.name}</td>
+                <td className="text-bold">
+                  <Link className="underline" to={`./../../../student/${attendance._id}`}>
+                    {attendance.name}
+                  </Link>
+                </td>
 
                 {dates.map((date, index) => (
                   <React.Fragment key={index}>
@@ -130,6 +157,7 @@ const SubjectAttendanceList = () => {
             ))}
         </tbody>
       </Table>
+
       <div className="flex justify-evenly text-sm p-4">
         <p>
           <span className="text-success font-bold">P</span> - Present
@@ -144,6 +172,9 @@ const SubjectAttendanceList = () => {
           <span className="text-neutral font-bold">X</span> - Not Marked
         </p>
       </div>
+      <CSVLink data={csvData} filename={'attendance_data.csv'}>
+        Export to CSV
+      </CSVLink>
       <div className="h-14"></div>
     </div>
   );

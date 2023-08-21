@@ -39,13 +39,11 @@ const ViewBatch = () => {
           <>
             {ctx.userData.role === 'super-admin' && (
               <>
-                <BreadCrumb to="/super-admin/departments">Departments</BreadCrumb>
-                <BreadCrumb to={`/super-admin/department/${batch.admin._id}`}>
+                <BreadCrumb to="../">Departments</BreadCrumb>
+                <BreadCrumb to={`../department/${batch.admin._id}`}>
                   {batch.admin.department}
                 </BreadCrumb>
-                <BreadCrumb to={`/super-admin/department/${batch.admin._id}/batches`}>
-                  Batches
-                </BreadCrumb>
+                <BreadCrumb to={`../department/${batch.admin._id}/batches`}>Batches</BreadCrumb>
               </>
             )}
             <BreadCrumb>Batch {batch.name}</BreadCrumb>
