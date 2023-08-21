@@ -12,11 +12,12 @@ const SubjectAttendanceList = () => {
   const [loading, isLoading] = useState(true);
   const [dates, setDates] = useState([]);
   const [attendanceIds, setAttendanceIds] = useState([]);
+  const [subject, setSubject] = useState();
 
   const [errorMessage, setErrorMessage] = useState('');
   const ctx = useContext(AppContext);
-  const csvData = [];
 
+  const [csvData, setCsvData] = useState([]);
   const params = useParams();
   useEffect(() => {
     axios
@@ -33,7 +34,47 @@ const SubjectAttendanceList = () => {
         if (response.data.data.attendances.length === 0) setErrorMessage('No Attendances found');
         isLoading(false);
 
-        // Prepare CSV data
+        const csvFileData = [];
+
+        const subj = response.data.data.subject;
+        setSubject(subj);
+
+        //Prepare CSV data
+
+        csvFileData.push([' ', ' ', subj.name]);
+        csvFileData.push([
+          ' ',
+          ' ',
+          'Batch ' + subj.semester.batch.name,
+          'Semester ' + subj.semester.name
+        ]);
+
+        const header = [' ', ' '];
+        for (var j = 0; j < parseInt(response.data.data.dates.length / 2); j++) {
+          header.push(' ');
+        }
+        header.push('Dates');
+
+        csvFileData.push(header);
+
+        const dates = ['R.no', 'Name'];
+        response.data.data.attendances[0].dates.map((date) => {
+          dates.push(
+            `${new Date(date).toLocaleDateString('en-PK', {
+              day: '2-digit',
+              month: 'short',
+              year: '2-digit'
+            })} ${new Date(date).toLocaleTimeString('en-PK', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            })}`
+          );
+        });
+        dates.push('Percentage');
+
+        csvFileData.push(dates);
+
         response.data.data.attendances.forEach((attendance) => {
           const rowData = [attendance.rollNo, attendance.name];
 
@@ -49,9 +90,9 @@ const SubjectAttendanceList = () => {
           });
 
           rowData.push(attendance.percentage);
-          csvData.push(rowData);
-          console.log(csvData);
+          csvFileData.push(rowData);
         });
+        setCsvData(csvFileData);
       })
       .catch((error) => {
         setErrorMessage(ctx.computeError(error));
@@ -63,6 +104,16 @@ const SubjectAttendanceList = () => {
     <div className="flex-grow">
       <SubSectionHeader text="Attendance List" />
 
+      {subject && (
+        <div className="flex justify-end p-2">
+          <CSVLink
+            data={csvData}
+            className="btn btn-sm btn-success"
+            filename={`${subject.name}_Attendance.csv`}>
+            Export to CSV
+          </CSVLink>
+        </div>
+      )}
       <Table error={errorMessage} loading={loading}>
         <thead>
           <tr>
@@ -172,9 +223,7 @@ const SubjectAttendanceList = () => {
           <span className="text-neutral font-bold">X</span> - Not Marked
         </p>
       </div>
-      <CSVLink data={csvData} filename={'attendance_data.csv'}>
-        Export to CSV
-      </CSVLink>
+
       <div className="h-14"></div>
     </div>
   );

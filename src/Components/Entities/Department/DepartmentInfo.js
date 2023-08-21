@@ -163,6 +163,8 @@ const DepartmentInfo = () => {
       {alertModal.show && (
         <AlertModal type={alertModal.type} text={alertModal.text} handler={alertModalHandler} />
       )}
+
+      <div className="h-14"></div>
     </>
   );
 };
