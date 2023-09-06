@@ -163,7 +163,7 @@ export const AppContextProvider = (props) => {
         login: loginHandler,
         logout: logoutHandler,
         theme: theme,
-        baseURL: '/api',
+        baseURL: '/',
         captchaKey: '6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip',
         error: error,
         handleError,
