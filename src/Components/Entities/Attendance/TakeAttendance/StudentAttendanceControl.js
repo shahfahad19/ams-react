@@ -17,6 +17,7 @@ const StudentAttendanceControl = ({ students, currentStudentIndex, handleAttenda
           onClick={() => handleAttendance(students[currentStudentIndex]._id, 'present')}>
           Present
         </button>
+
         <button
           className="btn btn-error mx-2"
           onClick={() => handleAttendance(students[currentStudentIndex]._id, 'absent')}>
