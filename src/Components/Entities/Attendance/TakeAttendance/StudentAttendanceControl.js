@@ -2,8 +2,13 @@ import React from 'react';
 
 const StudentAttendanceControl = ({ students, currentStudentIndex, handleAttendance }) => {
   return (
-    <div className="flex flex-col md:space-x-10 mt-4 space-y-4 md:space-y-10 items-center justify-center">
+    <div className="flex flex-col md:space-x-10 mt-4 space-y-4 md:space-y-5 items-center justify-center">
       <div className="flex flex-col items-center">
+        <img
+          src={students[currentStudentIndex].photo}
+          alt="student_photo"
+          className="h-20 w-20 rounded-lg mb-2"
+        />
         <p className="text-lg md:text-xl font-semibold mb-4 text-center">
           Roll no.{students[currentStudentIndex].rollNo}
         </p>

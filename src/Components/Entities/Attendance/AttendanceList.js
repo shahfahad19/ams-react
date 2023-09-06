@@ -136,20 +136,22 @@ const SubjectAttendanceList = () => {
         </tbody>
       </Table>
 
-      <div className="flex justify-evenly text-sm p-4">
-        <p>
-          <span className="text-success font-bold">P</span> - Present
-        </p>
-        <p>
-          <span className="text-error font-bold">A</span> - Absent
-        </p>
-        <p>
-          <span className="text-warning font-bold">L</span> - Leave
-        </p>
-        <p>
-          <span className="text-neutral font-bold">X</span> - Not Marked
-        </p>
-      </div>
+      {attendances.length > 0 && (
+        <div className="flex justify-evenly text-sm p-4">
+          <p>
+            <span className="text-success font-bold">P</span> - Present
+          </p>
+          <p>
+            <span className="text-error font-bold">A</span> - Absent
+          </p>
+          <p>
+            <span className="text-warning font-bold">L</span> - Leave
+          </p>
+          <p>
+            <span className="text-neutral font-bold">X</span> - Not Marked
+          </p>
+        </div>
+      )}
 
       <div className="h-14"></div>
     </div>

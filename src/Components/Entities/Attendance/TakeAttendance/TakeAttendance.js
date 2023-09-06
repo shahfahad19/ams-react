@@ -169,7 +169,7 @@ const TakeAttendance = () => {
           />
 
           {keyboardAvailable && (
-            <div className="text-center mt-10">
+            <div className="text-center mt-10 hidden md:block">
               <p className="font-semibold mb-2">Keyboard shortcuts: </p>
               <kbd className="kbd kbd-lg">P</kbd> - Present
               <kbd className="kbd kbd-lg ml-5">A</kbd> - Absent
@@ -226,6 +226,7 @@ const TakeAttendance = () => {
           </div>
         </ModalWrapper>
       )}
+      <div className="h-14"></div>
     </div>
   );
 };
