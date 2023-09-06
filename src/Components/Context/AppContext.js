@@ -69,10 +69,8 @@ export const AppContextProvider = (props) => {
           setUserData(response.data.data.user);
           setLoggedIn(true);
         })
-        .catch((error) => {
+        .catch(() => {
           setLoggedIn(false);
-          setError(error);
-          navigate('/error');
         });
 
     document.body.setAttribute('data-theme', savedTheme);
