@@ -133,9 +133,7 @@ const TakeAttendance = () => {
     return false;
   }
 
-  // Handle keyboard shortcuts for marking attendance
   const handleKeyPress = (event) => {
-    // Check if the pressed key is 'P', 'A', or 'L'
     if (event.key === 'P' || event.key === 'p') {
       handleAttendance(students[currentStudentIndex]._id, 'Present');
     } else if (event.key === 'A' || event.key === 'a') {
@@ -145,7 +143,6 @@ const TakeAttendance = () => {
     }
   };
 
-  // Add event listener to the document to listen for key presses
   useEffect(() => {
     if (keyboardAvailable) {
       document.addEventListener('keydown', handleKeyPress);
