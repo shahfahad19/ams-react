@@ -15,10 +15,7 @@ const ViewSubject = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setSubject(response.data.data.subject);

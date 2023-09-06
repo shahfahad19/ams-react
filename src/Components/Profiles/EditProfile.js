@@ -33,10 +33,7 @@ const EditProfile = () => {
     setBtnState('btn-loading');
     axios
       .patch(`${ctx.baseURL}/user/updateProfile`, data, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setBtnState('');
@@ -61,10 +58,7 @@ const EditProfile = () => {
     setRemoveBtnState('btn-loading');
     axios
       .get(`${ctx.baseURL}/user/removeEmail/fromProfile`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then(() => {
         setRemoveBtnState('');

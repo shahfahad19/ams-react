@@ -18,10 +18,7 @@ const AttendanceInfoTable = (props) => {
     if (subject.teacher !== null) {
       axios
         .get(`${ctx.baseURL}/users/teachers/${subject.teacher}`, {
-          credentials: 'include',
-          headers: {
-            Authorization: 'Bearer ' + ctx.token
-          }
+          credentials: 'include'
         })
         .then((response) => {
           setTeacher(response.data.data.teacher);

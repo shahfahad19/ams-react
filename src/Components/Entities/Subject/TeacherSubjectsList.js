@@ -21,10 +21,7 @@ const TeacherSubjectsList = () => {
     }
     axios
       .get(url, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setErrorMessage('');

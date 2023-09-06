@@ -30,10 +30,7 @@ const AddDefaultSubject = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/users/department/${params.departmentId}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setDepartment(response.data.data.department);
@@ -69,10 +66,7 @@ const AddDefaultSubject = () => {
           department: params.departmentId
         },
         {
-          credentials: 'include',
-          headers: {
-            Authorization: 'Bearer ' + ctx.token
-          }
+          credentials: 'include'
         }
       )
       .then(() => {

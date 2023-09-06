@@ -10,10 +10,7 @@ const StudentMainView = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/batches/${ctx.userData.batch}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setBatch(response.data.data.batch);

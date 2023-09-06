@@ -14,10 +14,7 @@ const DepartmentList = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/users/departments?sort=department`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setErrorMessage('');

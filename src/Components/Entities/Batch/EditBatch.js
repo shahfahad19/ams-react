@@ -61,10 +61,7 @@ const EditBatch = () => {
     };
     await axios
       .patch(`${ctx.baseURL}/batches/${params.batchId}`, batchData, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setBatchData(response.data.data.batch);
@@ -91,10 +88,7 @@ const EditBatch = () => {
     setAlert({ show: false });
     await axios
       .get(`${ctx.baseURL}/batches/${params.batchId}/updatecode`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setAlert({

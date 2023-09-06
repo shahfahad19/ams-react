@@ -17,10 +17,7 @@ const ViewSemester = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/semesters/${params.semesterId}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setSemester(response.data.data.semester);

@@ -52,10 +52,7 @@ const DeleteSemesterBtn = ({ ctx, semester, params, className }) => {
     setBtnState('btn-loading');
     await axios
       .delete(`${ctx.baseURL}/semesters/${params.semesterId}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then(() => {
         setShowPostConfirmationModal(false);

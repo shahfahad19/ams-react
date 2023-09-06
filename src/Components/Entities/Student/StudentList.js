@@ -17,10 +17,7 @@ const StudentList = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/users/students?batch=${params.batchId}&sort=-confirmed,rollNo`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setErrorMessage('');

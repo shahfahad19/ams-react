@@ -35,10 +35,7 @@ const EditStudentInfo = () => {
     setBtnState('btn-loading');
     axios
       .patch(`${ctx.baseURL}/users/students/${student._id}`, data, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setBtnState('');

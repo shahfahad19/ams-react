@@ -62,10 +62,7 @@ const ResetPassword = () => {
     setBtnState('btn-loading');
     axios
       .patch(`${ctx.baseURL}/user/resetPassword/${searchParams.get('token')}`, data, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then(() => {
         setBtnState('');

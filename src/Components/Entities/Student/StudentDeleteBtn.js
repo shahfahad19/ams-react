@@ -37,10 +37,7 @@ const StudentDeleteBtn = ({ student, className }) => {
 
     await axios
       .delete(`${ctx.baseURL}/users/students/${student._id}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then(() => {
         setShowConfirmationModal(false);

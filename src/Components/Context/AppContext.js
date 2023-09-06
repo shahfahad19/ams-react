@@ -38,42 +38,26 @@ export const AppContextProvider = (props) => {
     confirmed: true,
     photo: 'https://res.cloudinary.com/dbph73rvi/image/upload/v1675170781/mdqcinla4xkogsatvbr3.jpg'
   });
-  const [token, setToken] = useState();
 
   useEffect(() => {
-    let token = '';
-    let savedTheme = '';
+    let savedTheme = 'light';
     try {
-      token = localStorage.getItem('ams-token');
       savedTheme = localStorage.getItem('theme');
     } catch (err) {
       /* empty */
     }
-    if (token === '') {
-      savedTheme = 'light';
-      setLoggedIn(false);
-      return;
-    }
-    setToken(token);
-    if (token !== '')
-      axios
-        // eslint-disable-next-line no-undef
-        .get(`${process.env.REACT_APP_API}/user`, {
-          credentials: 'include',
-          headers: {
-            Authorization: 'Bearer ' + token
-          }
-        })
-        .then((response) => {
-          setLoggedInAs(response.data.data.user.role);
-          setUserData(response.data.data.user);
-          setLoggedIn(true);
-        })
-        .catch((error) => {
-          setLoggedIn(false);
-          setError(error);
-          navigate('/error');
-        });
+    axios
+      .get('api/user', {
+        credentials: 'include'
+      })
+      .then((response) => {
+        setLoggedInAs(response.data.data.user.role);
+        setUserData(response.data.data.user);
+        setLoggedIn(true);
+      })
+      .catch(() => {
+        setLoggedIn(false);
+      });
 
     document.body.setAttribute('data-theme', savedTheme);
     setTheme(savedTheme);
@@ -81,24 +65,10 @@ export const AppContextProvider = (props) => {
 
   const loginHandler = () => {
     setLoggedIn('wait');
-    let token = '';
-    try {
-      token = localStorage.getItem('ams-token') || '';
-    } catch (err) {
-      return;
-    }
-    if (token === '') {
-      setLoggedIn(false);
-      return;
-    }
 
     axios
-      // eslint-disable-next-line no-undef
-      .get(`${process.env.REACT_APP_API}/user`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
+      .get('/api/user', {
+        credentials: 'include'
       })
       .then(() => {})
       .catch(() => {
@@ -108,11 +78,15 @@ export const AppContextProvider = (props) => {
   };
 
   const logoutHandler = () => {
-    localStorage.setItem('ams-token', '');
     setLoggedIn(false);
     setLoggedInAs('');
     setUserData({});
-    setToken('');
+    axios
+      .get('/api/user/logout', {
+        credentials: 'include'
+      })
+      .then(() => {})
+      .catch(() => {});
   };
 
   const computeError = (error) => {
@@ -158,7 +132,6 @@ export const AppContextProvider = (props) => {
       value={{
         isLoggedIn: isLoggedIn,
         loggedInAs: loggedInAs,
-        token: token,
         userData: userData,
         login: loginHandler,
         logout: logoutHandler,

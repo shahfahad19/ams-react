@@ -31,10 +31,7 @@ const StudentAttendance = () => {
     const url = ctx.userData.role === 'student' ? ctx.userData._id : params.studentId;
     axios
       .get(`${ctx.baseURL}/attendances/student/${url}`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setData(response.data.attendances);

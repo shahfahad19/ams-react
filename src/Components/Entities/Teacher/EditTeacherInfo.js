@@ -61,10 +61,7 @@ const EditTeacherInfo = () => {
         `${ctx.baseURL}/users/teachers/${teacherId}`,
         { designation: designationRef.current.value },
         {
-          credentials: 'include',
-          headers: {
-            Authorization: 'Bearer ' + ctx.token
-          }
+          credentials: 'include'
         }
       )
       .then((response) => {

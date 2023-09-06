@@ -59,10 +59,7 @@ const SubjectEditBtn = ({ subject, className, subjectEdited }) => {
           creditHours: subjectHours
         },
         {
-          credentials: 'include',
-          headers: {
-            Authorization: 'Bearer ' + ctx.token
-          }
+          credentials: 'include'
         }
       )
       .then(() => {

@@ -18,10 +18,7 @@ const BatchList = () => {
 
     axios
       .get(`${ctx.baseURL}/semesters?batch=${batch}&sort=archived,name`, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then((response) => {
         setErrorMessage('');

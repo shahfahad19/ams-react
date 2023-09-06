@@ -48,10 +48,7 @@ const UpdatePassword = () => {
     setBtnState('btn-loading');
     axios
       .patch(`${ctx.baseURL}/user/updatePassword`, data, {
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + ctx.token
-        }
+        credentials: 'include'
       })
       .then(() => {
         setBtnState('');
