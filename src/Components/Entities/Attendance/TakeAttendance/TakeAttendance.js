@@ -135,11 +135,11 @@ const TakeAttendance = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'P' || event.key === 'p') {
-      handleAttendance(students[currentStudentIndex]._id, 'Present');
+      handleAttendance(students[currentStudentIndex]._id, 'present');
     } else if (event.key === 'A' || event.key === 'a') {
-      handleAttendance(students[currentStudentIndex]._id, 'Absent');
+      handleAttendance(students[currentStudentIndex]._id, 'absent');
     } else if (event.key === 'L' || event.key === 'l') {
-      handleAttendance(students[currentStudentIndex]._id, 'Leave');
+      handleAttendance(students[currentStudentIndex]._id, 'leave');
     }
   };
 

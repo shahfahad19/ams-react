@@ -140,9 +140,7 @@ const AddSubject = () => {
             </BreadCrumb>
 
             <BreadCrumb to={`../batch/${semester.batch._id}/semesters`}>Semesters</BreadCrumb>
-            <BreadCrumb to={`../batch/${semester.batch._id}/semesters/${semester.id}`}>
-              Semester {semester.name}
-            </BreadCrumb>
+            <BreadCrumb to={`../semester/${semester.id}`}>Semester {semester.name}</BreadCrumb>
 
             <BreadCrumb>Add Subject</BreadCrumb>
           </>
@@ -188,7 +186,7 @@ const AddSubject = () => {
             setAlert({ show: false });
           }}
         />
-        <BackButton to={'/admin/semester/' + params.semesterId + '/subjects'} text="Subjects" />
+        <BackButton to={'../semester/' + params.semesterId + '/subjects'} text="Subjects" />
       </FormWrapper>
     </>
   );

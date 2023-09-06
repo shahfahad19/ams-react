@@ -45,6 +45,7 @@ const TeacherSubjectsList = () => {
 
   const openSubject = (id) => {
     if (ctx.userData.role === 'teacher') ctx.navigate(`/teacher/subject/${id}/attendance`);
+    if (ctx.userData.role === 'super-admin') ctx.navigate(`/super-admin/subject/${id}/attendance`);
   };
   return (
     <div className="flex-grow">

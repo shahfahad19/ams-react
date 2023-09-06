@@ -149,7 +149,7 @@ const AddSemester = () => {
           }}
         />
 
-        <BackButton to={'/admin/batch/' + params.batchId + '/semesters'} text="Semesters" />
+        <BackButton to={'../batch/' + params.batchId + '/semesters'} text="Semesters" />
       </FormWrapper>
     </>
   );
