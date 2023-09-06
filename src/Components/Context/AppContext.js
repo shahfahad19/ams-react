@@ -163,10 +163,8 @@ export const AppContextProvider = (props) => {
         login: loginHandler,
         logout: logoutHandler,
         theme: theme,
-        // eslint-disable-next-line no-undef
-        baseURL: process.env.REACT_APP_API,
-        // eslint-disable-next-line no-undef
-        captchaKey: process.env.REACT_APP_CAPTCHA_KEY,
+        baseURL: '/api',
+        captchaKey: '6Lc3CBYkAAAAAJU9k9WPIqo5l9lWT4K4J8jhjFip',
         error: error,
         handleError,
         setUserData,
