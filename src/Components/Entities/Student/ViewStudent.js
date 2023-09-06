@@ -15,7 +15,10 @@ const ViewStudent = () => {
     const getData = async () => {
       await axios
         .get(`${ctx.baseURL}/users/students/${params.studentId}`, {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         })
         .then((response) => {
           setStudent(response.data.data.student);

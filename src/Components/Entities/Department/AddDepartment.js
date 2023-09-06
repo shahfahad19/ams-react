@@ -41,6 +41,7 @@ const AddDepartment = () => {
 
     setBtnState('btn-loading');
     setAlert({ show: false });
+    let token = ctx.token;
 
     const reqBody = {
       department: departmentRef.current.value,
@@ -48,7 +49,9 @@ const AddDepartment = () => {
     };
     await axios
       .post(`${ctx.baseURL}/users/departments`, reqBody, {
-        credentials: 'include'
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
       })
       .then(() => {
         departmentRef.current.value = '';

@@ -41,7 +41,10 @@ const CompleteTeacherSignup = () => {
     setBtnState('btn-loading');
     axios
       .post(`${ctx.baseURL}/user/completeProfile`, data, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         setBtnState('');

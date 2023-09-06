@@ -38,7 +38,10 @@ const SubjectDeleteBtn = ({ subject, className, subjectDeleted }) => {
 
     await axios
       .delete(`${ctx.baseURL}/subjects/defaultSubjects/${subject._id}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         setShowConfirmationModal(false);

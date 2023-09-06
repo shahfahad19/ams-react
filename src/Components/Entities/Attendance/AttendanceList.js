@@ -19,7 +19,10 @@ const SubjectAttendanceList = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/attendances?subject=${params.subjectId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setAttendances(response.data.data.attendances);

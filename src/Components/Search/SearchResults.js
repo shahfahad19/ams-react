@@ -18,7 +18,11 @@ const SearchResults = ({ searchData }) => {
     axios
       .get(
         `${ctx.baseURL}/users/search?role=${searchData.user}&${searchData.searchBy}=${searchData.query}`,
-        {}
+        {
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        }
       )
       .then((response) => {
         setIsLoading(false);

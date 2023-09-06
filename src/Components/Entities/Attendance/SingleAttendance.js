@@ -18,7 +18,11 @@ const SingleAttendance = () => {
 
   useEffect(() => {
     axios
-      .get(`${ctx.baseURL}/attendances/${params.attendanceId}`, {})
+      .get(`${ctx.baseURL}/attendances/${params.attendanceId}`, {
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
+      })
       .then((response) => {
         isLoading(false);
         setAttendance(response.data.data.attendance);

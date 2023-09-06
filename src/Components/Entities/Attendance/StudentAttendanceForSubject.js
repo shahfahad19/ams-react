@@ -16,7 +16,10 @@ const StudentAttendanceForSubject = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/attendances/student/${ctx.userData._id}/subject/${params.subjectId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         if (response.data.attendances.length === 0) {

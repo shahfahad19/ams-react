@@ -29,7 +29,10 @@ const TakeAttendance = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((subjectRes) => {
         setSubject(subjectRes.data.data.subject);
@@ -37,7 +40,10 @@ const TakeAttendance = () => {
           .get(
             `${ctx.baseURL}/users/students?batch=${subjectRes.data.data.subject.semester.batch.id}&sort=rollNo&confirmed=true`,
             {
-              credentials: 'include'
+              credentials: 'include',
+              headers: {
+                Authorization: 'Bearer ' + ctx.token
+              }
             }
           )
           .then((studentsRes) => {
@@ -97,7 +103,10 @@ const TakeAttendance = () => {
 
     axios
       .post(`${ctx.baseURL}/attendances`, attendanceData, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         saveAttendance(true);

@@ -37,7 +37,10 @@ const AddTeacher = () => {
     if (ctx.userData.role === 'super-admin') {
       axios
         .get(`${ctx.baseURL}/users/department/${params.departmentId}`, {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         })
         .then((response) => {
           setDepartmentName(response.data.data.department.department);
@@ -54,9 +57,12 @@ const AddTeacher = () => {
 
     setAlert({ show: false });
 
+    let token = ctx.token;
     await axios
       .post(`${ctx.baseURL}/users/teachers`, data, {
-        credentials: 'include'
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
       })
       .then(() => {
         reset();

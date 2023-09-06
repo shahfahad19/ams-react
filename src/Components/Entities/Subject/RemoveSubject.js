@@ -47,7 +47,10 @@ const RemoveSubject = () => {
           subject: subject.Id
         },
         {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         }
       )
       .then(() => {

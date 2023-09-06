@@ -33,7 +33,10 @@ const AddSemester = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/batches/${params.batchId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setBatch(response.data.data.batch);
@@ -61,7 +64,11 @@ const AddSemester = () => {
       .post(
         `${ctx.baseURL}/semesters?batch=${params.batchId}`,
         { name: semester.current.value },
-        {}
+        {
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        }
       )
       .then(() => {
         semester.current.value = '';

@@ -17,7 +17,10 @@ const DefaultSubjectList = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/subjects/defaultSubjects?department=${params.departmentId}&sort=name`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setErrorMessage('');

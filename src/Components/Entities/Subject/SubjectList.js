@@ -15,7 +15,10 @@ const SubjectList = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/subjects?semester=${params.semesterId}&sort=archived,name`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setErrorMessage('');

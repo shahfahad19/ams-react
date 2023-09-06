@@ -52,7 +52,10 @@ const DeleteSubjectBtn = ({ ctx, subject, params, className }) => {
     setBtnState('btn-loading');
     await axios
       .delete(`${ctx.baseURL}/subjects/${params.subjectId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         setShowPostConfirmationModal(false);

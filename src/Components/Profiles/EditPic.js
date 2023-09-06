@@ -69,7 +69,10 @@ const EditPic = () => {
         `${ctx.baseURL}/user/updateProfile`,
         { photo },
         {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         }
       )
       .then((response) => {

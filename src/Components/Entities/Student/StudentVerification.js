@@ -23,7 +23,10 @@ const StudentVerification = () => {
     setBtnState('btn-loading');
     await axios
       .get(`${ctx.baseURL}/user/getConfirmationToken?token=${captcha.current.getValue()}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         setShowModal(false);

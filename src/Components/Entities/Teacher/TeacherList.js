@@ -21,7 +21,10 @@ const TeacherList = () => {
         : `${ctx.baseURL}/users/teachers?sort=name`;
     axios
       .get(url, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setErrorMessage('');

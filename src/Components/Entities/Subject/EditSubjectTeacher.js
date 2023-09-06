@@ -40,7 +40,10 @@ const EditSubjectTeacher = () => {
     if (subject.teacher === undefined || subject.teacher === null) {
       axios
         .get(`${ctx.baseURL}/users/teachersByDepartments`, {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         })
         .then((response) => {
           changeTeachers(0);
@@ -71,7 +74,10 @@ const EditSubjectTeacher = () => {
           teacher: teacherId
         },
         {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         }
       )
       .then((response) => {
@@ -109,7 +115,10 @@ const EditSubjectTeacher = () => {
           teacher: null
         },
         {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         }
       )
       .then((response) => {

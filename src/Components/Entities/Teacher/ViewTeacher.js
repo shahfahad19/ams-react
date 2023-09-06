@@ -15,7 +15,10 @@ const ViewTeacher = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/users/teachers/${params.teacherId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setTeacher(response.data.data.teacher);

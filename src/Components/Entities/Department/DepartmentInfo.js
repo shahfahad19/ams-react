@@ -50,7 +50,10 @@ const DepartmentInfo = () => {
         `${ctx.baseURL}/users/department/${params.departmentId}/updateEmail`,
         { email },
         {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
         }
       )
       .then((response) => {

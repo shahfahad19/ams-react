@@ -26,7 +26,10 @@ const AddSubject = () => {
   useEffect(() => {
     axios
       .get(`${ctx.baseURL}/semesters/${params.semesterId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then((response) => {
         setSemester(response.data.data.semester);
@@ -35,7 +38,10 @@ const AddSubject = () => {
           .get(
             `${ctx.baseURL}/subjects/defaultSubjects?department=${response.data.data.semester.batch.admin._id}&semester=${params.semesterId}&sort=name`,
             {
-              credentials: 'include'
+              credentials: 'include',
+              headers: {
+                Authorization: 'Bearer ' + ctx.token
+              }
             }
           )
           .then((response) => {
@@ -74,7 +80,11 @@ const AddSubject = () => {
         {
           subject: subject.current.value
         },
-        {}
+        {
+          headers: {
+            Authorization: 'Bearer ' + ctx.token
+          }
+        }
       )
       .then((response) => {
         subject.current.value = '';

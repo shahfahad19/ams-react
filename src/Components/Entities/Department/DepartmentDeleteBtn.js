@@ -55,7 +55,10 @@ const DepartmentDeleteBtn = ({ department, params, ctx, className }) => {
 
     axios
       .delete(`${ctx.baseURL}/users/department/${params.departmentId}`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + ctx.token
+        }
       })
       .then(() => {
         setBtnState('');
